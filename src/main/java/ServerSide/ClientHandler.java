@@ -21,7 +21,11 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-
+        while (true){
+            //todo
+            sendMessage("YOU ARE CONNECTED TO THE SERVER!");
+            String msgFromClient = in.nextLine();
+        }
     }
 
     public void sendMessage(String message) {
