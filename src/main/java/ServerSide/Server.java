@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Server {
     int port = Config.serverPort;
-    List<ClientHandler> clients;
+    static List<ClientHandler> clients;
     public Server(){
         clients = new ArrayList<>();
         init();

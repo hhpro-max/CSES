@@ -8,14 +8,16 @@ public class Client implements Runnable{
     private static String token;
     int port = ClientConfig.port;
     String host = ClientConfig.host;
-
+    ClientSender clientSender;
+    ClientReceiver clientReceiver;
 
     public void init() throws IOException {
         socket = new Socket(host,port);
-        ClientSender clientSender = new ClientSender(this);
-        ClientReceiver clientReceiver = new ClientReceiver(this);
+        clientSender = new ClientSender(this);
+        clientReceiver = new ClientReceiver(this);
         new Thread(clientReceiver).start();
         new Thread(clientSender).start();
+        GuiController.getInstance().setClient(this);
     }
 
     public Socket getSocket() {
@@ -48,6 +50,22 @@ public class Client implements Runnable{
 
     public void setHost(String host) {
         this.host = host;
+    }
+
+    public ClientSender getClientSender() {
+        return clientSender;
+    }
+
+    public void setClientSender(ClientSender clientSender) {
+        this.clientSender = clientSender;
+    }
+
+    public ClientReceiver getClientReceiver() {
+        return clientReceiver;
+    }
+
+    public void setClientReceiver(ClientReceiver clientReceiver) {
+        this.clientReceiver = clientReceiver;
     }
 
     @Override

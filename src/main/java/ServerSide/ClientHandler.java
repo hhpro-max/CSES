@@ -3,7 +3,8 @@ package ServerSide;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
+
+import java.util.*;
 
 public class ClientHandler implements Runnable {
     Socket socket;
@@ -21,11 +22,34 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
+        sendMessage("YOU ARE CONNECTED TO THE SERVER!");
         while (true){
             //todo
-            sendMessage("YOU ARE CONNECTED TO THE SERVER!");
-            String msgFromClient = in.nextLine();
+
+            try {
+                String msgFromClient = in.nextLine();
+                List<String> msgOrder = castToList(msgFromClient);
+                analyzeOrder(msgOrder);
+
+            }catch (Exception e){
+                e.printStackTrace();
+                System.out.println("USER DISCONNECTED!");
+                try {
+                    this.kill();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            }
         }
+    }
+
+
+
+    private ArrayList<String> castToList(String msg) {
+        String r1 = msg.replace("[","");
+        String r2 = r1.replace("]","");
+        return new ArrayList<String>(Arrays.asList(r2.split(", ")));
     }
 
     public void sendMessage(String message) {
@@ -47,5 +71,15 @@ public class ClientHandler implements Runnable {
 
     public void kill() throws IOException {
         socket.close();
+        Server.clients.remove(this);
     }
+
+    private void analyzeOrder(List<String> order) {
+        if (order.get(0).equals(ServerReqType.LOGIN.toString())){
+            DataBase.getInstance().checkLogin(this,order.get(1),order.get(2));
+        }
+    }
+
+
+
 }
