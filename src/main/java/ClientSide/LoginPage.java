@@ -45,6 +45,7 @@ public class LoginPage extends JPanel{
         initCom();
         align();
         addListener();
+        GuiController.getInstance().jPanels.add(this);
     }
     public void initPanel() {
 

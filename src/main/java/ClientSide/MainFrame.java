@@ -14,7 +14,7 @@ public class MainFrame extends JFrame {
         this.add(loginPage);
         update();
 
-        GuiController.setFrame(this);
+        GuiController.getInstance().setFrame(this);
     }
 
 

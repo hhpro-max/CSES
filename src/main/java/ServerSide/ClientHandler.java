@@ -12,6 +12,15 @@ public class ClientHandler implements Runnable {
     Scanner in;
     private String token;
 
+    int id;
+    int nc;
+    String firstname;
+    String lastname;
+    String email;
+    String phoneNumber;
+    String college;
+    String lastLoginTime;
+
     public ClientHandler(Socket socket) throws IOException {
         this.socket = socket;
         out = new PrintWriter(socket.getOutputStream());
