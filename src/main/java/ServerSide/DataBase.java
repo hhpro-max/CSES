@@ -39,6 +39,17 @@ public class DataBase {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 //updating client info
+                respond.add(ServerReqType.LOGIN.toString());
+                respond.add(RespondType.SUCCESSFUL.toString());
+                respond.add(String.valueOf(resultSet.getInt("id")));
+                respond.add(String.valueOf(resultSet.getInt("nc")));
+                respond.add(resultSet.getString("firstname"));
+                respond.add(resultSet.getString("lastname"));
+                respond.add(resultSet.getString("relation"));
+                respond.add(resultSet.getString("email"));
+                respond.add(resultSet.getString("phonenumber"));
+                respond.add(resultSet.getString("college"));
+                respond.add(hour + ":" + minute + ":" + seconds);
 
                 clientHandler.id = resultSet.getInt("id");
                 clientHandler.nc = resultSet.getInt("nc");
@@ -51,8 +62,7 @@ public class DataBase {
 
                 //creating respond msg
 
-                respond.add(ServerReqType.LOGIN.toString());
-                respond.add(RespondType.SUCCESSFUL.toString());
+
 
 
                 preparedStatement = connection.prepareStatement("update sut_members set lastlogintime = ? where id = ?");

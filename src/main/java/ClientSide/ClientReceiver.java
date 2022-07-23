@@ -1,6 +1,7 @@
 package ClientSide;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -27,20 +28,14 @@ public class ClientReceiver implements Runnable {
         while (true) {
             String input = in.nextLine();
             List<String> serverOrder = castToList(input);
-            analyzeOrder(serverOrder);
+            DataHandler.getInstance().analyzeOrder(serverOrder);
         }
     }
-
-
 
     private ArrayList<String> castToList(String msg) {
         String r1 = msg.replace("[","");
         String r2 = r1.replace("]","");
         return new ArrayList<String>(Arrays.asList(r2.split(", ")));
     }
-    private void analyzeOrder(List<String> order) {
-        if (order.get(0).equals(ClientReqType.LOGIN.toString())){
-            DataHandler.getInstance().checkLoginRes(order.get(1));
-        }
-    }
+
 }

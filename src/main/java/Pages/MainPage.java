@@ -1,5 +1,7 @@
-package ClientSide;
+package Pages;
 
+import ClientSide.ClientConfig;
+import ClientSide.DataHandler;
 import Listeners.ExitListener;
 
 import javax.swing.*;
@@ -23,6 +25,8 @@ public class MainPage extends JPanel {
         initPanel();
         initCom();
         align();
+        addListener();
+        GuiController.getInstance().addJPanel(this);
     }
 
     public void initPanel() {

@@ -1,4 +1,6 @@
-package ClientSide;
+package Pages;
+
+import ClientSide.ClientConfig;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,5 +1,7 @@
 package ClientSide;
 
+import Pages.GuiController;
+
 import java.io.IOException;
 import java.net.Socket;
 

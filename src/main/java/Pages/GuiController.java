@@ -1,7 +1,8 @@
-package ClientSide;
+package Pages;
+
+import ClientSide.Client;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
 public class GuiController {
@@ -33,8 +34,15 @@ public class GuiController {
         jPanels.clear();
 
     }
-    public void changePanelTo(JPanel jPanel){
-        //todo
+    public void changePanelTo(PanelType panelType){
+        switch (panelType){
+            case MAINPAGE :
+                resetJPanels();
+                MainPage mainPage = new MainPage();
+                frame.add(mainPage);
+                updateFrame();
+                break;
+        }
     }
     public void exitButton(){
         resetJPanels();

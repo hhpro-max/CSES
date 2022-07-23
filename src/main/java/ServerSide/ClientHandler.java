@@ -16,6 +16,7 @@ public class ClientHandler implements Runnable {
     int nc;
     String firstname;
     String lastname;
+    String relation;
     String email;
     String phoneNumber;
     String college;
@@ -31,7 +32,7 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        sendMessage("YOU ARE CONNECTED TO THE SERVER!");
+
         while (true){
             //todo
 

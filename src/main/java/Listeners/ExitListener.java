@@ -1,6 +1,6 @@
 package Listeners;
 
-import ClientSide.GuiController;
+import Pages.GuiController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

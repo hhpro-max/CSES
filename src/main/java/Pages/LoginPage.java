@@ -1,5 +1,6 @@
-package ClientSide;
+package Pages;
 
+import ClientSide.ClientConfig;
 import ClientSources.ImageResource;
 import ClientSources.ResourceManager;
 import Listeners.LoginListener;

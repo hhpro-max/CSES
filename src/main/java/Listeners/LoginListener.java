@@ -2,8 +2,8 @@ package Listeners;
 
 
 
-import ClientSide.GuiController;
-import ClientSide.LoginPage;
+import Pages.GuiController;
+import Pages.LoginPage;
 import ClientSide.ClientReqType;
 
 import javax.swing.*;
