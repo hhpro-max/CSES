@@ -9,6 +9,7 @@ public class GuiController {
     Client client;
     public JOptionPane jOptionPane;
     public  JFrame frame;
+    public JPanel userMainPanel;
 
     public  ArrayList<JPanel> jPanels = new ArrayList<>();
 
@@ -36,10 +37,11 @@ public class GuiController {
     }
     public void changePanelTo(PanelType panelType){
         switch (panelType){
-            case MAINPAGE :
+            case STUDENTMAINPAGE  :
                 resetJPanels();
-                MainPage mainPage = new MainPage();
-                frame.add(mainPage);
+                NormalStudentPage normalStudentPage = new NormalStudentPage();
+                userMainPanel = normalStudentPage;
+                frame.add(normalStudentPage);
                 updateFrame();
                 break;
         }
@@ -48,6 +50,11 @@ public class GuiController {
         resetJPanels();
         LoginPage loginPage = new LoginPage();
         frame.add(loginPage);
+        updateFrame();
+    }
+    public void goToMainPanel(){
+        resetJPanels();
+        getFrame().add(getUserMainPanel());
         updateFrame();
     }
 
@@ -74,5 +81,13 @@ public class GuiController {
     public void updateFrame(){
         frame.repaint();
         frame.revalidate();
+    }
+
+    public JPanel getUserMainPanel() {
+        return userMainPanel;
+    }
+
+    public void setUserMainPanel(JPanel userMainPanel) {
+        this.userMainPanel = userMainPanel;
     }
 }

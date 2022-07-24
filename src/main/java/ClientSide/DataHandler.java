@@ -21,7 +21,12 @@ public class DataHandler {
     String college;
     String lastLoginTime;
     ImageIcon imageIcon;
-
+    //
+    String educationStatus;
+    String supervisorName;
+    private String sp;
+    boolean signUpPermit;
+    String signupTime;
 
 
     private static DataHandler dataHandler;
@@ -52,8 +57,16 @@ public class DataHandler {
             this.phoneNumber = orders.get(8);
             this.college = orders.get(9);
             this.lastLoginTime = orders.get(10);
+            switch (this.relation){
+                case "D":
+                    this.educationStatus = orders.get(11);
+                    this.supervisorName = orders.get(12);
+                    this.sp = orders.get(13);
+                    this.signupTime = orders.get(14);
+                    break;
+            }
             //todo change this
-            GuiController.getInstance().changePanelTo(PanelType.MAINPAGE);
+            GuiController.getInstance().changePanelTo(PanelType.STUDENTMAINPAGE);
         }else {
             GuiController.getInstance().jOptionPane.showMessageDialog(null,"USERNAME OR PASSWORD IS WRONG!");
         }
@@ -145,5 +158,42 @@ public class DataHandler {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getEducationStatus() {
+        return educationStatus;
+    }
+
+    public void setEducationStatus(String educationStatus) {
+        this.educationStatus = educationStatus;
+    }
+
+    public String getSupervisorName() {
+        return supervisorName;
+    }
+
+    public void setSupervisorName(String supervisorName) {
+        this.supervisorName = supervisorName;
+    }
+
+    public boolean isSignUpPermit() {
+        return this.sp.equals("true");
+    }
+
+    public void setSignUpPermit(boolean signUpPermit) {
+        this.signUpPermit = signUpPermit;
+        if (signUpPermit){
+            this.sp = "true";
+        }else {
+            this.sp = "false";
+        }
+    }
+
+    public String getSignupTime() {
+        return signupTime;
+    }
+
+    public void setSignupTime(String signupTime) {
+        this.signupTime = signupTime;
     }
 }

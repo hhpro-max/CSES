@@ -8,6 +8,7 @@ import java.util.List;
 
 public class DataBase {
     Connection connection;
+
     private static DataBase dataBase;
 
     private DataBase() {
@@ -55,15 +56,25 @@ public class DataBase {
                 clientHandler.nc = resultSet.getInt("nc");
                 clientHandler.firstname = resultSet.getString("firstname");
                 clientHandler.lastname = resultSet.getString("lastname");
+                clientHandler.relation = resultSet.getString("relation");
                 clientHandler.email = resultSet.getString("email");
                 clientHandler.phoneNumber = resultSet.getString("phonenumber");
                 clientHandler.college = resultSet.getString("college");
                 clientHandler.lastLoginTime = hour + ":" + minute + ":" + seconds;
 
-                //creating respond msg
-
-
-
+                switch (clientHandler.relation){
+                    case "D":
+                        preparedStatement = connection.prepareStatement("select * from students where id = ?");
+                        preparedStatement.setInt(1,clientHandler.id);
+                        resultSet = preparedStatement.executeQuery();
+                        if (resultSet.next()){
+                            respond.add(resultSet.getString("educational_status"));
+                            respond.add(findMemberName(resultSet.getInt("supervisor_id")));
+                            respond.add(resultSet.getString("signup_permit"));
+                            respond.add(resultSet.getString("signup_time"));
+                        }
+                        break;
+                }
 
                 preparedStatement = connection.prepareStatement("update sut_members set lastlogintime = ? where id = ?");
                 preparedStatement.setString(1, hour + ":" + minute + ":" + seconds);
@@ -82,6 +93,14 @@ public class DataBase {
             e.printStackTrace();
             //todo
         }
-
+    }
+    public String findMemberName(int id) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from sut_members where id = ?");
+        preparedStatement.setInt(1,id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()){
+            return resultSet.getString("firstname") + " " + resultSet.getString("lastname");
+        }
+        return "NULL";
     }
 }

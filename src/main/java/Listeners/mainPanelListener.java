@@ -11,6 +11,7 @@ public class mainPanelListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         //todo
-        GuiController.getInstance().changePanelTo(PanelType.MAINPAGE);
+        GuiController.getInstance().goToMainPanel();
+
     }
 }

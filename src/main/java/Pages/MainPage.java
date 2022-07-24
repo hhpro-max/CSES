@@ -28,7 +28,7 @@ public class MainPage extends JPanel {
     public Timer timer;
     public JLabel showTime;
     public JButton exit;
-    public JLabel lastLoginTime;
+    public JLabel lastLoginTime; //todo align this
     public JLabel imageIcon;
     public JLabel name;
     public JLabel email;
@@ -103,6 +103,7 @@ public class MainPage extends JPanel {
         this.add(name);
         email.setBounds(0,230,300,30);
         this.add(email);
+
     }
     public void addListener(){
         //
