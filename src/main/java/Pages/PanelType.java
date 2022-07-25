@@ -3,5 +3,7 @@ package Pages;
 public enum PanelType {
     LOGINPAGE,
     STUDENTMAINPAGE,
-    TEACHERMAINPAGE
+    TEACHERMAINPAGE,
+    LESSONSLISTPAGE,
+
 }

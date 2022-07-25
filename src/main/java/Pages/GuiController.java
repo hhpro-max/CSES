@@ -10,6 +10,7 @@ public class GuiController {
     public JOptionPane jOptionPane;
     public  JFrame frame;
     public JPanel userMainPanel;
+    public JPanel userCurrentPanel;
 
     public  ArrayList<JPanel> jPanels = new ArrayList<>();
 
@@ -27,6 +28,8 @@ public class GuiController {
         return guiController;
     }
 
+
+
     public void resetJPanels() {
         for (JPanel i :
                 jPanels) {
@@ -41,13 +44,29 @@ public class GuiController {
                 resetJPanels();
                 NormalStudentPage normalStudentPage = new NormalStudentPage();
                 userMainPanel = normalStudentPage;
+                userCurrentPanel = normalStudentPage;
                 frame.add(normalStudentPage);
                 updateFrame();
                 break;
+            case TEACHERMAINPAGE:
+                resetJPanels();
+                TeacherPage teacherPage = new TeacherPage();
+                userMainPanel = teacherPage;
+                userCurrentPanel = teacherPage;
+                frame.add(teacherPage);
+                updateFrame();
+                break;
+            case LESSONSLISTPAGE:
+                resetJPanels();
+                LessonsListPage lessonsListPage = new LessonsListPage();
+                userCurrentPanel = lessonsListPage;
+                frame.add(lessonsListPage,1);
+                updateFrame();
         }
     }
     public void exitButton(){
         resetJPanels();
+        userMainPanel.setVisible(false);
         LoginPage loginPage = new LoginPage();
         frame.add(loginPage);
         updateFrame();
@@ -81,6 +100,14 @@ public class GuiController {
     public void updateFrame(){
         frame.repaint();
         frame.revalidate();
+        if (!(userMainPanel == null)){
+            userMainPanel.repaint();
+            userMainPanel.revalidate();
+        }
+        if (!(userCurrentPanel == null)){
+            userCurrentPanel.repaint();
+            userCurrentPanel.revalidate();
+        }
     }
 
     public JPanel getUserMainPanel() {

@@ -7,6 +7,8 @@ import Pages.MainPage;
 import Pages.PanelType;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DataHandler {
@@ -28,6 +30,8 @@ public class DataHandler {
     boolean signUpPermit;
     String signupTime;
 
+    List<List<String>> lessons;
+
 
     private static DataHandler dataHandler;
     private DataHandler(){
@@ -42,6 +46,9 @@ public class DataHandler {
     public void analyzeOrder(List<String> orders){
         if (orders.get(0).equals(ClientReqType.LOGIN.toString())){
             DataHandler.getInstance().checkLoginRes(orders);
+        }else if (orders.get(0).equals(ClientReqType.GETLESSONSLIST.toString())){
+            //todo
+            initLessonsList(orders);
         }
     }
     public void checkLoginRes(List<String> orders){
@@ -70,6 +77,20 @@ public class DataHandler {
         }else {
             GuiController.getInstance().jOptionPane.showMessageDialog(null,"USERNAME OR PASSWORD IS WRONG!");
         }
+    }
+    public void initLessonsList(List<String> orders){
+        orders.remove(0);
+        lessons = new ArrayList<>();
+        for (String i:
+             orders) {
+            if (i.equals("SUCCESSFUL")){
+                lessons.add(new ArrayList<>());
+            }else{
+                lessons.get(lessons.size() - 1).add(i);
+            }
+        }
+        System.out.println(lessons);
+
     }
 
     public ImageIcon getImageIcon(){
@@ -195,5 +216,13 @@ public class DataHandler {
 
     public void setSignupTime(String signupTime) {
         this.signupTime = signupTime;
+    }
+
+    public List<List<String>> getLessons() {
+        return lessons;
+    }
+
+    public void setLessons(List<List<String>> lessons) {
+        this.lessons = lessons;
     }
 }

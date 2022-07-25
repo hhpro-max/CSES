@@ -3,6 +3,7 @@ package Pages;
 import ClientSide.ClientConfig;
 import ClientSide.DataHandler;
 import Listeners.ExitListener;
+import Listeners.MainPanelListener;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -38,7 +39,7 @@ public class MainPage extends JPanel {
         initCom();
         align();
         addListener();
-        GuiController.getInstance().addJPanel(this);
+
     }
 
     public void initPanel() {
@@ -109,7 +110,8 @@ public class MainPage extends JPanel {
         //
         ExitListener exitListener = new ExitListener();
         exit.addActionListener(exitListener);
-
+        MainPanelListener mainPanelListener = new MainPanelListener();
+        mainPage.addActionListener(mainPanelListener);
         //
     }
 }

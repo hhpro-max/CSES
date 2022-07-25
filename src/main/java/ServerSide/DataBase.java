@@ -103,4 +103,27 @@ public class DataBase {
         }
         return "NULL";
     }
+    synchronized public void  getLessonsList(ClientHandler clientHandler) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from lessons");
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<String> respond = new ArrayList<>();
+        respond.add(ServerReqType.GETLESSONSLIST.toString());
+        while (resultSet.next()){
+            respond.add(RespondType.SUCCESSFUL.toString());
+            respond.add(resultSet.getString("lessonid"));
+            respond.add(resultSet.getString("name"));
+            respond.add(resultSet.getString("prereq"));
+            respond.add(resultSet.getString("teacherid"));
+            respond.add(resultSet.getString("college"));
+            respond.add(resultSet.getString("units"));
+            respond.add(resultSet.getString("level"));
+            respond.add(resultSet.getString("capacity"));
+            respond.add(resultSet.getString("days"));
+            respond.add(resultSet.getString("time"));
+            respond.add(resultSet.getString("examdate"));
+
+        }
+        clientHandler.sendMessage(respond.toString());
+        respond.clear();
+    }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class ClientHandler implements Runnable {
@@ -84,9 +85,11 @@ public class ClientHandler implements Runnable {
         Server.clients.remove(this);
     }
 
-    private void analyzeOrder(List<String> order) {
+    private void analyzeOrder(List<String> order) throws SQLException {
         if (order.get(0).equals(ServerReqType.LOGIN.toString())){
             DataBase.getInstance().checkLogin(this,order.get(1),order.get(2));
+        }else if (order.get(0).equals(ServerReqType.GETLESSONSLIST.toString())){
+            DataBase.getInstance().getLessonsList(this);
         }
     }
 
