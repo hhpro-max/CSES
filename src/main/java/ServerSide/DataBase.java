@@ -126,4 +126,21 @@ public class DataBase {
         clientHandler.sendMessage(respond.toString());
         respond.clear();
     }
+    synchronized public void getTeachersList(ClientHandler clientHandler) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from sut_members join teachers on sut_members.id = teachers.id");
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<String> respond = new ArrayList<>();
+        respond.add(ServerReqType.GETTEACHERSLIST.toString());
+        while (resultSet.next()){
+            respond.add(RespondType.SUCCESSFUL.toString());
+            respond.add(resultSet.getString("id"));
+            respond.add(resultSet.getString("firstname") + " " + resultSet.getString("lastname"));
+            respond.add(resultSet.getString("email"));
+            respond.add(resultSet.getString("college"));
+            respond.add(resultSet.getString("phonenumber"));
+            respond.add(resultSet.getString("level"));
+        }
+        clientHandler.sendMessage(respond.toString());
+        respond.clear();
+    }
 }

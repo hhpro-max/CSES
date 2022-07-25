@@ -90,6 +90,8 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().checkLogin(this,order.get(1),order.get(2));
         }else if (order.get(0).equals(ServerReqType.GETLESSONSLIST.toString())){
             DataBase.getInstance().getLessonsList(this);
+        }else if ((order.get(0).equals(ServerReqType.GETTEACHERSLIST.toString()))){
+            DataBase.getInstance().getTeachersList(this);
         }
     }
 

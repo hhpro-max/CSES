@@ -31,6 +31,7 @@ public class DataHandler {
     String signupTime;
 
     List<List<String>> lessons;
+    List<List<String>> teachers;
 
 
     private static DataHandler dataHandler;
@@ -47,8 +48,9 @@ public class DataHandler {
         if (orders.get(0).equals(ClientReqType.LOGIN.toString())){
             DataHandler.getInstance().checkLoginRes(orders);
         }else if (orders.get(0).equals(ClientReqType.GETLESSONSLIST.toString())){
-            //todo
             initLessonsList(orders);
+        }else if (orders.get(0).equals(ClientReqType.GETTEACHERSLIST.toString())){
+            initTeachersList(orders);
         }
     }
     public void checkLoginRes(List<String> orders){
@@ -83,14 +85,26 @@ public class DataHandler {
         lessons = new ArrayList<>();
         for (String i:
              orders) {
-            if (i.equals("SUCCESSFUL")){
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
                 lessons.add(new ArrayList<>());
             }else{
                 lessons.get(lessons.size() - 1).add(i);
             }
         }
-        System.out.println(lessons);
 
+
+    }
+    public void initTeachersList(List<String> orders){
+        orders.remove(0);
+        teachers = new ArrayList<>();
+        for (String i:
+                orders) {
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
+                teachers.add(new ArrayList<>());
+            }else{
+                teachers.get(teachers.size() - 1).add(i);
+            }
+        }
     }
 
     public ImageIcon getImageIcon(){
@@ -99,6 +113,14 @@ public class DataHandler {
             return imageIcon ;
         }
         return imageIcon;
+    }
+
+    public List<List<String>> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(List<List<String>> teachers) {
+        this.teachers = teachers;
     }
 
     public int getId() {

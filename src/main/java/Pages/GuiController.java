@@ -39,30 +39,32 @@ public class GuiController {
 
     }
     public void changePanelTo(PanelType panelType){
+        resetJPanels();
         switch (panelType){
             case STUDENTMAINPAGE  :
-                resetJPanels();
                 NormalStudentPage normalStudentPage = new NormalStudentPage();
                 userMainPanel = normalStudentPage;
                 userCurrentPanel = normalStudentPage;
                 frame.add(normalStudentPage);
-                updateFrame();
                 break;
             case TEACHERMAINPAGE:
-                resetJPanels();
                 TeacherPage teacherPage = new TeacherPage();
                 userMainPanel = teacherPage;
                 userCurrentPanel = teacherPage;
                 frame.add(teacherPage);
-                updateFrame();
                 break;
             case LESSONSLISTPAGE:
-                resetJPanels();
                 LessonsListPage lessonsListPage = new LessonsListPage();
                 userCurrentPanel = lessonsListPage;
                 frame.add(lessonsListPage,1);
-                updateFrame();
+                break;
+            case TEACHERSLISTPAGE:
+                TeachersListPage teachersListPage = new TeachersListPage();
+                userCurrentPanel = teachersListPage;
+                frame.add(teachersListPage ,1);
+                break;
         }
+        updateFrame();
     }
     public void exitButton(){
         resetJPanels();

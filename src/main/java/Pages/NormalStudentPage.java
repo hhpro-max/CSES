@@ -2,6 +2,7 @@ package Pages;
 
 import ClientSide.DataHandler;
 import Listeners.LessonsListListener;
+import Listeners.TeachersListListener;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -78,12 +79,8 @@ public class NormalStudentPage extends MainPage{
     private void addMoreListeners() {
         LessonsListListener lessonsListListener = new LessonsListListener();
         lessonsList.addActionListener(lessonsListListener);
-        teachersList.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-            }
-        });
+        TeachersListListener teachersListListener = new TeachersListListener();
+        teachersList.addActionListener(teachersListListener);
         weeklyPlan.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

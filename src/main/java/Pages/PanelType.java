@@ -5,5 +5,6 @@ public enum PanelType {
     STUDENTMAINPAGE,
     TEACHERMAINPAGE,
     LESSONSLISTPAGE,
+    TEACHERSLISTPAGE,
 
 }
