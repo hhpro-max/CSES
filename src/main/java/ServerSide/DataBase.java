@@ -143,4 +143,28 @@ public class DataBase {
         clientHandler.sendMessage(respond.toString());
         respond.clear();
     }
+
+    synchronized public void getUserLessons(ClientHandler clientHandler) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from lessons join student_lessons on lessons.lessonid = student_lessons.lessonid where student_lessons.id = ?");
+        preparedStatement.setInt(1,clientHandler.id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<String> respond = new ArrayList<>();
+        respond.add(ServerReqType.GETUSERLESSONS.toString());
+        while (resultSet.next()){
+            respond.add(RespondType.SUCCESSFUL.toString());
+            respond.add(resultSet.getString("lessonid"));
+            respond.add(resultSet.getString("name"));
+            respond.add(resultSet.getString("prereq"));
+            respond.add(resultSet.getString("teacherid"));
+            respond.add(resultSet.getString("college"));
+            respond.add(resultSet.getString("units"));
+            respond.add(resultSet.getString("level"));
+            respond.add(resultSet.getString("capacity"));
+            respond.add(resultSet.getString("days"));
+            respond.add(resultSet.getString("time"));
+            respond.add(resultSet.getString("examdate"));
+        }
+        clientHandler.sendMessage(respond.toString());
+        respond.clear();
+    }
 }

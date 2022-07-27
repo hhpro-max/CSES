@@ -6,5 +6,5 @@ public enum PanelType {
     TEACHERMAINPAGE,
     LESSONSLISTPAGE,
     TEACHERSLISTPAGE,
-
+    WEEKLYPLANPAGE
 }

@@ -86,13 +86,19 @@ public class ClientHandler implements Runnable {
     }
 
     private void analyzeOrder(List<String> order) throws SQLException {
+        //todo delete sout
+        System.out.println(order.toString());
+
         if (order.get(0).equals(ServerReqType.LOGIN.toString())){
             DataBase.getInstance().checkLogin(this,order.get(1),order.get(2));
         }else if (order.get(0).equals(ServerReqType.GETLESSONSLIST.toString())){
             DataBase.getInstance().getLessonsList(this);
         }else if ((order.get(0).equals(ServerReqType.GETTEACHERSLIST.toString()))){
             DataBase.getInstance().getTeachersList(this);
+        }else if (order.get(0).equals(ServerReqType.GETUSERLESSONS.toString())){
+            DataBase.getInstance().getUserLessons(this);
         }
+
     }
 
 

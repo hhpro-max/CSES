@@ -1,7 +1,6 @@
 package Pages;
 
 import ClientSide.ClientConfig;
-import ClientSide.ClientReqType;
 import ClientSide.DataHandler;
 
 import javax.swing.*;
@@ -99,9 +98,7 @@ public class LessonsListPage extends JPanel {
         namayesh.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<String> orders = new ArrayList<>();
-                orders.add(ClientReqType.GETLESSONSLIST.toString());
-                GuiController.getInstance().getClient().getClientSender().sendMessage(orders);
+                DataHandler.getInstance().updateLessonsList();
                 if (!(sp==null)){
                     remove(sp);
                 }
@@ -121,7 +118,7 @@ public class LessonsListPage extends JPanel {
                 }
                 int j = 0;
                 if (ostadName == null && maghtaInDars == null){
-                    List<List<String>> etelat = DataHandler.getInstance().getLessons();
+                    List<List<String>> etelat = DataHandler.getInstance().getAllLessons();
 
                     String colomns[] = {"ID","NAME","PISHNIAZ","OSTAD","COLLEGE","VAHED","MAGHTA","ZARFIAT","DAYS","TIME","EXAMDATE"};
                     String rows[][] = etelat.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
@@ -133,7 +130,7 @@ public class LessonsListPage extends JPanel {
                 else if (!(ostadName == null) && maghtaInDars == null){
                     List<List<String>> etelat = new ArrayList<>();
                     for (List<String> i:
-                            DataHandler.getInstance().getLessons()) {
+                            DataHandler.getInstance().getAllLessons()) {
                         if (i.get(4).equals(daneshKadeDars.toString()) && i.get(3).equals(ostadName)){
                             etelat.add(i);
                         }
@@ -146,7 +143,7 @@ public class LessonsListPage extends JPanel {
                 }else if (ostadName == null && !(maghtaInDars == null)){
                     List<List<String>> etelat = new ArrayList<>();
                     for (List<String> i:
-                            DataHandler.getInstance().getLessons()) {
+                            DataHandler.getInstance().getAllLessons()) {
                         if (i.get(4).equals(daneshKadeDars.toString()) && i.get(6).equals(maghtaInDars.toString())){
                             etelat.add(i);
                         }
@@ -159,7 +156,7 @@ public class LessonsListPage extends JPanel {
                 }else if (!(ostadName == null) && !(maghtaInDars == null)){
                     List<List<String>> etelat = new ArrayList<>();
                     for (List<String> i:
-                            DataHandler.getInstance().getLessons()) {
+                            DataHandler.getInstance().getAllLessons()) {
                         if (i.get(4).equals(daneshKadeDars.toString()) && i.get(6).equals(maghtaInDars.toString()) && i.get(3).equals(ostadName)){
                             etelat.add(i);
                         }

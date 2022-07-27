@@ -5,7 +5,6 @@ import ClientSide.DataHandler;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TeachersListPage extends JPanel {
@@ -43,12 +42,13 @@ public class TeachersListPage extends JPanel {
         namayesh.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                DataHandler.getInstance().updateTeachersList();
                 if (!(jScrollPane==null)){
                     remove(jScrollPane);
                 }
                 repaint();
                 revalidate();
-                List<List<String>> etelat = DataHandler.getInstance().getTeachers();
+                List<List<String>> etelat = DataHandler.getInstance().getAllTeachers();
 
                 String colomns[] = {"ID","NAME","EMAIL","DANESHKADE","SHOMARETAMAS","DARAJE OSTADI"};
                 String rows[][] = etelat.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);

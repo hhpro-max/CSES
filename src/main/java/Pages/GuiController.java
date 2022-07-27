@@ -63,6 +63,11 @@ public class GuiController {
                 userCurrentPanel = teachersListPage;
                 frame.add(teachersListPage ,1);
                 break;
+            case WEEKLYPLANPAGE:
+                WeeklyPlanPage weeklyPlanPage = new WeeklyPlanPage();
+                userCurrentPanel = weeklyPlanPage;
+                frame.add(weeklyPlanPage,1);
+                break;
         }
         updateFrame();
     }

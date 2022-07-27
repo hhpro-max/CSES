@@ -29,6 +29,8 @@ public class ClientReceiver implements Runnable {
             String input = in.nextLine();
             List<String> serverOrder = castToList(input);
             DataHandler.getInstance().analyzeOrder(serverOrder);
+            //todo delete sout
+            System.out.println(serverOrder.toString());
         }
     }
 

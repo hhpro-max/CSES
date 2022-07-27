@@ -3,12 +3,10 @@ package ClientSide;
 import ClientSources.ImageResource;
 import ClientSources.ResourceManager;
 import Pages.GuiController;
-import Pages.MainPage;
 import Pages.PanelType;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class DataHandler {
@@ -30,8 +28,9 @@ public class DataHandler {
     boolean signUpPermit;
     String signupTime;
 
-    List<List<String>> lessons;
-    List<List<String>> teachers;
+    List<List<String>> allLessons;
+    List<List<String>> allTeachers;
+    List<List<String>> userLessons;
 
 
     private static DataHandler dataHandler;
@@ -51,6 +50,8 @@ public class DataHandler {
             initLessonsList(orders);
         }else if (orders.get(0).equals(ClientReqType.GETTEACHERSLIST.toString())){
             initTeachersList(orders);
+        }else if (orders.get(0).equals(ClientReqType.GETUSERLESSONS.toString())){
+            initUserLessons(orders);
         }
     }
     public void checkLoginRes(List<String> orders){
@@ -82,13 +83,13 @@ public class DataHandler {
     }
     public void initLessonsList(List<String> orders){
         orders.remove(0);
-        lessons = new ArrayList<>();
+        allLessons = new ArrayList<>();
         for (String i:
              orders) {
             if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
-                lessons.add(new ArrayList<>());
+                allLessons.add(new ArrayList<>());
             }else{
-                lessons.get(lessons.size() - 1).add(i);
+                allLessons.get(allLessons.size() - 1).add(i);
             }
         }
 
@@ -96,15 +97,40 @@ public class DataHandler {
     }
     public void initTeachersList(List<String> orders){
         orders.remove(0);
-        teachers = new ArrayList<>();
+        allTeachers = new ArrayList<>();
         for (String i:
                 orders) {
             if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
-                teachers.add(new ArrayList<>());
+                allTeachers.add(new ArrayList<>());
             }else{
-                teachers.get(teachers.size() - 1).add(i);
+                allTeachers.get(allTeachers.size() - 1).add(i);
             }
         }
+    }
+    public void initUserLessons(List<String> orders){
+        orders.remove(0);
+        userLessons = new ArrayList<>();
+        for (String i:
+             orders) {
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
+                userLessons.add(new ArrayList<>());
+            }else{
+                userLessons.get(userLessons.size() - 1).add(i);
+            }
+        }
+        //todo delete sout
+        System.out.println(userLessons.toString());
+    }
+
+    public void updateLessonsList(){
+        List<String> orders = new ArrayList<>();
+        orders.add(ClientReqType.GETLESSONSLIST.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(orders);
+    }
+    public void updateTeachersList(){
+        List<String> orders = new ArrayList<>();
+        orders.add(ClientReqType.GETTEACHERSLIST.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(orders);
     }
 
     public ImageIcon getImageIcon(){
@@ -115,12 +141,12 @@ public class DataHandler {
         return imageIcon;
     }
 
-    public List<List<String>> getTeachers() {
-        return teachers;
+    public List<List<String>> getAllTeachers() {
+        return allTeachers;
     }
 
-    public void setTeachers(List<List<String>> teachers) {
-        this.teachers = teachers;
+    public void setAllTeachers(List<List<String>> allTeachers) {
+        this.allTeachers = allTeachers;
     }
 
     public int getId() {
@@ -240,11 +266,20 @@ public class DataHandler {
         this.signupTime = signupTime;
     }
 
-    public List<List<String>> getLessons() {
-        return lessons;
+    public List<List<String>> getAllLessons() {
+        return allLessons;
     }
 
     public void setLessons(List<List<String>> lessons) {
-        this.lessons = lessons;
+        this.allLessons = lessons;
+    }
+
+    public List<List<String>> getUserLessons() {
+
+        return userLessons;
+    }
+
+    public void setUserLessons(List<List<String>> userLessons) {
+        this.userLessons = userLessons;
     }
 }

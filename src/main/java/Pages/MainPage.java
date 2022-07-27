@@ -2,8 +2,7 @@ package Pages;
 
 import ClientSide.ClientConfig;
 import ClientSide.DataHandler;
-import Listeners.ExitListener;
-import Listeners.MainPanelListener;
+import Listeners.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -112,6 +111,16 @@ public class MainPage extends JPanel {
         exit.addActionListener(exitListener);
         MainPanelListener mainPanelListener = new MainPanelListener();
         mainPage.addActionListener(mainPanelListener);
+
+        //
+
+        LessonsListListener lessonsListListener = new LessonsListListener();
+        lessonsList.addActionListener(lessonsListListener);
+        TeachersListListener teachersListListener = new TeachersListListener();
+        teachersList.addActionListener(teachersListListener);
+        WeeklyPlanListener weeklyPlanListener = new WeeklyPlanListener();
+        weeklyPlan.addActionListener(weeklyPlanListener);
+
         //
     }
 }
