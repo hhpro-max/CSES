@@ -1,5 +1,6 @@
 package ServerSide;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -22,6 +23,9 @@ public class ClientHandler implements Runnable {
     String phoneNumber;
     String college;
     String lastLoginTime;
+
+    boolean isStudent = false;
+    boolean isTeacher = false;
 
     public ClientHandler(Socket socket) throws IOException {
         this.socket = socket;
@@ -85,6 +89,8 @@ public class ClientHandler implements Runnable {
         Server.clients.remove(this);
     }
 
+
+
     private void analyzeOrder(List<String> order) throws SQLException {
         //todo delete sout
         System.out.println(order.toString());
@@ -97,6 +103,10 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().getTeachersList(this);
         }else if (order.get(0).equals(ServerReqType.GETUSERLESSONS.toString())){
             DataBase.getInstance().getUserLessons(this);
+        }else if (order.get(0).equals(ServerReqType.GETRECOMMENDLIST.toString())){
+            DataBase.getInstance().getRecommendList(this);
+        }else if (order.get(0).equals(ServerReqType.RECOMMENDREQ.toString())){
+            DataBase.getInstance().setRecommendReq(this,order.get(1));
         }
 
     }

@@ -1,6 +1,7 @@
 package ServerSide;
 
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,7 +17,7 @@ public class DataBase {
             connection = DriverManager.getConnection(Config.databaseUrl, Config.databaseUser, Config.databasePass);
         } catch (SQLException e) {
             e.printStackTrace();
-            //todo
+            //todo exception handle
         }
     }
 
@@ -62,25 +63,27 @@ public class DataBase {
                 clientHandler.college = resultSet.getString("college");
                 clientHandler.lastLoginTime = hour + ":" + minute + ":" + seconds;
 
-                switch (clientHandler.relation){
+                switch (clientHandler.relation) {
                     case "D":
                         preparedStatement = connection.prepareStatement("select * from students where id = ?");
-                        preparedStatement.setInt(1,clientHandler.id);
+                        preparedStatement.setInt(1, clientHandler.id);
                         resultSet = preparedStatement.executeQuery();
-                        if (resultSet.next()){
+                        if (resultSet.next()) {
                             respond.add(resultSet.getString("educational_status"));
                             respond.add(findMemberName(resultSet.getInt("supervisor_id")));
                             respond.add(resultSet.getString("signup_permit"));
                             respond.add(resultSet.getString("signup_time"));
                         }
+                        clientHandler.isStudent = true;
+                        System.out.println("STUDENT LOGEDIN!");
                         break;
+                    //todo complete the relations
                 }
 
                 preparedStatement = connection.prepareStatement("update sut_members set lastlogintime = ? where id = ?");
                 preparedStatement.setString(1, hour + ":" + minute + ":" + seconds);
                 preparedStatement.setString(2, username);
                 preparedStatement.executeUpdate();
-
 
 
             } else {
@@ -94,21 +97,23 @@ public class DataBase {
             //todo
         }
     }
+
     public String findMemberName(int id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("select * from sut_members where id = ?");
-        preparedStatement.setInt(1,id);
+        preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()){
+        if (resultSet.next()) {
             return resultSet.getString("firstname") + " " + resultSet.getString("lastname");
         }
         return "NULL";
     }
-    synchronized public void  getLessonsList(ClientHandler clientHandler) throws SQLException {
+
+    synchronized public void getLessonsList(ClientHandler clientHandler) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("select * from lessons");
         ResultSet resultSet = preparedStatement.executeQuery();
         List<String> respond = new ArrayList<>();
         respond.add(ServerReqType.GETLESSONSLIST.toString());
-        while (resultSet.next()){
+        while (resultSet.next()) {
             respond.add(RespondType.SUCCESSFUL.toString());
             respond.add(resultSet.getString("lessonid"));
             respond.add(resultSet.getString("name"));
@@ -126,12 +131,13 @@ public class DataBase {
         clientHandler.sendMessage(respond.toString());
         respond.clear();
     }
+
     synchronized public void getTeachersList(ClientHandler clientHandler) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("select * from sut_members join teachers on sut_members.id = teachers.id");
         ResultSet resultSet = preparedStatement.executeQuery();
         List<String> respond = new ArrayList<>();
         respond.add(ServerReqType.GETTEACHERSLIST.toString());
-        while (resultSet.next()){
+        while (resultSet.next()) {
             respond.add(RespondType.SUCCESSFUL.toString());
             respond.add(resultSet.getString("id"));
             respond.add(resultSet.getString("firstname") + " " + resultSet.getString("lastname"));
@@ -146,12 +152,12 @@ public class DataBase {
 
     synchronized public void getUserLessons(ClientHandler clientHandler) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("select * from lessons join student_lessons on lessons.lessonid = student_lessons.lessonid where student_lessons.id = ? or lessons.teacherid = ?");
-        preparedStatement.setInt(1,clientHandler.id);
-        preparedStatement.setInt(2,clientHandler.id);
+        preparedStatement.setInt(1, clientHandler.id);
+        preparedStatement.setInt(2, clientHandler.id);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<String> respond = new ArrayList<>();
         respond.add(ServerReqType.GETUSERLESSONS.toString());
-        while (resultSet.next()){
+        while (resultSet.next()) {
             respond.add(RespondType.SUCCESSFUL.toString());
             respond.add(resultSet.getString("lessonid"));
             respond.add(resultSet.getString("name"));
@@ -167,5 +173,62 @@ public class DataBase {
         }
         clientHandler.sendMessage(respond.toString());
         respond.clear();
+    }
+
+    synchronized public void getRecommendList(ClientHandler clientHandler) throws SQLException {
+        PreparedStatement preparedStatement;
+        ResultSet resultSet;
+        List<String> respond = new ArrayList<>();
+        respond.add(ServerReqType.GETRECOMMENDLIST.toString());
+        if (clientHandler.isStudent) {
+            preparedStatement = connection.prepareStatement("select * from recommend_req join sut_members on recommend_req.teacherid = sut_members.id where recommend_req.studentid = ?");
+            preparedStatement.setInt(1, clientHandler.id);
+        } else if (clientHandler.isTeacher) {
+            preparedStatement = connection.prepareStatement("select * from recommend_req join sut_members on recommend_req.studentid = sut_members.id where recommend_req.teacherid = ?");
+            preparedStatement.setInt(1, clientHandler.id);
+
+        }
+        else {
+            //todo
+            preparedStatement = connection.prepareStatement("");
+        }
+        resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            respond.add(RespondType.SUCCESSFUL.toString());
+            respond.add(resultSet.getString("id"));
+            respond.add(resultSet.getString("firstname") + " " + resultSet.getString("lastname"));
+            respond.add(resultSet.getString("result"));
+        }
+        clientHandler.sendMessage(respond.toString());
+        respond.clear();
+    }
+
+    synchronized public void setRecommendReq(ClientHandler clientHandler, String teacherID) throws SQLException {
+        List<String> res = new ArrayList<>();
+        res.add(ServerReqType.RECOMMENDREQ.toString());
+        if (clientHandler.isStudent) {
+            String check = findMemberRelation(Integer.parseInt(teacherID));
+            if (check.equals("O")){
+                PreparedStatement preparedStatement = connection.prepareStatement("insert into recommend_req values (? , ? , default)");
+                preparedStatement.setInt(1, clientHandler.id);
+                preparedStatement.setInt(2, Integer.parseInt(teacherID));
+                preparedStatement.execute();
+                res.add(RespondType.SUCCESSFUL.toString());
+            }else {
+                res.add(RespondType.UNSUCCESSFUL.toString());
+            }
+            clientHandler.sendMessage(res.toString());
+            getRecommendList(clientHandler);
+        }
+
+    }
+    public String findMemberRelation(int id) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("select relation from sut_members where id = ?");
+        preparedStatement.setInt(1,id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()){
+            return resultSet.getString("relation");
+        }
+        return "NULL";
     }
 }

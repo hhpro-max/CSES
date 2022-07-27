@@ -73,6 +73,11 @@ public class GuiController {
                 userCurrentPanel =examsListPage;
                 frame.add(examsListPage,1);
                 break;
+            case STUDENTRECREQPAGE:
+                StudentRecReqPage studentRecReqPage = new StudentRecReqPage();
+                userCurrentPanel = studentRecReqPage;
+                frame.add(studentRecReqPage,1);
+                break;
         }
         updateFrame();
     }
@@ -120,6 +125,14 @@ public class GuiController {
             userCurrentPanel.repaint();
             userCurrentPanel.revalidate();
         }
+    }
+
+    public JOptionPane getjOptionPane() {
+        return jOptionPane;
+    }
+
+    public void setjOptionPane(JOptionPane jOptionPane) {
+        this.jOptionPane = jOptionPane;
     }
 
     public JPanel getUserMainPanel() {

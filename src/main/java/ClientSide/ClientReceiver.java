@@ -27,10 +27,15 @@ public class ClientReceiver implements Runnable {
         //System.out.println( "YOUR TOKEN IS : " + Client.getToken() );
         while (true) {
             String input = in.nextLine();
-            List<String> serverOrder = castToList(input);
-            DataHandler.getInstance().analyzeOrder(serverOrder);
+
             //todo delete sout
-            System.out.println(serverOrder.toString());
+            System.out.println(input);
+
+            List<String> serverOrder = castToList(input);
+
+
+            DataHandler.getInstance().analyzeOrder(serverOrder);
+
         }
     }
 

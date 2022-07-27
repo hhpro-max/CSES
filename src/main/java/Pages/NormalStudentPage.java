@@ -1,10 +1,7 @@
 package Pages;
 
 import ClientSide.DataHandler;
-import Listeners.ExamListListener;
-import Listeners.LessonsListListener;
-import Listeners.TeachersListListener;
-import Listeners.WeeklyPlanListener;
+import Listeners.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -79,14 +76,8 @@ public class NormalStudentPage extends MainPage{
     }
 
     private void addMoreListeners() {
-        ExamListListener examListListener = new ExamListListener();
-        examsList.addActionListener(examListListener);
-        recommendReq.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-            }
-        });
+        StudentRecReqListener studentRecReqListener = new StudentRecReqListener();
+        recommendReq.addActionListener(studentRecReqListener);
         studyEvidenceReq.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

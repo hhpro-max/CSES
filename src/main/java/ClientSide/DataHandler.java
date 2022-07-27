@@ -31,6 +31,7 @@ public class DataHandler {
     List<List<String>> allLessons;
     List<List<String>> allTeachers;
     List<List<String>> userLessons;
+    List<List<String>> recommendsList;
 
 
     private static DataHandler dataHandler;
@@ -52,8 +53,22 @@ public class DataHandler {
             initTeachersList(orders);
         }else if (orders.get(0).equals(ClientReqType.GETUSERLESSONS.toString())){
             initUserLessons(orders);
+        }else if (orders.get(0).equals(ClientReqType.GETRECOMMENDLIST.toString())){
+            initRecommendList(orders);
+        }else if (orders.get(0).equals(ClientReqType.RECOMMENDREQ.toString())){
+            showRecReqResult(orders);
         }
     }
+
+    private void showRecReqResult(List<String> orders) {
+        if (orders.get(1).equals(ServerRespondType.SUCCESSFUL.toString())){
+            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOUR REQ HAS BEEN SAVES SUCCESSFULLY!");
+        }else {
+            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"TEACHER ID HAS NOT FOUND!");
+        }
+    }
+
+
     public void checkLoginRes(List<String> orders){
         if (orders.get(1).equals(ServerRespondType.SUCCESSFUL.toString())){
             GuiController.getInstance().jOptionPane.showMessageDialog(null,"YOU HAD LOGEDIN SUCCESSFULY");
@@ -119,6 +134,18 @@ public class DataHandler {
             }
         }
     }
+    private void initRecommendList(List<String> orders) {
+        orders.remove(0);
+        recommendsList = new ArrayList<>();
+        for (String i:
+                orders) {
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
+                recommendsList.add(new ArrayList<>());
+            }else{
+                recommendsList.get(recommendsList.size() - 1).add(i);
+            }
+        }
+    }
 
     public void updateLessonsList(){
         List<String> orders = new ArrayList<>();
@@ -135,12 +162,25 @@ public class DataHandler {
         req.add(ClientReqType.GETUSERLESSONS.toString());
         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
     }
+    public void updateRecommendsList(){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.GETRECOMMENDLIST.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
     public ImageIcon getImageIcon(){
         if (imageIcon == null){
             ImageIcon imageIcon = new ImageIcon(ResourceManager.get(ImageResource.NULL_PROFILE));
             return imageIcon ;
         }
         return imageIcon;
+    }
+
+    public List<List<String>> getRecommendsList() {
+        return recommendsList;
+    }
+
+    public void setRecommendsList(List<List<String>> recommendsList) {
+        this.recommendsList = recommendsList;
     }
 
     public List<List<String>> getAllTeachers() {

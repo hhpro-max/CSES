@@ -5,7 +5,6 @@ public enum ServerReqType {
     GETLESSONSLIST,
     GETTEACHERSLIST,
     GETUSERLESSONS,
-
-
-
+    GETRECOMMENDLIST,
+    RECOMMENDREQ,
 }

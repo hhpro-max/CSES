@@ -120,7 +120,8 @@ public class MainPage extends JPanel {
         teachersList.addActionListener(teachersListListener);
         WeeklyPlanListener weeklyPlanListener = new WeeklyPlanListener();
         weeklyPlan.addActionListener(weeklyPlanListener);
-
+        ExamListListener examListListener = new ExamListListener();
+        examsList.addActionListener(examListListener);
         //
     }
 }

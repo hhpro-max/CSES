@@ -31,12 +31,6 @@ public class TeacherPage extends MainPage{
         userProfile.add(userProfileMenu);
     }
     private void addMoreListener() {
-        examsList.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
         recommendReq.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
