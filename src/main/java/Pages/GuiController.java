@@ -68,6 +68,11 @@ public class GuiController {
                 userCurrentPanel = weeklyPlanPage;
                 frame.add(weeklyPlanPage,1);
                 break;
+            case EXAMSLISTPAGE:
+                ExamsListPage examsListPage = new ExamsListPage();
+                userCurrentPanel =examsListPage;
+                frame.add(examsListPage,1);
+                break;
         }
         updateFrame();
     }
@@ -80,7 +85,7 @@ public class GuiController {
     }
     public void goToMainPanel(){
         resetJPanels();
-        getFrame().add(getUserMainPanel());
+        getFrame().add(getUserMainPanel() ,1);
         updateFrame();
     }
 

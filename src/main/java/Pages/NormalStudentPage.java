@@ -1,6 +1,7 @@
 package Pages;
 
 import ClientSide.DataHandler;
+import Listeners.ExamListListener;
 import Listeners.LessonsListListener;
 import Listeners.TeachersListListener;
 import Listeners.WeeklyPlanListener;
@@ -78,12 +79,8 @@ public class NormalStudentPage extends MainPage{
     }
 
     private void addMoreListeners() {
-        examsList.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-            }
-        });
+        ExamListListener examListListener = new ExamListListener();
+        examsList.addActionListener(examListListener);
         recommendReq.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -24,6 +24,7 @@ public class WeeklyPlanPage extends JPanel {
         initComps();
         align();
         addListener();
+        GuiController.getInstance().addJPanel(this);
     }
 
     private void initPanel() {

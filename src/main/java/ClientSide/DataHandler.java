@@ -118,8 +118,6 @@ public class DataHandler {
                 userLessons.get(userLessons.size() - 1).add(i);
             }
         }
-        //todo delete sout
-        System.out.println(userLessons.toString());
     }
 
     public void updateLessonsList(){
@@ -132,7 +130,11 @@ public class DataHandler {
         orders.add(ClientReqType.GETTEACHERSLIST.toString());
         GuiController.getInstance().getClient().getClientSender().sendMessage(orders);
     }
-
+    public void updateUserLessons(){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.GETUSERLESSONS.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
     public ImageIcon getImageIcon(){
         if (imageIcon == null){
             ImageIcon imageIcon = new ImageIcon(ResourceManager.get(ImageResource.NULL_PROFILE));

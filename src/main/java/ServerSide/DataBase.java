@@ -145,8 +145,9 @@ public class DataBase {
     }
 
     synchronized public void getUserLessons(ClientHandler clientHandler) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("select * from lessons join student_lessons on lessons.lessonid = student_lessons.lessonid where student_lessons.id = ?");
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from lessons join student_lessons on lessons.lessonid = student_lessons.lessonid where student_lessons.id = ? or lessons.teacherid = ?");
         preparedStatement.setInt(1,clientHandler.id);
+        preparedStatement.setInt(2,clientHandler.id);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<String> respond = new ArrayList<>();
         respond.add(ServerReqType.GETUSERLESSONS.toString());
