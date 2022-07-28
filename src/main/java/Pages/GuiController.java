@@ -88,6 +88,11 @@ public class GuiController {
                 userCurrentPanel = minorReqPage;
                 frame.add(minorReqPage,1);
                 break;
+            case LEAVEREQPAGE:
+                LeaveReqPage leaveReqPage = new LeaveReqPage();
+                userCurrentPanel = leaveReqPage;
+                frame.add(leaveReqPage,1);
+                break;
         }
         updateFrame();
     }

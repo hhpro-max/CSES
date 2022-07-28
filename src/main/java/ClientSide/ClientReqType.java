@@ -8,5 +8,7 @@ public enum ClientReqType {
     GETRECOMMENDLIST,
     RECOMMENDREQ,
     MINORREQLIST,
-    MINORREQ
+    MINORREQ,
+    LEAVEREQLIST,
+    LEAVEREQ
 }

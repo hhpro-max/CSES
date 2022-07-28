@@ -86,13 +86,8 @@ public class NormalStudentPage extends MainPage{
         });
         MinorReqListener minorReqListener = new MinorReqListener();
         minorReq.addActionListener(minorReqListener);
-        leaveReq.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-
-            }
-        });
+        LeaveReqListener leaveReqListener = new LeaveReqListener();
+        leaveReq.addActionListener(leaveReqListener);
         temporaryGrades.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

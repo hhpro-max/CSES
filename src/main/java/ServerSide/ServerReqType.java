@@ -8,5 +8,7 @@ public enum ServerReqType {
     GETRECOMMENDLIST,
     RECOMMENDREQ,
     MINORREQLIST,
-    MINORREQ
+    MINORREQ,
+    LEAVEREQLIST,
+    LEAVEREQ
 }

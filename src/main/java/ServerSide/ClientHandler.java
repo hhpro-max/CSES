@@ -111,6 +111,10 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().getMinorReqList(this);
         } else if (order.get(0).equals(ServerReqType.MINORREQ.toString())){
             DataBase.getInstance().setMinorReq(this,order);
+        }else if (order.get(0).equals(ServerReqType.LEAVEREQ.toString())){
+            DataBase.getInstance().setLeaveReq(this,order);
+        }else if (order.get(0).equals(ServerReqType.LEAVEREQLIST.toString())){
+            DataBase.getInstance().getLeaveReqList(this);
         }
 
     }

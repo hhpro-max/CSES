@@ -3,6 +3,7 @@ package ClientSide;
 import ClientSources.ImageResource;
 import ClientSources.ResourceManager;
 import Pages.GuiController;
+import Pages.LeaveReqPage;
 import Pages.PanelType;
 
 import javax.swing.*;
@@ -33,7 +34,7 @@ public class DataHandler {
     List<List<String>> userLessons;
     List<List<String>> recommendsList;
     List<List<String>> minorReqList;
-
+    List<List<String>> leaveReqList;
 
     private static DataHandler dataHandler;
     private DataHandler(){
@@ -62,8 +63,13 @@ public class DataHandler {
             initMinorReqList(orders);
         } else if (orders.get(0).equals(ClientReqType.MINORREQ.toString())){
             showMinorReqResult(orders);
+        }else if (orders.get(0).equals(ClientReqType.LEAVEREQ.toString())){
+            showLeaveReqResult(orders);
+        }else if (orders.get(0).equals(ClientReqType.LEAVEREQLIST.toString())){
+            initLeaveReqList(orders);
         }
     }
+
 
 
 
@@ -173,7 +179,29 @@ public class DataHandler {
             GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOU ARE UNDER_DEFINED_SCORE!");
         }
     }
+    private void initLeaveReqList(List<String> orders) {
+        leaveReqList = new ArrayList<>();
+        leaveReqList.add(new ArrayList<>());
+        leaveReqList.get(0).add("_-_-_-_");
+        if (orders.size() >= 2){
+            leaveReqList.get(0).add(orders.get(1));
+        }else {
+            leaveReqList.get(0).add("YOU HAVE NO REQUESTS HERE!");
+        }
+    }
 
+    private void showLeaveReqResult(List<String> orders) {
+        if (orders.get(1).equals(ServerRespondType.SUCCESSFUL.toString())){
+            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOUR REQ HAS BEEN SAVED SUCCESSFULLY!");
+        }else {
+            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"SOME THING WENT WRONG!");
+        }
+    }
+    public void updateLeaveReqList(){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.LEAVEREQLIST.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
     public void updateLessonsList(){
         List<String> orders = new ArrayList<>();
         orders.add(ClientReqType.GETLESSONSLIST.toString());
@@ -213,6 +241,14 @@ public class DataHandler {
 
     public void setMinorReqList(List<List<String>> minorReqList) {
         this.minorReqList = minorReqList;
+    }
+
+    public List<List<String>> getLeaveReqList() {
+        return leaveReqList;
+    }
+
+    public void setLeaveReqList(List<List<String>> leaveReqList) {
+        this.leaveReqList = leaveReqList;
     }
 
     public List<List<String>> getRecommendsList() {

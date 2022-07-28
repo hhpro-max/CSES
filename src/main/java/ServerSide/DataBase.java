@@ -6,6 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 
 public class DataBase {
     Connection connection;
@@ -187,8 +188,7 @@ public class DataBase {
             preparedStatement = connection.prepareStatement("select * from recommend_req join sut_members on recommend_req.studentid = sut_members.id where recommend_req.teacherid = ?");
             preparedStatement.setInt(1, clientHandler.id);
 
-        }
-        else {
+        } else {
             //todo
             preparedStatement = connection.prepareStatement("");
         }
@@ -208,13 +208,13 @@ public class DataBase {
         res.add(ServerReqType.RECOMMENDREQ.toString());
         if (clientHandler.isStudent) {
             String check = findMemberRelation(Integer.parseInt(teacherID));
-            if (check.equals("O")){
+            if (check.equals("O")) {
                 PreparedStatement preparedStatement = connection.prepareStatement("insert into recommend_req values (? , ? , default)");
                 preparedStatement.setInt(1, clientHandler.id);
                 preparedStatement.setInt(2, Integer.parseInt(teacherID));
                 preparedStatement.execute();
                 res.add(RespondType.SUCCESSFUL.toString());
-            }else {
+            } else {
                 res.add(RespondType.UNSUCCESSFUL.toString());
             }
             clientHandler.sendMessage(res.toString());
@@ -222,38 +222,39 @@ public class DataBase {
         }
 
     }
+
     synchronized public String findMemberRelation(int id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("select relation from sut_members where id = ?");
-        preparedStatement.setInt(1,id);
+        preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()){
+        if (resultSet.next()) {
             return resultSet.getString("relation");
         }
         return "NULL";
     }
 
-   synchronized  public void setMinorReq(ClientHandler clientHandler,List<String> orders) throws SQLException {
+    synchronized public void setMinorReq(ClientHandler clientHandler, List<String> orders) throws SQLException {
         PreparedStatement preparedStatement;
         ResultSet resultSet;
         List<String> respond = new ArrayList<>();
         respond.add(ServerReqType.MINORREQ.toString());
-        if (clientHandler.isStudent){
+        if (clientHandler.isStudent) {
             preparedStatement = connection.prepareStatement("select grade_average from students where id = ?");
-            preparedStatement.setInt(1,clientHandler.id);
+            preparedStatement.setInt(1, clientHandler.id);
             resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 double score = resultSet.getDouble("grade_average");
-                if (score >= 14.0){
+                if (score >= 14.0) {
                     preparedStatement = connection.prepareStatement("insert into minor_req values (?,?,?,default)");
-                    preparedStatement.setInt(1,clientHandler.id);
-                    preparedStatement.setString(2,clientHandler.college);
-                    preparedStatement.setString(3,orders.get(1));
+                    preparedStatement.setInt(1, clientHandler.id);
+                    preparedStatement.setString(2, clientHandler.college);
+                    preparedStatement.setString(3, orders.get(1));
                     preparedStatement.execute();
                     respond.add(RespondType.SUCCESSFUL.toString());
-                }else {
+                } else {
                     respond.add(RespondType.UNSUCCESSFUL.toString());
                 }
-            }else {
+            } else {
                 respond.add(RespondType.UNSUCCESSFUL.toString());
             }
         }
@@ -265,11 +266,11 @@ public class DataBase {
     synchronized public void getMinorReqList(ClientHandler clientHandler) throws SQLException {
         List<String> res = new ArrayList<>();
         res.add(ServerReqType.MINORREQLIST.toString());
-        if (clientHandler.isStudent){
+        if (clientHandler.isStudent) {
             PreparedStatement preparedStatement = connection.prepareStatement("select aim_college , result from minor_req where studentid = ?");
-            preparedStatement.setInt(1,clientHandler.id);
+            preparedStatement.setInt(1, clientHandler.id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 res.add(RespondType.SUCCESSFUL.toString());
                 res.add(resultSet.getString("aim_college"));
                 res.add(resultSet.getString("result"));
@@ -277,5 +278,42 @@ public class DataBase {
         }
         clientHandler.sendMessage(res.toString());
         res.clear();
+    }
+
+    synchronized public void setLeaveReq(ClientHandler clientHandler, List<String> order) throws SQLException {
+        List<String> res = new ArrayList<>();
+        res.add(ServerReqType.LEAVEREQ.toString());
+
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from leave_req where studentid = ?");
+        preparedStatement.setInt(1, clientHandler.id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if (!resultSet.next()) {
+            res.add(RespondType.SUCCESSFUL.toString());
+            preparedStatement = connection.prepareStatement("insert into leave_req values (?,default)");
+            preparedStatement.setInt(1,clientHandler.id);
+            preparedStatement.execute();
+        } else {
+            res.add(RespondType.UNSUCCESSFUL.toString());
+        }
+        getLeaveReqList(clientHandler);
+        clientHandler.sendMessage(res.toString());
+        res.clear();
+    }
+
+    synchronized public void getLeaveReqList(ClientHandler clientHandler) throws SQLException {
+        List<String> res = new ArrayList<>();
+        res.add(ServerReqType.LEAVEREQLIST.toString());
+        PreparedStatement preparedStatement;
+        ResultSet resultSet;
+        if (clientHandler.isStudent){
+            preparedStatement = connection.prepareStatement("select * from leave_req where studentid = ?");
+            preparedStatement.setInt(1,clientHandler.id);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                res.add(resultSet.getString("result"));
+            }
+        }
+        clientHandler.sendMessage(res.toString());
     }
 }
