@@ -7,4 +7,6 @@ public enum ServerReqType {
     GETUSERLESSONS,
     GETRECOMMENDLIST,
     RECOMMENDREQ,
+    MINORREQLIST,
+    MINORREQ
 }

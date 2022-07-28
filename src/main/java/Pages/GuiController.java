@@ -78,6 +78,11 @@ public class GuiController {
                 userCurrentPanel = studentRecReqPage;
                 frame.add(studentRecReqPage,1);
                 break;
+            case STUDYEVIDENCEREQPAGE:
+                StudyEvidenceReqPage studyEvidenceReqPage = new StudyEvidenceReqPage();
+                userCurrentPanel = studyEvidenceReqPage;
+                frame.add(studyEvidenceReqPage , 1);
+                break;
         }
         updateFrame();
     }

@@ -32,6 +32,7 @@ public class DataHandler {
     List<List<String>> allTeachers;
     List<List<String>> userLessons;
     List<List<String>> recommendsList;
+    List<List<String>> minorReqList;
 
 
     private static DataHandler dataHandler;
@@ -57,6 +58,16 @@ public class DataHandler {
             initRecommendList(orders);
         }else if (orders.get(0).equals(ClientReqType.RECOMMENDREQ.toString())){
             showRecReqResult(orders);
+        }else if (orders.get(0).equals(ClientReqType.MINORREQ.toString())){
+            showMinorReqResult(orders);
+        }
+    }
+
+    private void showMinorReqResult(List<String> orders) {
+        if (orders.get(1).equals(ServerRespondType.SUCCESSFUL.toString())){
+            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOUR REQ HAS BEEN SAVES SUCCESSFULLY!");
+        }else {
+            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOU ARE UNDER_DEFINED_SCORE!");
         }
     }
 
@@ -173,6 +184,14 @@ public class DataHandler {
             return imageIcon ;
         }
         return imageIcon;
+    }
+
+    public List<List<String>> getMinorReqList() {
+        return minorReqList;
+    }
+
+    public void setMinorReqList(List<List<String>> minorReqList) {
+        this.minorReqList = minorReqList;
     }
 
     public List<List<String>> getRecommendsList() {
@@ -312,7 +331,7 @@ public class DataHandler {
         return allLessons;
     }
 
-    public void setLessons(List<List<String>> lessons) {
+    public void setAllLessons(List<List<String>> lessons) {
         this.allLessons = lessons;
     }
 

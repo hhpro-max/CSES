@@ -231,4 +231,41 @@ public class DataBase {
         }
         return "NULL";
     }
+
+    public void setMinorReq(ClientHandler clientHandler,List<String> orders) throws SQLException {
+        PreparedStatement preparedStatement;
+        ResultSet resultSet;
+        List<String> respond = new ArrayList<>();
+        respond.add(ServerReqType.MINORREQ.toString());
+        if (clientHandler.isStudent){
+            preparedStatement = connection.prepareStatement("select grade_average from students where id = ?");
+            preparedStatement.setInt(1,clientHandler.id);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                double score = resultSet.getDouble("grade_average");
+                if (score >= 14.0){
+                    preparedStatement = connection.prepareStatement("insert into minor_req values (?,?,?)");
+                    preparedStatement.setInt(1,clientHandler.id);
+                    preparedStatement.setString(2,clientHandler.college);
+                    preparedStatement.setString(3,orders.get(1));
+                    if (preparedStatement.execute()){
+                        respond.add(RespondType.SUCCESSFUL.toString());
+                    }else {
+                        respond.add(RespondType.UNSUCCESSFUL.toString());
+                    }
+                }else {
+                    respond.add(RespondType.UNSUCCESSFUL.toString());
+                }
+            }else {
+                respond.add(RespondType.UNSUCCESSFUL.toString());
+            }
+        }
+        getMinorReqList(clientHandler);
+        clientHandler.sendMessage(respond.toString());
+        respond.clear();
+    }
+
+    public void getMinorReqList(ClientHandler clientHandler) {
+        //todo complete this
+    }
 }

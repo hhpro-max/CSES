@@ -107,6 +107,10 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().getRecommendList(this);
         }else if (order.get(0).equals(ServerReqType.RECOMMENDREQ.toString())){
             DataBase.getInstance().setRecommendReq(this,order.get(1));
+        }else if (order.get(0).equals(ServerReqType.MINORREQLIST.toString())){
+            DataBase.getInstance().getMinorReqList(this);
+        } else if (order.get(0).equals(ServerReqType.RECOMMENDREQ.toString())){
+            DataBase.getInstance().setMinorReq(this,order);
         }
 
     }
