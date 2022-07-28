@@ -58,22 +58,18 @@ public class DataHandler {
             initRecommendList(orders);
         }else if (orders.get(0).equals(ClientReqType.RECOMMENDREQ.toString())){
             showRecReqResult(orders);
-        }else if (orders.get(0).equals(ClientReqType.MINORREQ.toString())){
+        }else if (orders.get(0).equals(ClientReqType.MINORREQLIST.toString())){
+            initMinorReqList(orders);
+        } else if (orders.get(0).equals(ClientReqType.MINORREQ.toString())){
             showMinorReqResult(orders);
         }
     }
 
-    private void showMinorReqResult(List<String> orders) {
-        if (orders.get(1).equals(ServerRespondType.SUCCESSFUL.toString())){
-            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOUR REQ HAS BEEN SAVES SUCCESSFULLY!");
-        }else {
-            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOU ARE UNDER_DEFINED_SCORE!");
-        }
-    }
+
 
     private void showRecReqResult(List<String> orders) {
         if (orders.get(1).equals(ServerRespondType.SUCCESSFUL.toString())){
-            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOUR REQ HAS BEEN SAVES SUCCESSFULLY!");
+            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOUR REQ HAS BEEN SAVED SUCCESSFULLY!");
         }else {
             GuiController.getInstance().getjOptionPane().showMessageDialog(null,"TEACHER ID HAS NOT FOUND!");
         }
@@ -157,6 +153,26 @@ public class DataHandler {
             }
         }
     }
+    private void initMinorReqList(List<String> orders) {
+        orders.remove(0);
+        minorReqList = new ArrayList<>();
+        for (String i:
+                orders) {
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
+                minorReqList.add(new ArrayList<>());
+            }else{
+                minorReqList.get(minorReqList.size() - 1).add(i);
+            }
+        }
+    }
+
+    private void showMinorReqResult(List<String> orders) {
+        if (orders.get(1).equals(ServerRespondType.SUCCESSFUL.toString())){
+            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOUR REQ HAS BEEN SAVED SUCCESSFULLY!");
+        }else {
+            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOU ARE UNDER_DEFINED_SCORE!");
+        }
+    }
 
     public void updateLessonsList(){
         List<String> orders = new ArrayList<>();
@@ -176,6 +192,11 @@ public class DataHandler {
     public void updateRecommendsList(){
         List<String> req = new ArrayList<>();
         req.add(ClientReqType.GETRECOMMENDLIST.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
+    public void updateMinorReqList(){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.MINORREQLIST.toString());
         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
     }
     public ImageIcon getImageIcon(){

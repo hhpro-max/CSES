@@ -84,12 +84,8 @@ public class NormalStudentPage extends MainPage{
                 GuiController.getInstance().changePanelTo(PanelType.STUDYEVIDENCEREQPAGE);
             }
         });
-        minorReq.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-            }
-        });
+        MinorReqListener minorReqListener = new MinorReqListener();
+        minorReq.addActionListener(minorReqListener);
         leaveReq.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

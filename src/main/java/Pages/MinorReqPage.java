@@ -11,7 +11,7 @@ import java.util.*;
 
 public class MinorReqPage extends JPanel {
     JButton jButton;
-    JComboBox<College> jComboBox;
+    JComboBox<String> jComboBox;
     JOptionPane jOptionPane;
     String coloms[] ={"Daneshkade Maghsad","Moshahede Natije"};
     List<List<String>> data = new ArrayList<>();
@@ -34,7 +34,17 @@ public class MinorReqPage extends JPanel {
     }
     public void initComps(){
         jButton = new JButton("Sabt Darkhast");
-        jComboBox = new JComboBox<>(College.values());
+        List<String> collegeList = new ArrayList<>();
+        for (College c:
+             College.values()) {
+            collegeList.add(c.toString());
+        }
+        collegeList.remove(DataHandler.getInstance().getCollege().toUpperCase());
+        jComboBox = new JComboBox<>();
+        for (String i:
+             collegeList) {
+            jComboBox.addItem(i);
+        }
         jOptionPane = new JOptionPane();
         jTable = null;
         jScrollPane = null;
@@ -67,6 +77,9 @@ public class MinorReqPage extends JPanel {
     }
 
     public void initTable() {
+        if (data != null) {
+            data.clear();
+        }
         data.addAll(DataHandler.getInstance().getMinorReqList());
         String data1[][]= data.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
         jTable = new JTable(data1,coloms);

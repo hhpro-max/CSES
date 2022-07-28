@@ -83,6 +83,11 @@ public class GuiController {
                 userCurrentPanel = studyEvidenceReqPage;
                 frame.add(studyEvidenceReqPage , 1);
                 break;
+            case MINORREQPAGE:
+                MinorReqPage minorReqPage = new MinorReqPage();
+                userCurrentPanel = minorReqPage;
+                frame.add(minorReqPage,1);
+                break;
         }
         updateFrame();
     }

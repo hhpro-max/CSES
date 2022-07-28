@@ -98,7 +98,7 @@ public class DataBase {
         }
     }
 
-    public String findMemberName(int id) throws SQLException {
+    synchronized public String findMemberName(int id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("select * from sut_members where id = ?");
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -222,7 +222,7 @@ public class DataBase {
         }
 
     }
-    public String findMemberRelation(int id) throws SQLException {
+    synchronized public String findMemberRelation(int id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("select relation from sut_members where id = ?");
         preparedStatement.setInt(1,id);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -232,7 +232,7 @@ public class DataBase {
         return "NULL";
     }
 
-    public void setMinorReq(ClientHandler clientHandler,List<String> orders) throws SQLException {
+   synchronized  public void setMinorReq(ClientHandler clientHandler,List<String> orders) throws SQLException {
         PreparedStatement preparedStatement;
         ResultSet resultSet;
         List<String> respond = new ArrayList<>();
@@ -244,15 +244,12 @@ public class DataBase {
             if (resultSet.next()){
                 double score = resultSet.getDouble("grade_average");
                 if (score >= 14.0){
-                    preparedStatement = connection.prepareStatement("insert into minor_req values (?,?,?)");
+                    preparedStatement = connection.prepareStatement("insert into minor_req values (?,?,?,default)");
                     preparedStatement.setInt(1,clientHandler.id);
                     preparedStatement.setString(2,clientHandler.college);
                     preparedStatement.setString(3,orders.get(1));
-                    if (preparedStatement.execute()){
-                        respond.add(RespondType.SUCCESSFUL.toString());
-                    }else {
-                        respond.add(RespondType.UNSUCCESSFUL.toString());
-                    }
+                    preparedStatement.execute();
+                    respond.add(RespondType.SUCCESSFUL.toString());
                 }else {
                     respond.add(RespondType.UNSUCCESSFUL.toString());
                 }
@@ -265,7 +262,20 @@ public class DataBase {
         respond.clear();
     }
 
-    public void getMinorReqList(ClientHandler clientHandler) {
-        //todo complete this
+    synchronized public void getMinorReqList(ClientHandler clientHandler) throws SQLException {
+        List<String> res = new ArrayList<>();
+        res.add(ServerReqType.MINORREQLIST.toString());
+        if (clientHandler.isStudent){
+            PreparedStatement preparedStatement = connection.prepareStatement("select aim_college , result from minor_req where studentid = ?");
+            preparedStatement.setInt(1,clientHandler.id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                res.add(RespondType.SUCCESSFUL.toString());
+                res.add(resultSet.getString("aim_college"));
+                res.add(resultSet.getString("result"));
+            }
+        }
+        clientHandler.sendMessage(res.toString());
+        res.clear();
     }
 }
