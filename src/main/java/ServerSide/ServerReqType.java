@@ -10,5 +10,7 @@ public enum ServerReqType {
     MINORREQLIST,
     MINORREQ,
     LEAVEREQLIST,
-    LEAVEREQ
+    LEAVEREQ,
+    TEMPORARYGRADESLIST,
+    OBJECTION,
 }

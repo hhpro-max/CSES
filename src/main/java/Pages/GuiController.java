@@ -42,7 +42,7 @@ public class GuiController {
         resetJPanels();
         switch (panelType){
             case STUDENTMAINPAGE  :
-                NormalStudentPage normalStudentPage = new NormalStudentPage();
+                StudentPage normalStudentPage = new StudentPage();
                 userMainPanel = normalStudentPage;
                 userCurrentPanel = normalStudentPage;
                 frame.add(normalStudentPage);
@@ -92,6 +92,11 @@ public class GuiController {
                 LeaveReqPage leaveReqPage = new LeaveReqPage();
                 userCurrentPanel = leaveReqPage;
                 frame.add(leaveReqPage,1);
+                break;
+            case TEMPORARYGRADELISTPAGE:
+                TemporaryGradesPage temporaryGradesPage = new TemporaryGradesPage();
+                userCurrentPanel=temporaryGradesPage;
+                frame.add(temporaryGradesPage,1);
                 break;
         }
         updateFrame();

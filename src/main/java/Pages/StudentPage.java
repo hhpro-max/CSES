@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class NormalStudentPage extends MainPage{
+public class StudentPage extends MainPage{
     public JTable studyStatus;
     public JLabel showStatus;
 
@@ -19,7 +19,7 @@ public class NormalStudentPage extends MainPage{
     public JMenuItem eduStatus;
     public JMenuItem userProfileMenu;
 
-    public NormalStudentPage() {
+    public StudentPage() {
         super();
         initTable();
         initMenubar();
@@ -88,12 +88,8 @@ public class NormalStudentPage extends MainPage{
         minorReq.addActionListener(minorReqListener);
         LeaveReqListener leaveReqListener = new LeaveReqListener();
         leaveReq.addActionListener(leaveReqListener);
-        temporaryGrades.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-            }
-        });
+        TemporaryGradesListener temporaryGradesListener = new TemporaryGradesListener();
+        temporaryGrades.addActionListener(temporaryGradesListener);
         eduStatus.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

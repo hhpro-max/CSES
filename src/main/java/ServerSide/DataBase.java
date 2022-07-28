@@ -316,4 +316,38 @@ public class DataBase {
         }
         clientHandler.sendMessage(res.toString());
     }
+
+    public void setObjection(ClientHandler clientHandler, List<String> order) throws SQLException {
+        PreparedStatement preparedStatement;
+        ResultSet resultSet;
+        if (clientHandler.isStudent){
+            preparedStatement = connection.prepareStatement("update student_lessons set student_objection = ? where id = ? and lessonid = ?");
+            preparedStatement.setString(1,order.get(order.size()-1));
+            preparedStatement.setInt(2,clientHandler.id);
+            preparedStatement.setInt(3,Integer.parseInt(order.get(1)));
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    public void getTemporaryGradesList(ClientHandler clientHandler) throws SQLException {
+        List<String> res = new ArrayList<>();
+        res.add(ServerReqType.TEMPORARYGRADESLIST.toString());
+
+        PreparedStatement preparedStatement;
+        ResultSet resultSet;
+
+        if (clientHandler.isStudent){
+            preparedStatement = connection.prepareStatement("select * from student_lessons where id = ?");
+            preparedStatement.setInt(1,clientHandler.id);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                res.add(RespondType.SUCCESSFUL.toString());
+                res.add(resultSet.getString("lessonid"));
+                res.add(resultSet.getString("score"));
+                res.add(resultSet.getString("student_objection"));
+                res.add(resultSet.getString("teacher_answer"));
+            }
+        }
+        clientHandler.sendMessage(res.toString());
+    }
 }

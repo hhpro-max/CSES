@@ -10,5 +10,7 @@ public enum ClientReqType {
     MINORREQLIST,
     MINORREQ,
     LEAVEREQLIST,
-    LEAVEREQ
+    LEAVEREQ,
+    TEMPORARYGRADESLIST,
+    OBJECTION,
 }

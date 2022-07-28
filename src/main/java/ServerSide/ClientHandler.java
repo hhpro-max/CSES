@@ -115,6 +115,10 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().setLeaveReq(this,order);
         }else if (order.get(0).equals(ServerReqType.LEAVEREQLIST.toString())){
             DataBase.getInstance().getLeaveReqList(this);
+        }else if (order.get(0).equals(ServerReqType.OBJECTION.toString())){
+            DataBase.getInstance().setObjection(this,order);
+        }else if (order.get(0).equals(ServerReqType.TEMPORARYGRADESLIST.toString())){
+            DataBase.getInstance().getTemporaryGradesList(this);
         }
 
     }

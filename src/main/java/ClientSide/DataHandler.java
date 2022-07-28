@@ -35,10 +35,17 @@ public class DataHandler {
     List<List<String>> recommendsList;
     List<List<String>> minorReqList;
     List<List<String>> leaveReqList;
+    List<List<String>> userTemporaryGradesList;
 
     private static DataHandler dataHandler;
     private DataHandler(){
-
+        allLessons = new ArrayList<>();
+        allTeachers = new ArrayList<>();
+        userLessons = new ArrayList<>();
+        recommendsList = new ArrayList<>();
+        minorReqList = new ArrayList<>();
+        leaveReqList = new ArrayList<>();
+        userTemporaryGradesList = new ArrayList<>();
     }
     public static DataHandler getInstance(){
         if (dataHandler == null){
@@ -67,6 +74,8 @@ public class DataHandler {
             showLeaveReqResult(orders);
         }else if (orders.get(0).equals(ClientReqType.LEAVEREQLIST.toString())){
             initLeaveReqList(orders);
+        }else if (orders.get(0).equals(ClientReqType.TEMPORARYGRADESLIST.toString())){
+            initTemporaryGradesList(orders);
         }
     }
 
@@ -179,6 +188,18 @@ public class DataHandler {
             GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOU ARE UNDER_DEFINED_SCORE!");
         }
     }
+    private void initTemporaryGradesList(List<String> orders) {
+        orders.remove(0);
+        userTemporaryGradesList = new ArrayList<>();
+        for (String i:
+                orders) {
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
+                userTemporaryGradesList.add(new ArrayList<>());
+            }else{
+                userTemporaryGradesList.get(userTemporaryGradesList.size() - 1).add(i);
+            }
+        }
+    }
     private void initLeaveReqList(List<String> orders) {
         leaveReqList = new ArrayList<>();
         leaveReqList.add(new ArrayList<>());
@@ -196,6 +217,11 @@ public class DataHandler {
         }else {
             GuiController.getInstance().getjOptionPane().showMessageDialog(null,"SOME THING WENT WRONG!");
         }
+    }
+    public void updateTemporaryGradesList(){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.TEMPORARYGRADESLIST.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
     }
     public void updateLeaveReqList(){
         List<String> req = new ArrayList<>();
@@ -395,6 +421,14 @@ public class DataHandler {
     public List<List<String>> getUserLessons() {
 
         return userLessons;
+    }
+
+    public List<List<String>> getUserTemporaryGradesList() {
+        return userTemporaryGradesList;
+    }
+
+    public void setUserTemporaryGradesList(List<List<String>> userTemporaryGradesList) {
+        this.userTemporaryGradesList = userTemporaryGradesList;
     }
 
     public void setUserLessons(List<List<String>> userLessons) {
