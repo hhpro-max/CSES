@@ -334,6 +334,12 @@ public class DataBase {
             preparedStatement.setInt(2,clientHandler.id);
             preparedStatement.setInt(3,Integer.parseInt(order.get(1)));
             preparedStatement.executeUpdate();
+        }else if (clientHandler.isTeacher){
+            preparedStatement = connection.prepareStatement("update student_lessons set teacher_answer = ? where id = ? and lessonid = ?");
+            preparedStatement.setString(1,order.get(order.size()-1));
+            preparedStatement.setString(2,order.get(2));
+            preparedStatement.setString(3,order.get(1));
+            preparedStatement.executeUpdate();
         }
     }
 
@@ -354,6 +360,20 @@ public class DataBase {
                 res.add(resultSet.getString("score"));
                 res.add(resultSet.getString("student_objection"));
                 res.add(resultSet.getString("teacher_answer"));
+            }
+        }else if (clientHandler.isTeacher){
+            preparedStatement = connection.prepareStatement("select * from sut_members join (student_lessons join lessons on lessons.lessonid = student_lessons.lessonid )on student_lessons.id = sut_members.id where lessons.teacherid = ?");
+            preparedStatement.setInt(1,clientHandler.id);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                res.add(RespondType.SUCCESSFUL.toString());
+                res.add(resultSet.getString("sut_members.id"));
+                res.add(resultSet.getString("sut_members.firstname") + " " + resultSet.getString("sut_members.lastname"));
+                res.add(resultSet.getString("student_lessons.lessonid"));
+                res.add(resultSet.getString("lessons.name"));
+                res.add(resultSet.getString("student_lessons.score"));
+                res.add(resultSet.getString("student_lessons.student_objection"));
+                res.add(resultSet.getString("student_lessons.teacher_answer"));
             }
         }
         clientHandler.sendMessage(res.toString());
@@ -381,5 +401,15 @@ public class DataBase {
            preparedStatement.setInt(3,Integer.parseInt(order.get(1)));
            preparedStatement.executeUpdate();
        }
+    }
+
+    public void setTemporaryGrades(ClientHandler clientHandler, List<String> order) throws SQLException {
+        if (clientHandler.isTeacher){
+            PreparedStatement preparedStatement = connection.prepareStatement("update student_lessons set score = ? where id = ? and lessonid = ?");
+            preparedStatement.setDouble(1,Double.parseDouble(order.get(order.size()-1)));
+            preparedStatement.setInt(2,Integer.parseInt(order.get(1)));
+            preparedStatement.setInt(3,Integer.parseInt(order.get(2)));
+            preparedStatement.executeUpdate();
+        }
     }
 }

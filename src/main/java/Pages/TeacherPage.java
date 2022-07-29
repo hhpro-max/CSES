@@ -2,6 +2,7 @@ package Pages;
 
 import Listeners.LessonsListListener;
 import Listeners.TeacherRecReqListener;
+import Listeners.TeacherTemporaryGradeListener;
 import Listeners.TeachersListListener;
 
 import javax.swing.*;
@@ -34,12 +35,9 @@ public class TeacherPage extends MainPage{
     private void addMoreListener() {
         TeacherRecReqListener teacherRecReqListener = new TeacherRecReqListener();
         recommendReq.addActionListener(teacherRecReqListener);
-        temporaryGrades.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        TeacherTemporaryGradeListener teacherTemporaryGradeListener = new TeacherTemporaryGradeListener();
+        temporaryGrades.addActionListener(teacherTemporaryGradeListener);
 
-            }
-        });
         userProfileMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

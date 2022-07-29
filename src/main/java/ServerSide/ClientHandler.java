@@ -125,6 +125,8 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().setUserPhoneNumber(this,order);
         }else if (order.get(0).equals(ServerReqType.SET_REC_RESULT.toString())){
             DataBase.getInstance().setRecResult(this,order);
+        }else if (order.get(0).equals(ServerReqType.SET_TEMPORARY_GRADE.toString())){
+            DataBase.getInstance().setTemporaryGrades(this,order);
         }
 
     }

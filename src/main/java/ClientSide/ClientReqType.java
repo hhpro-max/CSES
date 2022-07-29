@@ -16,5 +16,6 @@ public enum ClientReqType {
     SETSTUDENTGRADEAVE,
     EDIT_EMAIL,
     EDIT_PHONE,
-    SET_REC_RESULT
+    SET_REC_RESULT,
+    SET_TEMPORARY_GRADE
 }

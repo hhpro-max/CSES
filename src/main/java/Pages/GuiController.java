@@ -113,6 +113,11 @@ public class GuiController {
                 userCurrentPanel = teacherRecReqPage;
                 frame.add(teacherRecReqPage ,1);
                 break;
+            case TEACHER_TEMPORARY_GRADES_PAGE:
+                TeacherTemporaryGradesPage teacherTemporaryGradesPage = new TeacherTemporaryGradesPage();
+                userCurrentPanel = teacherTemporaryGradesPage;
+                frame.add(teacherTemporaryGradesPage,1);
+                break;
         }
         updateFrame();
     }
