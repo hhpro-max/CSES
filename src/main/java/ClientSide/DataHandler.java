@@ -22,7 +22,7 @@ public class DataHandler {
     String college;
     String lastLoginTime;
     ImageIcon imageIcon;
-    //
+    //student
     String educationStatus;
     String supervisorName;
     private String sp;
@@ -30,6 +30,9 @@ public class DataHandler {
     String signupTime;
     double averageGrade;
     String entranceYear;
+    //teacher
+    String roomNumber;
+    String teacherLevel;
 
     List<List<String>> allLessons;
     List<List<String>> allTeachers;
@@ -117,7 +120,8 @@ public class DataHandler {
                     GuiController.getInstance().changePanelTo(PanelType.STUDENTMAINPAGE);
                     break;
                 case "O":
-
+                    this.teacherLevel = orders.get(11);
+                    this.roomNumber = orders.get(12);
                     GuiController.getInstance().changePanelTo(PanelType.TEACHERMAINPAGE);
                     break;
             }
@@ -458,5 +462,21 @@ public class DataHandler {
 
     public void setUserLessons(List<List<String>> userLessons) {
         this.userLessons = userLessons;
+    }
+
+    public String getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public String getTeacherLevel() {
+        return teacherLevel;
+    }
+
+    public void setTeacherLevel(String teacherLevel) {
+        this.teacherLevel = teacherLevel;
     }
 }

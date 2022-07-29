@@ -81,7 +81,13 @@ public class DataBase {
                         System.out.println("STUDENT LOGEDIN!");
                         break;
                     case "O":
-
+                        preparedStatement = connection.prepareStatement("select * from teachers where id = ?");
+                        preparedStatement.setInt(1,clientHandler.id);
+                        resultSet = preparedStatement.executeQuery();
+                        if (resultSet.next()){
+                            respond.add(resultSet.getString("level"));
+                            respond.add(resultSet.getString("roomid"));
+                        }
                         clientHandler.isTeacher = true;
                         System.out.println("TEACHER LOGEDIN!");
                         break;

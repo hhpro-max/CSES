@@ -37,11 +37,10 @@ public class TeacherPage extends MainPage{
         recommendReq.addActionListener(teacherRecReqListener);
         TeacherTemporaryGradeListener teacherTemporaryGradeListener = new TeacherTemporaryGradeListener();
         temporaryGrades.addActionListener(teacherTemporaryGradeListener);
-
         userProfileMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                GuiController.getInstance().changePanelTo(PanelType.TEACHER_PROFILE_PAGE);
             }
         });
     }

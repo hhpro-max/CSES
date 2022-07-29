@@ -60,7 +60,7 @@ public class MainPage extends JPanel {
         exit = new JButton("EXIT");
         lastLoginTime = new JLabel(DataHandler.getInstance().getLastLoginTime());
         imageIcon = new JLabel(DataHandler.getInstance().getImageIcon());
-        name = new JLabel("yourName : " + DataHandler.getInstance().getFirstname());
+        name = new JLabel("yourName : " + DataHandler.getInstance().getFullName());
         email = new JLabel("yourEmail : " +DataHandler.getInstance().getEmail());
 
         //menu items
