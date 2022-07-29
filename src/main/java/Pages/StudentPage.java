@@ -90,12 +90,9 @@ public class StudentPage extends MainPage{
         leaveReq.addActionListener(leaveReqListener);
         TemporaryGradesListener temporaryGradesListener = new TemporaryGradesListener();
         temporaryGrades.addActionListener(temporaryGradesListener);
-        eduStatus.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-            }
-        });
+        StudentEduStatusListener studentEduStatusListener = new StudentEduStatusListener();
+        eduStatus.addActionListener(studentEduStatusListener);
+
         userProfileMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

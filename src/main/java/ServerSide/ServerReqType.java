@@ -13,4 +13,5 @@ public enum ServerReqType {
     LEAVEREQ,
     TEMPORARYGRADESLIST,
     OBJECTION,
+    SETSTUDENTGRADEAVE
 }

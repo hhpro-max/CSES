@@ -171,6 +171,7 @@ public class DataBase {
             respond.add(resultSet.getString("days"));
             respond.add(resultSet.getString("time"));
             respond.add(resultSet.getString("examdate"));
+            respond.add(resultSet.getString("score"));
         }
         clientHandler.sendMessage(respond.toString());
         respond.clear();

@@ -98,6 +98,11 @@ public class GuiController {
                 userCurrentPanel=temporaryGradesPage;
                 frame.add(temporaryGradesPage,1);
                 break;
+            case STUDENT_EDU_STATUS_PAGE:
+                StudentEduStatusPage studentEduStatusPage = new StudentEduStatusPage();
+                userCurrentPanel = studentEduStatusPage;
+                frame.add(studentEduStatusPage,1);
+                break;
         }
         updateFrame();
     }

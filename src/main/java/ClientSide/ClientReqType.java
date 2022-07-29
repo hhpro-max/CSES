@@ -13,4 +13,5 @@ public enum ClientReqType {
     LEAVEREQ,
     TEMPORARYGRADESLIST,
     OBJECTION,
+    SETSTUDENTGRADEAVE
 }
