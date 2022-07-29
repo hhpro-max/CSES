@@ -123,6 +123,8 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().setUserEmail(this,order);
         }else if (order.get(0).equals(ServerReqType.EDIT_PHONE.toString())){
             DataBase.getInstance().setUserPhoneNumber(this,order);
+        }else if (order.get(0).equals(ServerReqType.SET_REC_RESULT.toString())){
+            DataBase.getInstance().setRecResult(this,order);
         }
 
     }

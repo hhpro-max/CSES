@@ -80,6 +80,11 @@ public class DataBase {
                         clientHandler.isStudent = true;
                         System.out.println("STUDENT LOGEDIN!");
                         break;
+                    case "O":
+
+                        clientHandler.isTeacher = true;
+                        System.out.println("TEACHER LOGEDIN!");
+                        break;
                     //todo complete the relations
                 }
 
@@ -320,7 +325,7 @@ public class DataBase {
         clientHandler.sendMessage(res.toString());
     }
 
-    public void setObjection(ClientHandler clientHandler, List<String> order) throws SQLException {
+    synchronized public void setObjection(ClientHandler clientHandler, List<String> order) throws SQLException {
         PreparedStatement preparedStatement;
         ResultSet resultSet;
         if (clientHandler.isStudent){
@@ -332,7 +337,7 @@ public class DataBase {
         }
     }
 
-    public void getTemporaryGradesList(ClientHandler clientHandler) throws SQLException {
+    synchronized public void getTemporaryGradesList(ClientHandler clientHandler) throws SQLException {
         List<String> res = new ArrayList<>();
         res.add(ServerReqType.TEMPORARYGRADESLIST.toString());
 
@@ -354,17 +359,27 @@ public class DataBase {
         clientHandler.sendMessage(res.toString());
     }
 
-    public void setUserEmail(ClientHandler clientHandler,List<String> order) throws SQLException {
+    synchronized public void setUserEmail(ClientHandler clientHandler,List<String> order) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("update sut_members set email = ? where id = ?");
         preparedStatement.setString(1,order.get(1));
         preparedStatement.setInt(2,clientHandler.id);
         preparedStatement.executeUpdate();
     }
 
-    public void setUserPhoneNumber(ClientHandler clientHandler, List<String> order) throws SQLException {
+    synchronized public void setUserPhoneNumber(ClientHandler clientHandler, List<String> order) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("update sut_members set phonenumber = ? where id = ?");
         preparedStatement.setString(1,order.get(1));
         preparedStatement.setInt(2,clientHandler.id);
         preparedStatement.executeUpdate();
+    }
+
+    public void setRecResult(ClientHandler clientHandler, List<String> order) throws SQLException {
+       if (clientHandler.isTeacher){
+           PreparedStatement preparedStatement = connection.prepareStatement("update recommend_req set result = ? where teacherid = ? and studentid = ?");
+           preparedStatement.setString(1,order.get(2));
+           preparedStatement.setInt(2,clientHandler.id);
+           preparedStatement.setInt(3,Integer.parseInt(order.get(1)));
+           preparedStatement.executeUpdate();
+       }
     }
 }

@@ -114,10 +114,15 @@ public class DataHandler {
                     this.signupTime = orders.get(14);
                     this.averageGrade = Double.parseDouble(orders.get(15));
                     this.entranceYear = orders.get(16);
+                    GuiController.getInstance().changePanelTo(PanelType.STUDENTMAINPAGE);
+                    break;
+                case "O":
+
+                    GuiController.getInstance().changePanelTo(PanelType.TEACHERMAINPAGE);
                     break;
             }
             //todo change this
-            GuiController.getInstance().changePanelTo(PanelType.STUDENTMAINPAGE);
+
         }else {
             GuiController.getInstance().jOptionPane.showMessageDialog(null,"USERNAME OR PASSWORD IS WRONG!");
         }

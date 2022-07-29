@@ -15,5 +15,6 @@ public enum ServerReqType {
     OBJECTION,
     SETSTUDENTGRADEAVE,
     EDIT_EMAIL,
-    EDIT_PHONE
+    EDIT_PHONE,
+    SET_REC_RESULT
 }
