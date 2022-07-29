@@ -28,6 +28,8 @@ public class DataHandler {
     private String sp;
     boolean signUpPermit;
     String signupTime;
+    double averageGrade;
+    String entranceYear;
 
     List<List<String>> allLessons;
     List<List<String>> allTeachers;
@@ -110,6 +112,8 @@ public class DataHandler {
                     this.supervisorName = orders.get(12);
                     this.sp = orders.get(13);
                     this.signupTime = orders.get(14);
+                    this.averageGrade = Double.parseDouble(orders.get(15));
+                    this.entranceYear = orders.get(16);
                     break;
             }
             //todo change this
@@ -309,6 +313,14 @@ public class DataHandler {
         this.nc = nc;
     }
 
+    public String getEntranceYear() {
+        return entranceYear;
+    }
+
+    public void setEntranceYear(String entranceYear) {
+        this.entranceYear = entranceYear;
+    }
+
     public String getFirstname() {
         return firstname;
     }
@@ -367,6 +379,14 @@ public class DataHandler {
 
     public String getFullName() {
         return fullName;
+    }
+
+    public double getAverageGrade() {
+        return averageGrade;
+    }
+
+    public void setAverageGrade(double averageGrade) {
+        this.averageGrade = averageGrade;
     }
 
     public void setFullName(String fullName) {

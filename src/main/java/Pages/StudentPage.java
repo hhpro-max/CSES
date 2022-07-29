@@ -96,7 +96,7 @@ public class StudentPage extends MainPage{
         userProfileMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                GuiController.getInstance().changePanelTo(PanelType.STUDENT_PROFILE_PAGE);
             }
         });
     }

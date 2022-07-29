@@ -74,6 +74,8 @@ public class DataBase {
                             respond.add(findMemberName(resultSet.getInt("supervisor_id")));
                             respond.add(resultSet.getString("signup_permit"));
                             respond.add(resultSet.getString("signup_time"));
+                            respond.add(resultSet.getString("grade_average"));
+                            respond.add(resultSet.getString("enter_year"));
                         }
                         clientHandler.isStudent = true;
                         System.out.println("STUDENT LOGEDIN!");
@@ -350,5 +352,19 @@ public class DataBase {
             }
         }
         clientHandler.sendMessage(res.toString());
+    }
+
+    public void setUserEmail(ClientHandler clientHandler,List<String> order) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("update sut_members set email = ? where id = ?");
+        preparedStatement.setString(1,order.get(1));
+        preparedStatement.setInt(2,clientHandler.id);
+        preparedStatement.executeUpdate();
+    }
+
+    public void setUserPhoneNumber(ClientHandler clientHandler, List<String> order) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("update sut_members set phonenumber = ? where id = ?");
+        preparedStatement.setString(1,order.get(1));
+        preparedStatement.setInt(2,clientHandler.id);
+        preparedStatement.executeUpdate();
     }
 }
