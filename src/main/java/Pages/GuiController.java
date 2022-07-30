@@ -41,6 +41,12 @@ public class GuiController {
     public void changePanelTo(PanelType panelType){
         resetJPanels();
         switch (panelType){
+            case SENIOR_STUDENT_MAIN_PAGE:
+                SeniorStudentPage seniorStudentPage = new SeniorStudentPage();
+                userCurrentPanel = seniorStudentPage;
+                userMainPanel = seniorStudentPage;
+                frame.add(seniorStudentPage);
+                break;
             case STUDENTMAINPAGE  :
                 StudentPage normalStudentPage = new StudentPage();
                 userMainPanel = normalStudentPage;
@@ -122,6 +128,11 @@ public class GuiController {
                 TeacherProfilePage teacherProfilePage = new TeacherProfilePage();
                 userCurrentPanel = teacherProfilePage;
                 frame.add(teacherProfilePage,1);
+                break;
+            case DORMITORY_REQ_PAGE:
+                DormitoryReqPage dormitoryReqPage = new DormitoryReqPage();
+                userCurrentPanel = dormitoryReqPage;
+                frame.add(dormitoryReqPage,1);
                 break;
         }
         updateFrame();

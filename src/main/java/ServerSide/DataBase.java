@@ -76,6 +76,7 @@ public class DataBase {
                             respond.add(resultSet.getString("signup_time"));
                             respond.add(resultSet.getString("grade_average"));
                             respond.add(resultSet.getString("enter_year"));
+                            respond.add(resultSet.getString("education_level"));
                         }
                         clientHandler.isStudent = true;
                         System.out.println("STUDENT LOGEDIN!");

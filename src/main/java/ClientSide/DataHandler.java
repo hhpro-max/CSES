@@ -23,6 +23,7 @@ public class DataHandler {
     String lastLoginTime;
     ImageIcon imageIcon;
     //student
+    String eduLevel;
     String educationStatus;
     String supervisorName;
     private String sp;
@@ -30,6 +31,8 @@ public class DataHandler {
     String signupTime;
     double averageGrade;
     String entranceYear;
+    //senior student
+    String dormitoryReq = "FALSE";
     //teacher
     String roomNumber;
     String teacherLevel;
@@ -115,9 +118,19 @@ public class DataHandler {
                     this.supervisorName = orders.get(12);
                     this.sp = orders.get(13);
                     this.signupTime = orders.get(14);
-                    this.averageGrade = Double.parseDouble(orders.get(15));
+                    try {
+                        this.averageGrade = Double.parseDouble(orders.get(15));
+                    }catch (Exception e){
+                        this.averageGrade = 0.0;
+                    }
                     this.entranceYear = orders.get(16);
-                    GuiController.getInstance().changePanelTo(PanelType.STUDENTMAINPAGE);
+                    this.eduLevel = orders.get(17);
+                    if (eduLevel.equals("DA")){
+                        GuiController.getInstance().changePanelTo(PanelType.SENIOR_STUDENT_MAIN_PAGE);
+                    }else {
+                        GuiController.getInstance().changePanelTo(PanelType.STUDENTMAINPAGE);
+                    }
+
                     break;
                 case "O":
                     this.teacherLevel = orders.get(11);
@@ -478,5 +491,13 @@ public class DataHandler {
 
     public void setTeacherLevel(String teacherLevel) {
         this.teacherLevel = teacherLevel;
+    }
+
+    public String getDormitoryReq() {
+        return dormitoryReq;
+    }
+
+    public String getEduLevel() {
+        return eduLevel;
     }
 }

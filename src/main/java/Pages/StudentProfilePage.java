@@ -33,7 +33,7 @@ public class StudentProfilePage extends ProfilePage{
         salVorod1 = new JLabel("SAL VOROOD :");
         salVorod2 =new JLabel(DataHandler.getInstance().getEntranceYear());
         maghta1 = new JLabel("MAGHTA :");
-        maghta2 = new JLabel(DataHandler.getInstance().getRelation());
+        maghta2 = new JLabel(DataHandler.getInstance().getEduLevel());
         vaziat1 = new JLabel("VAZIAT :");
         vaziat2 = new JLabel(DataHandler.getInstance().getEducationStatus());
     }
