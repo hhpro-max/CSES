@@ -156,6 +156,11 @@ public class GuiController {
                 userCurrentPanel = addLessonPage;
                 frame.add(addLessonPage,1);
                 break;
+            case ADD_STUDENT_PAGE:
+                AddStudentPage addStudentPage = new AddStudentPage();
+                userCurrentPanel = addStudentPage;
+                frame.add(addStudentPage,1);
+                break;
         }
         updateFrame();
     }

@@ -412,7 +412,7 @@ public class DataBase {
         preparedStatement.executeUpdate();
     }
 
-    public void setRecResult(ClientHandler clientHandler, List<String> order) throws SQLException {
+    synchronized public void setRecResult(ClientHandler clientHandler, List<String> order) throws SQLException {
        if (clientHandler.isTeacher){
            PreparedStatement preparedStatement = connection.prepareStatement("update recommend_req set result = ? where teacherid = ? and studentid = ?");
            preparedStatement.setString(1,order.get(2));
@@ -422,7 +422,7 @@ public class DataBase {
        }
     }
 
-    public void setTemporaryGrades(ClientHandler clientHandler, List<String> order) throws SQLException {
+    synchronized public void setTemporaryGrades(ClientHandler clientHandler, List<String> order) throws SQLException {
         if (clientHandler.isTeacher){
             PreparedStatement preparedStatement = connection.prepareStatement("update student_lessons set score = ? where id = ? and lessonid = ?");
             preparedStatement.setDouble(1,Double.parseDouble(order.get(order.size()-1)));
@@ -432,7 +432,7 @@ public class DataBase {
         }
     }
 
-    public void deleteLesson(ClientHandler clientHandler, List<String> order) throws SQLException {
+    synchronized public void deleteLesson(ClientHandler clientHandler, List<String> order) throws SQLException {
         if (clientHandler.isEduAssistant){
             PreparedStatement preparedStatement = connection.prepareStatement("delete from lessons where lessonid = ?");
             preparedStatement.setInt(1,Integer.parseInt(order.get(1)));
@@ -444,7 +444,7 @@ public class DataBase {
         }
     }
 
-    public void addLesson(ClientHandler clientHandler, List<String> order) throws SQLException {
+    synchronized public void addLesson(ClientHandler clientHandler, List<String> order) throws SQLException {
         if (clientHandler.isEduAssistant){
             int j = 0;
             PreparedStatement preparedStatement = connection.prepareStatement("insert into lessons values (?,?,?,?,?,?,?,?,?,?,?)");
@@ -456,6 +456,33 @@ public class DataBase {
                 j++;
             }
             preparedStatement.execute();
+        }
+    }
+
+    synchronized public void addStudent(ClientHandler clientHandler, List<String> order) throws SQLException {
+        if (clientHandler.isEduAssistant){
+            int j = 0;
+            int k = 1;
+            boolean firstTime = true;
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into sut_members values (?,?,?,?,?,?,?,?,?,?,?)");
+            for (String i:
+                 order) {
+                if (j > 0 && j < 12){
+                    preparedStatement.setString(j,i);
+
+                }else if (j >= 12){
+                    if (firstTime){
+                        preparedStatement.execute();
+                        preparedStatement = connection.prepareStatement("insert into students values (?,?,?,?,?,?,?,?)");
+                        firstTime = false;
+                    }
+                    preparedStatement.setString(k,i);
+                    k++;
+                }
+                j++;
+            }
+            preparedStatement.execute();
+            clientHandler.sendMessage(ServerReqType.SHOW_RESULT.toString() + ", " + RespondType.SUCCESSFUL.toString());
         }
     }
 }

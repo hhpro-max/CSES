@@ -20,5 +20,6 @@ public enum ClientReqType {
     SET_TEMPORARY_GRADE,
     SHOW_RESULT,
     DELETE_LESSON,
-    ADD_LESSON
+    ADD_LESSON,
+    ADD_STUDENT
 }

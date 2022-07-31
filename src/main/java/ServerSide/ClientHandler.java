@@ -49,6 +49,10 @@ public class ClientHandler implements Runnable {
 
             }catch (SQLException e) {
                 e.printStackTrace();
+                List<String> res = new ArrayList<>();
+                res.add(ServerReqType.SHOW_RESULT.toString());
+                res.add(RespondType.UNSUCCESSFUL.toString());
+                sendMessage(res.toString());
                 System.out.println("DATABASE PROBLEM!");
             }catch (NoSuchElementException e){
                 e.printStackTrace();
@@ -135,6 +139,8 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().deleteLesson(this,order);
         }else if (order.get(0).equals(ServerReqType.ADD_LESSON.toString())){
             DataBase.getInstance().addLesson(this,order);
+        }else if (order.get(0).equals(ServerReqType.ADD_STUDENT.toString())){
+            DataBase.getInstance().addStudent(this,order);
         }
 
     }

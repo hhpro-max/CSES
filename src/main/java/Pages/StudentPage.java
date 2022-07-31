@@ -57,8 +57,6 @@ public class StudentPage extends MainPage{
         this.add(studyStatus);
     }
     private void initMenubar() {
-        jMenuBar = new JMenuBar();
-        jMenuBar.setBounds(80,0,720,30);
         eduStatus = new JMenuItem("EDU STATUS");
         temporaryGrades = new JMenuItem("TEMPORARY GRADES LIST");
         userProfileMenu = new JMenuItem("PROFILE");

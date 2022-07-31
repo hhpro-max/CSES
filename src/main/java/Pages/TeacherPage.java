@@ -23,8 +23,6 @@ public class TeacherPage extends MainPage{
 
 
     private void initMenuBar() {
-        jMenuBar = new JMenuBar();
-        jMenuBar.setBounds(80,0,720,30);
         temporaryGrades = new JMenuItem("SCORES");
         recommendReq = new JMenuItem("RECOMMEND REQ");
         userProfileMenu = new JMenuItem("PROFILE");

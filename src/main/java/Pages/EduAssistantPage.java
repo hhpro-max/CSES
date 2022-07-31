@@ -24,6 +24,7 @@ public class EduAssistantPage extends TeacherPage{
         super();
         initMoreComps();
         addMoreListener();
+
     }
     public void initMoreComps(){
         sabtkarbar = new JMenu("SABT KARBAR");
@@ -45,6 +46,7 @@ public class EduAssistantPage extends TeacherPage{
         sabtkarbar.add(addOstad);
         sabtkarbar.add(addDaneshjoo);
         jMenuBar.add(sabtkarbar);
+
     }
     public void addMoreListener(){
         for (ActionListener i :
@@ -91,6 +93,12 @@ public class EduAssistantPage extends TeacherPage{
                 add(lessonsListPage, 1);
                 repaint();
                 revalidate();
+            }
+        });
+        addDaneshjoo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GuiController.getInstance().changePanelTo(PanelType.ADD_STUDENT_PAGE);
             }
         });
     }
