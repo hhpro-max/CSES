@@ -26,6 +26,7 @@ public class ClientHandler implements Runnable {
 
     boolean isStudent = false;
     boolean isTeacher = false;
+    boolean isEduAssistant = false;
 
     public ClientHandler(Socket socket) throws IOException {
         this.socket = socket;
@@ -46,7 +47,10 @@ public class ClientHandler implements Runnable {
                 List<String> msgOrder = castToList(msgFromClient);
                 analyzeOrder(msgOrder);
 
-            }catch (Exception e){
+            }catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("DATABASE PROBLEM!");
+            }catch (NoSuchElementException e){
                 e.printStackTrace();
                 System.out.println("USER DISCONNECTED!");
                 try {
@@ -127,6 +131,10 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().setRecResult(this,order);
         }else if (order.get(0).equals(ServerReqType.SET_TEMPORARY_GRADE.toString())){
             DataBase.getInstance().setTemporaryGrades(this,order);
+        }else if (order.get(0).equals(ServerReqType.DELETE_LESSON.toString())){
+            DataBase.getInstance().deleteLesson(this,order);
+        }else if (order.get(0).equals(ServerReqType.ADD_LESSON.toString())){
+            DataBase.getInstance().addLesson(this,order);
         }
 
     }

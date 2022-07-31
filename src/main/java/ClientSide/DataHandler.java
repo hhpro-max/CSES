@@ -84,6 +84,8 @@ public class DataHandler {
             initLeaveReqList(orders);
         }else if (orders.get(0).equals(ClientReqType.TEMPORARYGRADESLIST.toString())){
             initTemporaryGradesList(orders);
+        }else if (orders.get(0).equals(ClientReqType.SHOW_RESULT.toString())){
+            showResult(orders);
         }
     }
 
@@ -138,6 +140,11 @@ public class DataHandler {
                     this.teacherLevel = orders.get(11);
                     this.roomNumber = orders.get(12);
                     GuiController.getInstance().changePanelTo(PanelType.TEACHERMAINPAGE);
+                    break;
+                case "M":
+                    this.teacherLevel = orders.get(11);
+                    this.roomNumber = orders.get(12);
+                    GuiController.getInstance().changePanelTo(PanelType.EDU_ASSISTANT_MAIN_PAGE);
                     break;
             }
             //todo change this
@@ -280,6 +287,14 @@ public class DataHandler {
         List<String> req = new ArrayList<>();
         req.add(ClientReqType.MINORREQLIST.toString());
         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
+
+    public void showResult(List<String> order){
+        if (order.get(1).equals(ServerRespondType.SUCCESSFUL.toString())){
+            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"SUCCESSFUL!");
+        }else {
+            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"UNSUCCESSFUL! (S.TH WENT WRONG)");
+        }
     }
     public ImageIcon getImageIcon(){
         if (imageIcon == null){

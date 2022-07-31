@@ -92,6 +92,18 @@ public class DataBase {
                         clientHandler.isTeacher = true;
                         System.out.println("TEACHER LOGEDIN!");
                         break;
+                    case "M":
+                        preparedStatement = connection.prepareStatement("select * from teachers where id = ?");
+                        preparedStatement.setInt(1,clientHandler.id);
+                        resultSet = preparedStatement.executeQuery();
+                        if (resultSet.next()){
+                            respond.add(resultSet.getString("level"));
+                            respond.add(resultSet.getString("roomid"));
+                        }
+                        clientHandler.isTeacher = true;
+                        clientHandler.isEduAssistant = true;
+                        System.out.println("TEACHER LOGEDIN!");
+                        break;
                     //todo complete the relations
                 }
 
@@ -417,6 +429,33 @@ public class DataBase {
             preparedStatement.setInt(2,Integer.parseInt(order.get(1)));
             preparedStatement.setInt(3,Integer.parseInt(order.get(2)));
             preparedStatement.executeUpdate();
+        }
+    }
+
+    public void deleteLesson(ClientHandler clientHandler, List<String> order) throws SQLException {
+        if (clientHandler.isEduAssistant){
+            PreparedStatement preparedStatement = connection.prepareStatement("delete from lessons where lessonid = ?");
+            preparedStatement.setInt(1,Integer.parseInt(order.get(1)));
+            preparedStatement.execute();
+            List<String> res = new ArrayList<>();
+            res.add(ServerReqType.SHOW_RESULT.toString());
+            res.add(RespondType.SUCCESSFUL.toString());
+            clientHandler.sendMessage(res.toString());
+        }
+    }
+
+    public void addLesson(ClientHandler clientHandler, List<String> order) throws SQLException {
+        if (clientHandler.isEduAssistant){
+            int j = 0;
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into lessons values (?,?,?,?,?,?,?,?,?,?,?)");
+            for (String i:
+                 order) {
+                if (j != 0){
+                    preparedStatement.setString(j,i);
+                }
+                j++;
+            }
+            preparedStatement.execute();
         }
     }
 }

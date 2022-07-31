@@ -17,5 +17,8 @@ public enum ServerReqType {
     EDIT_EMAIL,
     EDIT_PHONE,
     SET_REC_RESULT,
-    SET_TEMPORARY_GRADE
+    SET_TEMPORARY_GRADE,
+    SHOW_RESULT,
+    DELETE_LESSON,
+    ADD_LESSON
 }
