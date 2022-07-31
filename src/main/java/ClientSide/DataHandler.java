@@ -127,7 +127,9 @@ public class DataHandler {
                     this.eduLevel = orders.get(17);
                     if (eduLevel.equals("DA")){
                         GuiController.getInstance().changePanelTo(PanelType.SENIOR_STUDENT_MAIN_PAGE);
-                    }else {
+                    } else if (eduLevel.equals("DD")){
+                        GuiController.getInstance().changePanelTo(PanelType.DOCTOR_STUDENT_MAIN_PAGE);
+                    } else {
                         GuiController.getInstance().changePanelTo(PanelType.STUDENTMAINPAGE);
                     }
 
