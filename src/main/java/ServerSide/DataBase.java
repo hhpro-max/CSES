@@ -485,4 +485,31 @@ public class DataBase {
             clientHandler.sendMessage(ServerReqType.SHOW_RESULT.toString() + ", " + RespondType.SUCCESSFUL.toString());
         }
     }
+
+    public void addTeacher(ClientHandler clientHandler, List<String> order) throws SQLException {
+        if (clientHandler.isEduAssistant){
+            int j = 0;
+            int k = 1;
+            boolean firstTime = true;
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into sut_members values (?,?,?,?,?,?,?,?,?,?,?)");
+            for (String i:
+                    order) {
+                if (j > 0 && j < 12){
+                    preparedStatement.setString(j,i);
+
+                }else if (j >= 12){
+                    if (firstTime){
+                        preparedStatement.execute();
+                        preparedStatement = connection.prepareStatement("insert into teachers values (?,?,?)");
+                        firstTime = false;
+                    }
+                    preparedStatement.setString(k,i);
+                    k++;
+                }
+                j++;
+            }
+            preparedStatement.execute();
+            clientHandler.sendMessage(ServerReqType.SHOW_RESULT.toString() + ", " + RespondType.SUCCESSFUL.toString());
+        }
+    }
 }

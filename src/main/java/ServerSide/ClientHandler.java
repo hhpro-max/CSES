@@ -141,6 +141,8 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().addLesson(this,order);
         }else if (order.get(0).equals(ServerReqType.ADD_STUDENT.toString())){
             DataBase.getInstance().addStudent(this,order);
+        }else if (order.get(0).equals(ServerReqType.ADD_TEACHER.toString())){
+            DataBase.getInstance().addTeacher(this,order);
         }
 
     }

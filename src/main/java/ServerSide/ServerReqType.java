@@ -21,5 +21,6 @@ public enum ServerReqType {
     SHOW_RESULT,
     DELETE_LESSON,
     ADD_LESSON,
-    ADD_STUDENT
+    ADD_STUDENT,
+    ADD_TEACHER
 }

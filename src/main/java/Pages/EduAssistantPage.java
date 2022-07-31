@@ -101,5 +101,11 @@ public class EduAssistantPage extends TeacherPage{
                 GuiController.getInstance().changePanelTo(PanelType.ADD_STUDENT_PAGE);
             }
         });
+        addOstad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GuiController.getInstance().changePanelTo(PanelType.ADD_TEACHER_PAGE);
+            }
+        });
     }
 }
