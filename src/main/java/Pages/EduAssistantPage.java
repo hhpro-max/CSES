@@ -4,6 +4,7 @@ import ClientSide.ClientReqType;
 import ClientSide.DataHandler;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -113,6 +114,14 @@ public class EduAssistantPage extends TeacherPage{
             public void actionPerformed(ActionEvent e) {
                 DataHandler.getInstance().updateMinorReqList();
                 GuiController.getInstance().changePanelTo(PanelType.CHECK_MINOR_PAGE);
+            }
+        });
+        checkEnserafi.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DataHandler.getInstance().updateLeaveReqList();
+                GuiController.getInstance().changePanelTo(PanelType.CHECK_LEAVE_REQ_PAGE);
+
             }
         });
     }

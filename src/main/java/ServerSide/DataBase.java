@@ -307,6 +307,7 @@ public class DataBase {
                 preparedStatement.setString(2,orders.get(1));
                 preparedStatement.executeUpdate();
             }
+            respond.add(RespondType.SUCCESSFUL.toString());
         }
         sendSuccessMessage(clientHandler);
         getMinorReqList(clientHandler);
@@ -350,17 +351,27 @@ public class DataBase {
         List<String> res = new ArrayList<>();
         res.add(ServerReqType.LEAVEREQ.toString());
 
-        PreparedStatement preparedStatement = connection.prepareStatement("select * from leave_req where studentid = ?");
-        preparedStatement.setInt(1, clientHandler.id);
-        ResultSet resultSet = preparedStatement.executeQuery();
+        if (clientHandler.isStudent){
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from leave_req where studentid = ?");
+            preparedStatement.setInt(1, clientHandler.id);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-        if (!resultSet.next()) {
+            if (!resultSet.next()) {
+                res.add(RespondType.SUCCESSFUL.toString());
+                preparedStatement = connection.prepareStatement("insert into leave_req values (?,default)");
+                preparedStatement.setInt(1,clientHandler.id);
+                preparedStatement.execute();
+            } else {
+                res.add(RespondType.UNSUCCESSFUL.toString());
+            }
+        }else if (clientHandler.isEduAssistant){
+            PreparedStatement preparedStatement = connection.prepareStatement("update leave_req,students set leave_req.result = ?,students.educational_status = ? where leave_req.studentid = ? and students.id = ?");
+            preparedStatement.setString(1,"ACCEPTED");
+            preparedStatement.setString(2,"LEAVED");
+            preparedStatement.setString(3,order.get(1));
+            preparedStatement.setString(4,order.get(1));
+            preparedStatement.executeUpdate();
             res.add(RespondType.SUCCESSFUL.toString());
-            preparedStatement = connection.prepareStatement("insert into leave_req values (?,default)");
-            preparedStatement.setInt(1,clientHandler.id);
-            preparedStatement.execute();
-        } else {
-            res.add(RespondType.UNSUCCESSFUL.toString());
         }
         getLeaveReqList(clientHandler);
         clientHandler.sendMessage(res.toString());
@@ -377,7 +388,19 @@ public class DataBase {
             preparedStatement.setInt(1,clientHandler.id);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()){
+                res.add(RespondType.SUCCESSFUL.toString());
+                res.add("-_-_-_-_-");
                 res.add(resultSet.getString("result"));
+            }
+        }else if (clientHandler.isEduAssistant){
+            preparedStatement = connection.prepareStatement("select * from leave_req join sut_members on leave_req.studentid = sut_members.id where sut_members.college = ?");
+            preparedStatement.setString(1, clientHandler.college);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                res.add(RespondType.SUCCESSFUL.toString());
+                res.add(resultSet.getString("sut_members.id"));
+                res.add(resultSet.getString("sut_members.firstname") + " " + resultSet.getString("sut_members.lastname"));
+                res.add(resultSet.getString("leave_req.result"));
             }
         }
         clientHandler.sendMessage(res.toString());

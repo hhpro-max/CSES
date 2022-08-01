@@ -171,6 +171,11 @@ public class GuiController {
                 userCurrentPanel = checkMinorPage;
                 frame.add(checkMinorPage,1);
                 break;
+            case CHECK_LEAVE_REQ_PAGE:
+                CheckLeaveReqPage checkLeaveReqPage = new CheckLeaveReqPage();
+                userCurrentPanel = checkLeaveReqPage;
+                frame.add(checkLeaveReqPage,1);
+                break;
         }
         updateFrame();
     }

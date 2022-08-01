@@ -240,13 +240,15 @@ public class DataHandler {
         }
     }
     private void initLeaveReqList(List<String> orders) {
+        orders.remove(0);
         leaveReqList = new ArrayList<>();
-        leaveReqList.add(new ArrayList<>());
-        leaveReqList.get(0).add("_-_-_-_");
-        if (orders.size() >= 2){
-            leaveReqList.get(0).add(orders.get(1));
-        }else {
-            leaveReqList.get(0).add("YOU HAVE NO REQUESTS HERE!");
+        for (String i:
+                orders) {
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
+                leaveReqList.add(new ArrayList<>());
+            }else{
+                leaveReqList.get(leaveReqList.size() - 1).add(i);
+            }
         }
     }
 
