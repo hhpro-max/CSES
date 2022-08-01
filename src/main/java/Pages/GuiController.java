@@ -41,6 +41,12 @@ public class GuiController {
     public void changePanelTo(PanelType panelType) {
         resetJPanels();
         switch (panelType) {
+            case EDU_MANAGER_MAIN_PAGE:
+                EduManagerPage eduManagerPage = new EduManagerPage();
+                userCurrentPanel = eduManagerPage;
+                userMainPanel = eduManagerPage;
+                frame.add(eduManagerPage);
+                break;
             case EDU_ASSISTANT_MAIN_PAGE:
                 EduAssistantPage eduAssistantPage = new EduAssistantPage();
                 userCurrentPanel = eduAssistantPage;

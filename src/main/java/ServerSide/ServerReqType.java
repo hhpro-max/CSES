@@ -22,5 +22,7 @@ public enum ServerReqType {
     DELETE_LESSON,
     ADD_LESSON,
     ADD_STUDENT,
-    ADD_TEACHER
+    ADD_TEACHER,
+    DELETE_TEACHER,
+    UPGRADE_TO_ASSISTANCE
 }

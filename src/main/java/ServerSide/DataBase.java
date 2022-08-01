@@ -1,14 +1,13 @@
 package ServerSide;
 
 
-import ClientSide.ClientReqType;
 
-import java.io.IOException;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.ListIterator;
+
 
 public class DataBase {
     Connection connection;
@@ -104,7 +103,19 @@ public class DataBase {
                         }
                         clientHandler.isTeacher = true;
                         clientHandler.isEduAssistant = true;
-                        System.out.println("TEACHER LOGEDIN!");
+                        System.out.println("ASSISTANCE LOGEDIN!");
+                        break;
+                    case "R":
+                        preparedStatement = connection.prepareStatement("select * from teachers where id = ?");
+                        preparedStatement.setInt(1,clientHandler.id);
+                        resultSet = preparedStatement.executeQuery();
+                        if (resultSet.next()){
+                            respond.add(resultSet.getString("level"));
+                            respond.add(resultSet.getString("roomid"));
+                        }
+                        clientHandler.isTeacher = true;
+                        clientHandler.isEduManager = true;
+                        System.out.println("MANAGER LOGEDIN!");
                         break;
                     //todo complete the relations
                 }
@@ -316,6 +327,9 @@ public class DataBase {
     }
     synchronized public void sendSuccessMessage(ClientHandler clientHandler){
         clientHandler.sendMessage(ServerReqType.SHOW_RESULT.toString() + ", " + RespondType.SUCCESSFUL.toString());
+    }
+    synchronized public void sendUnSuccessMessage(ClientHandler clientHandler){
+        clientHandler.sendMessage(ServerReqType.SHOW_RESULT.toString() + ", " + RespondType.UNSUCCESSFUL.toString());
     }
     synchronized public void getMinorReqList(ClientHandler clientHandler) throws SQLException {
         List<String> res = new ArrayList<>();
@@ -588,6 +602,37 @@ public class DataBase {
             }
             preparedStatement.execute();
             clientHandler.sendMessage(ServerReqType.SHOW_RESULT.toString() + ", " + RespondType.SUCCESSFUL.toString());
+        }
+    }
+
+    synchronized public void deleteTeacher(ClientHandler clientHandler, List<String> order) throws SQLException {
+        if (clientHandler.isEduManager){
+            PreparedStatement preparedStatement = connection.prepareStatement("delete sut_members,teachers from sut_members inner join teachers on sut_members.id = teachers.id where sut_members.id = ? and teachers.id = ?");
+            preparedStatement.setString(1,order.get(1));
+            preparedStatement.setString(2,order.get(1));
+            preparedStatement.execute();
+            sendSuccessMessage(clientHandler);
+        }
+    }
+
+    synchronized public void upgradeToAssistance(ClientHandler clientHandler, List<String> order) throws SQLException {
+        if (clientHandler.isEduManager){
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from edu_assistant join sut_members on edu_assistant.id = sut_members.id where sut_members.college = ?");
+            preparedStatement.setString(1,clientHandler.college);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                sendUnSuccessMessage(clientHandler);
+                return;
+            }else {
+                preparedStatement = connection.prepareStatement("update sut_members set relation = ? where id = ?");
+                preparedStatement.setString(1,"M");
+                preparedStatement.setString(2,order.get(1));
+                preparedStatement.executeUpdate();
+                preparedStatement = connection.prepareStatement("insert into edu_assistant values (?)");
+                preparedStatement.setString(1,order.get(1));
+                preparedStatement.execute();
+                sendSuccessMessage(clientHandler);
+            }
         }
     }
 }

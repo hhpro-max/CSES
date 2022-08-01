@@ -146,6 +146,11 @@ public class DataHandler {
                     this.roomNumber = orders.get(12);
                     GuiController.getInstance().changePanelTo(PanelType.EDU_ASSISTANT_MAIN_PAGE);
                     break;
+                case "R":
+                    this.teacherLevel = orders.get(11);
+                    this.roomNumber = orders.get(12);
+                    GuiController.getInstance().changePanelTo(PanelType.EDU_MANAGER_MAIN_PAGE);
+                    break;
             }
             //todo change this
 

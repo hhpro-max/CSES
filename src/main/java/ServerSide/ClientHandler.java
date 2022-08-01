@@ -27,6 +27,7 @@ public class ClientHandler implements Runnable {
     boolean isStudent = false;
     boolean isTeacher = false;
     boolean isEduAssistant = false;
+    boolean isEduManager = false;
 
     public ClientHandler(Socket socket) throws IOException {
         this.socket = socket;
@@ -143,6 +144,10 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().addStudent(this,order);
         }else if (order.get(0).equals(ServerReqType.ADD_TEACHER.toString())){
             DataBase.getInstance().addTeacher(this,order);
+        }else if (order.get(0).equals(ServerReqType.DELETE_TEACHER.toString())){
+            DataBase.getInstance().deleteTeacher(this,order);
+        }else if (order.get(0).equals(ServerReqType.UPGRADE_TO_ASSISTANCE.toString())){
+            DataBase.getInstance().upgradeToAssistance(this,order);
         }
 
     }
