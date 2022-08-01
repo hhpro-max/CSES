@@ -442,7 +442,7 @@ public class DataBase {
                 res.add(resultSet.getString("student_objection"));
                 res.add(resultSet.getString("teacher_answer"));
             }
-        }else if (clientHandler.isTeacher){
+        }else if (clientHandler.isTeacher && !clientHandler.isEduAssistant){
             preparedStatement = connection.prepareStatement("select * from sut_members join (student_lessons join lessons on lessons.lessonid = student_lessons.lessonid )on student_lessons.id = sut_members.id where lessons.teacherid = ?");
             preparedStatement.setInt(1,clientHandler.id);
             resultSet = preparedStatement.executeQuery();
@@ -456,7 +456,23 @@ public class DataBase {
                 res.add(resultSet.getString("student_lessons.student_objection"));
                 res.add(resultSet.getString("student_lessons.teacher_answer"));
             }
+        }else if (clientHandler.isEduAssistant){
+            preparedStatement = connection.prepareStatement("select * from sut_members join (student_lessons join lessons on lessons.lessonid = student_lessons.lessonid )on student_lessons.id = sut_members.id where sut_members.college = ?");
+            preparedStatement.setString(1, clientHandler.college);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                res.add(RespondType.SUCCESSFUL.toString());
+                res.add(resultSet.getString("sut_members.id"));
+                res.add(resultSet.getString("sut_members.firstname") + " " + resultSet.getString("sut_members.lastname"));
+                res.add(resultSet.getString("lessons.teacherid"));
+                res.add(resultSet.getString("student_lessons.lessonid"));
+                res.add(resultSet.getString("lessons.name"));
+                res.add(resultSet.getString("student_lessons.score"));
+                res.add(resultSet.getString("student_lessons.student_objection"));
+                res.add(resultSet.getString("student_lessons.teacher_answer"));
+            }
         }
+
         clientHandler.sendMessage(res.toString());
     }
 

@@ -5,6 +5,7 @@ import ClientSide.DataHandler;
 
 import javax.swing.*;
 import javax.xml.crypto.Data;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -122,6 +123,20 @@ public class EduAssistantPage extends TeacherPage{
                 DataHandler.getInstance().updateLeaveReqList();
                 GuiController.getInstance().changePanelTo(PanelType.CHECK_LEAVE_REQ_PAGE);
 
+            }
+        });
+        checkNomarat.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DataHandler.getInstance().updateTemporaryGradesList();
+                GuiController.getInstance().changePanelTo(PanelType.CHECK_TEMPORARY_GRADES_LIST);
+            }
+        });
+        vaziatTahsily.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DataHandler.getInstance().updateTemporaryGradesList();
+                GuiController.getInstance().changePanelTo(PanelType.CHECK_TEMPORARY_GRADES_LIST);
             }
         });
     }

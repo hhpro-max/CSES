@@ -8,11 +8,11 @@ import java.util.ArrayList;
 public class GuiController {
     Client client;
     public JOptionPane jOptionPane;
-    public  JFrame frame;
+    public JFrame frame;
     public JPanel userMainPanel;
     public JPanel userCurrentPanel;
 
-    public  ArrayList<JPanel> jPanels = new ArrayList<>();
+    public ArrayList<JPanel> jPanels = new ArrayList<>();
 
 
     public static GuiController guiController;
@@ -29,7 +29,6 @@ public class GuiController {
     }
 
 
-
     public void resetJPanels() {
         for (JPanel i :
                 jPanels) {
@@ -38,9 +37,10 @@ public class GuiController {
         jPanels.clear();
 
     }
-    public void changePanelTo(PanelType panelType){
+
+    public void changePanelTo(PanelType panelType) {
         resetJPanels();
-        switch (panelType){
+        switch (panelType) {
             case EDU_ASSISTANT_MAIN_PAGE:
                 EduAssistantPage eduAssistantPage = new EduAssistantPage();
                 userCurrentPanel = eduAssistantPage;
@@ -59,7 +59,7 @@ public class GuiController {
                 userMainPanel = seniorStudentPage;
                 frame.add(seniorStudentPage);
                 break;
-            case STUDENTMAINPAGE  :
+            case STUDENTMAINPAGE:
                 StudentPage normalStudentPage = new StudentPage();
                 userMainPanel = normalStudentPage;
                 userCurrentPanel = normalStudentPage;
@@ -74,121 +74,129 @@ public class GuiController {
             case DEFENCE_TIME_PAGE:
                 DefenceTimePage defenceTimePage = new DefenceTimePage();
                 userCurrentPanel = defenceTimePage;
-                frame.add(defenceTimePage,1);
+                frame.add(defenceTimePage, 1);
                 break;
             case LESSONSLISTPAGE:
                 LessonsListPage lessonsListPage = new LessonsListPage();
                 userCurrentPanel = lessonsListPage;
-                frame.add(lessonsListPage,1);
+                frame.add(lessonsListPage, 1);
                 break;
             case TEACHERSLISTPAGE:
                 TeachersListPage teachersListPage = new TeachersListPage();
                 userCurrentPanel = teachersListPage;
-                frame.add(teachersListPage ,1);
+                frame.add(teachersListPage, 1);
                 break;
             case WEEKLYPLANPAGE:
                 WeeklyPlanPage weeklyPlanPage = new WeeklyPlanPage();
                 userCurrentPanel = weeklyPlanPage;
-                frame.add(weeklyPlanPage,1);
+                frame.add(weeklyPlanPage, 1);
                 break;
             case EXAMSLISTPAGE:
                 ExamsListPage examsListPage = new ExamsListPage();
-                userCurrentPanel =examsListPage;
-                frame.add(examsListPage,1);
+                userCurrentPanel = examsListPage;
+                frame.add(examsListPage, 1);
                 break;
             case STUDENTRECREQPAGE:
                 StudentRecReqPage studentRecReqPage = new StudentRecReqPage();
                 userCurrentPanel = studentRecReqPage;
-                frame.add(studentRecReqPage,1);
+                frame.add(studentRecReqPage, 1);
                 break;
             case STUDYEVIDENCEREQPAGE:
                 StudyEvidenceReqPage studyEvidenceReqPage = new StudyEvidenceReqPage();
                 userCurrentPanel = studyEvidenceReqPage;
-                frame.add(studyEvidenceReqPage , 1);
+                frame.add(studyEvidenceReqPage, 1);
                 break;
             case MINORREQPAGE:
                 MinorReqPage minorReqPage = new MinorReqPage();
                 userCurrentPanel = minorReqPage;
-                frame.add(minorReqPage,1);
+                frame.add(minorReqPage, 1);
                 break;
             case LEAVEREQPAGE:
                 LeaveReqPage leaveReqPage = new LeaveReqPage();
                 userCurrentPanel = leaveReqPage;
-                frame.add(leaveReqPage,1);
+                frame.add(leaveReqPage, 1);
                 break;
             case TEMPORARYGRADELISTPAGE:
                 TemporaryGradesPage temporaryGradesPage = new TemporaryGradesPage();
-                userCurrentPanel=temporaryGradesPage;
-                frame.add(temporaryGradesPage,1);
+                userCurrentPanel = temporaryGradesPage;
+                frame.add(temporaryGradesPage, 1);
                 break;
             case STUDENT_EDU_STATUS_PAGE:
                 StudentEduStatusPage studentEduStatusPage = new StudentEduStatusPage();
                 userCurrentPanel = studentEduStatusPage;
-                frame.add(studentEduStatusPage,1);
+                frame.add(studentEduStatusPage, 1);
                 break;
             case STUDENT_PROFILE_PAGE:
                 StudentProfilePage studentProfilePage = new StudentProfilePage();
                 userCurrentPanel = studentProfilePage;
-                frame.add(studentProfilePage,1);
+                frame.add(studentProfilePage, 1);
                 break;
             case TEACHER_REC_REQ_PAGE:
                 TeacherRecReqPage teacherRecReqPage = new TeacherRecReqPage();
                 userCurrentPanel = teacherRecReqPage;
-                frame.add(teacherRecReqPage ,1);
+                frame.add(teacherRecReqPage, 1);
                 break;
             case TEACHER_TEMPORARY_GRADES_PAGE:
                 TeacherTemporaryGradesPage teacherTemporaryGradesPage = new TeacherTemporaryGradesPage();
                 userCurrentPanel = teacherTemporaryGradesPage;
-                frame.add(teacherTemporaryGradesPage,1);
+                frame.add(teacherTemporaryGradesPage, 1);
                 break;
             case TEACHER_PROFILE_PAGE:
                 TeacherProfilePage teacherProfilePage = new TeacherProfilePage();
                 userCurrentPanel = teacherProfilePage;
-                frame.add(teacherProfilePage,1);
+                frame.add(teacherProfilePage, 1);
                 break;
             case DORMITORY_REQ_PAGE:
                 DormitoryReqPage dormitoryReqPage = new DormitoryReqPage();
                 userCurrentPanel = dormitoryReqPage;
-                frame.add(dormitoryReqPage,1);
+                frame.add(dormitoryReqPage, 1);
                 break;
             case ADD_LESSON_PAGE:
                 AddLessonPage addLessonPage = new AddLessonPage();
                 userCurrentPanel = addLessonPage;
-                frame.add(addLessonPage,1);
+                frame.add(addLessonPage, 1);
                 break;
             case ADD_STUDENT_PAGE:
                 AddStudentPage addStudentPage = new AddStudentPage();
                 userCurrentPanel = addStudentPage;
-                frame.add(addStudentPage,1);
+                frame.add(addStudentPage, 1);
                 break;
             case ADD_TEACHER_PAGE:
                 AddTeacherPage addTeacherPage = new AddTeacherPage();
                 userCurrentPanel = addTeacherPage;
-                frame.add(addTeacherPage,1);
+                frame.add(addTeacherPage, 1);
                 break;
             case CHECK_MINOR_PAGE:
                 CheckMinorPage checkMinorPage = new CheckMinorPage();
                 userCurrentPanel = checkMinorPage;
-                frame.add(checkMinorPage,1);
+                frame.add(checkMinorPage, 1);
                 break;
             case CHECK_LEAVE_REQ_PAGE:
                 CheckLeaveReqPage checkLeaveReqPage = new CheckLeaveReqPage();
                 userCurrentPanel = checkLeaveReqPage;
-                frame.add(checkLeaveReqPage,1);
+                frame.add(checkLeaveReqPage, 1);
                 break;
+            case CHECK_TEMPORARY_GRADES_LIST:
+                CheckTemporaryGradesPage checkTemporaryGradesPage = new CheckTemporaryGradesPage();
+                userCurrentPanel = checkTemporaryGradesPage;
+                frame.add(checkTemporaryGradesPage, 1);
+                break;
+
         }
         updateFrame();
     }
-    public void exitButton(){
+
+    public void exitButton() {
         resetJPanels();
         userMainPanel.setVisible(false);
         LoginPage loginPage = new LoginPage();
         frame.add(loginPage);
         updateFrame();
     }
-    public void goToMainPanel(){
+
+    public void goToMainPanel() {
         resetJPanels();
-        getFrame().add(getUserMainPanel() ,1);
+        getFrame().add(getUserMainPanel(), 1);
         updateFrame();
     }
 
@@ -197,11 +205,11 @@ public class GuiController {
     }
 
 
-    public  JFrame getFrame() {
+    public JFrame getFrame() {
         return frame;
     }
 
-    public  void setFrame(JFrame frame) {
+    public void setFrame(JFrame frame) {
         this.frame = frame;
     }
 
@@ -212,14 +220,15 @@ public class GuiController {
     public void setClient(Client client) {
         this.client = client;
     }
-    public void updateFrame(){
+
+    public void updateFrame() {
         frame.repaint();
         frame.revalidate();
-        if (!(userMainPanel == null)){
+        if (!(userMainPanel == null)) {
             userMainPanel.repaint();
             userMainPanel.revalidate();
         }
-        if (!(userCurrentPanel == null)){
+        if (!(userCurrentPanel == null)) {
             userCurrentPanel.repaint();
             userCurrentPanel.revalidate();
         }
