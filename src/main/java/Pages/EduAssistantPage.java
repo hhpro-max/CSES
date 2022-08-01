@@ -1,6 +1,7 @@
 package Pages;
 
 import ClientSide.ClientReqType;
+import ClientSide.DataHandler;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -105,6 +106,13 @@ public class EduAssistantPage extends TeacherPage{
             @Override
             public void actionPerformed(ActionEvent e) {
                 GuiController.getInstance().changePanelTo(PanelType.ADD_TEACHER_PAGE);
+            }
+        });
+        checkMinor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DataHandler.getInstance().updateMinorReqList();
+                GuiController.getInstance().changePanelTo(PanelType.CHECK_MINOR_PAGE);
             }
         });
     }

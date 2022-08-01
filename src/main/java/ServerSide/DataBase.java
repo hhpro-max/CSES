@@ -1,6 +1,8 @@
 package ServerSide;
 
 
+import ClientSide.ClientReqType;
+
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -272,7 +274,7 @@ public class DataBase {
             if (resultSet.next()) {
                 double score = resultSet.getDouble("grade_average");
                 if (score >= 14.0) {
-                    preparedStatement = connection.prepareStatement("insert into minor_req values (?,?,?,default)");
+                    preparedStatement = connection.prepareStatement("insert into minor_req values (?,?,?,default,default)");
                     preparedStatement.setInt(1, clientHandler.id);
                     preparedStatement.setString(2, clientHandler.college);
                     preparedStatement.setString(3, orders.get(1));
@@ -284,23 +286,60 @@ public class DataBase {
             } else {
                 respond.add(RespondType.UNSUCCESSFUL.toString());
             }
+        }else if (clientHandler.isEduAssistant){
+            preparedStatement = connection.prepareStatement("select * from minor_req where studentid = ? and origin_college = ?");
+            preparedStatement.setString(1,orders.get(1));
+            preparedStatement.setString(2,clientHandler.college);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                preparedStatement = connection.prepareStatement("update minor_req set origin_result = ? where studentid = ?");
+                preparedStatement.setString(1,orders.get(2));
+                preparedStatement.setString(2,orders.get(1));
+                preparedStatement.executeUpdate();
+            }
+            preparedStatement = connection.prepareStatement("select * from minor_req where studentid = ? and aim_college = ?");
+            preparedStatement.setString(1,orders.get(1));
+            preparedStatement.setString(2,clientHandler.college);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                preparedStatement = connection.prepareStatement("update minor_req set aim_result = ? where studentid = ?");
+                preparedStatement.setString(1,orders.get(2));
+                preparedStatement.setString(2,orders.get(1));
+                preparedStatement.executeUpdate();
+            }
         }
+        sendSuccessMessage(clientHandler);
         getMinorReqList(clientHandler);
         clientHandler.sendMessage(respond.toString());
         respond.clear();
     }
-
+    synchronized public void sendSuccessMessage(ClientHandler clientHandler){
+        clientHandler.sendMessage(ServerReqType.SHOW_RESULT.toString() + ", " + RespondType.SUCCESSFUL.toString());
+    }
     synchronized public void getMinorReqList(ClientHandler clientHandler) throws SQLException {
         List<String> res = new ArrayList<>();
         res.add(ServerReqType.MINORREQLIST.toString());
         if (clientHandler.isStudent) {
-            PreparedStatement preparedStatement = connection.prepareStatement("select aim_college , result from minor_req where studentid = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("select aim_college , aim_result , origin_result from minor_req where studentid = ?");
             preparedStatement.setInt(1, clientHandler.id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 res.add(RespondType.SUCCESSFUL.toString());
                 res.add(resultSet.getString("aim_college"));
-                res.add(resultSet.getString("result"));
+                res.add(resultSet.getString("origin_result") + " / " + resultSet.getString("aim_result"));
+            }
+        }else if (clientHandler.isEduAssistant){
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from minor_req where aim_college = ? or origin_college = ?");
+            preparedStatement.setString(1,clientHandler.college);
+            preparedStatement.setString(2,clientHandler.college);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                res.add(RespondType.SUCCESSFUL.toString());
+                res.add(resultSet.getString("studentid"));
+                res.add(resultSet.getString("origin_college"));
+                res.add(resultSet.getString("aim_college"));
+                res.add(resultSet.getString("origin_result"));
+                res.add(resultSet.getString("aim_result"));
             }
         }
         clientHandler.sendMessage(res.toString());
@@ -486,7 +525,7 @@ public class DataBase {
         }
     }
 
-    public void addTeacher(ClientHandler clientHandler, List<String> order) throws SQLException {
+    synchronized public void addTeacher(ClientHandler clientHandler, List<String> order) throws SQLException {
         if (clientHandler.isEduAssistant){
             int j = 0;
             int k = 1;

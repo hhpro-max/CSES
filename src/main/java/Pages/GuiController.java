@@ -166,6 +166,11 @@ public class GuiController {
                 userCurrentPanel = addTeacherPage;
                 frame.add(addTeacherPage,1);
                 break;
+            case CHECK_MINOR_PAGE:
+                CheckMinorPage checkMinorPage = new CheckMinorPage();
+                userCurrentPanel = checkMinorPage;
+                frame.add(checkMinorPage,1);
+                break;
         }
         updateFrame();
     }

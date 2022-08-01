@@ -217,10 +217,14 @@ public class DataHandler {
     }
 
     private void showMinorReqResult(List<String> orders) {
-        if (orders.get(1).equals(ServerRespondType.SUCCESSFUL.toString())){
-            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOUR REQ HAS BEEN SAVED SUCCESSFULLY!");
-        }else {
-            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOU ARE UNDER_DEFINED_SCORE!");
+        try {
+            if (orders.get(1).equals(ServerRespondType.SUCCESSFUL.toString())){
+                GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOUR REQ HAS BEEN SAVED SUCCESSFULLY!");
+            }else {
+                GuiController.getInstance().getjOptionPane().showMessageDialog(null,"YOU ARE UNDER_DEFINED_SCORE!");
+            }
+        }catch (Exception e){
+
         }
     }
     private void initTemporaryGradesList(List<String> orders) {
