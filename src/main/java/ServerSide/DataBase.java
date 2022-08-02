@@ -114,6 +114,7 @@ public class DataBase {
                             respond.add(resultSet.getString("roomid"));
                         }
                         clientHandler.isTeacher = true;
+                        //clientHandler.isEduAssistant = true;
                         clientHandler.isEduManager = true;
                         System.out.println("MANAGER LOGEDIN!");
                         break;
@@ -539,7 +540,7 @@ public class DataBase {
     synchronized public void addLesson(ClientHandler clientHandler, List<String> order) throws SQLException {
         if (clientHandler.isEduAssistant){
             int j = 0;
-            PreparedStatement preparedStatement = connection.prepareStatement("insert into lessons values (?,?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into lessons values (?,?,?,?,?,?,?,?,?,?,?,?)");
             for (String i:
                  order) {
                 if (j != 0){
@@ -548,7 +549,9 @@ public class DataBase {
                 j++;
             }
             preparedStatement.execute();
+            sendSuccessMessage(clientHandler);
         }
+
     }
 
     synchronized public void addStudent(ClientHandler clientHandler, List<String> order) throws SQLException {
@@ -633,6 +636,36 @@ public class DataBase {
                 preparedStatement.execute();
                 sendSuccessMessage(clientHandler);
             }
+        }
+    }
+
+    synchronized public void getStudentsList(ClientHandler clientHandler) throws SQLException {
+        if (clientHandler.isEduAssistant){
+            List<String> respond = new ArrayList<>();
+            respond.add(ServerReqType.GET_STUDENTS_LIST.toString());
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from students join sut_members on students.id = sut_members.id where sut_members.college = ?");
+            preparedStatement.setString(1, clientHandler.college);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                respond.add(RespondType.SUCCESSFUL.toString());
+                respond.add(resultSet.getString("students.id"));
+                respond.add(resultSet.getString("students.signup_time"));
+                respond.add(resultSet.getString("students.enter_year"));
+                respond.add(resultSet.getString("students.education_level"));
+            }
+            clientHandler.sendMessage(respond.toString());
+        }
+    }
+
+    synchronized public void setChooseTime(ClientHandler clientHandler, List<String> order) throws SQLException {
+        if (clientHandler.isEduAssistant){
+            PreparedStatement preparedStatement = connection.prepareStatement("update students set signup_time = ? where enter_year=? and education_level = ?");
+            preparedStatement.setString(1,order.get(1));
+            preparedStatement.setString(2,order.get(2));
+            preparedStatement.setString(3,order.get(3));
+            preparedStatement.executeUpdate();
+
+            sendSuccessMessage(clientHandler);
         }
     }
 }

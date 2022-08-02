@@ -187,7 +187,16 @@ public class GuiController {
                 userCurrentPanel = checkTemporaryGradesPage;
                 frame.add(checkTemporaryGradesPage, 1);
                 break;
-
+            case SET_CHOOSE_TIME:
+                SetChooseTime setChooseTime = new SetChooseTime();
+                userCurrentPanel = setChooseTime;
+                frame.add(setChooseTime,1);
+                break;
+            case TAKE_LESSON_PAGE:
+                TakeLessonPage takeLessonPage = new TakeLessonPage();
+                userCurrentPanel = takeLessonPage;
+                frame.add(takeLessonPage,1);
+                break;
         }
         updateFrame();
     }

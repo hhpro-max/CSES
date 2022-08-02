@@ -19,6 +19,7 @@ public class EduAssistantPage extends TeacherPage{
     JMenuItem checkEnserafi;
     JMenuItem vaziatTahsily;
     JMenuItem checkNomarat;
+    JMenuItem setChooseTime;
     JButton sabtVavirayesh, deleteDars;
     JTextField deleteDars1;
     JOptionPane jOptionPane;
@@ -39,6 +40,7 @@ public class EduAssistantPage extends TeacherPage{
         vaziatTahsily = new JMenuItem("VAZIAT TAHSILI");
         checkNomarat = new JMenuItem("CHECK NOMARAT");
         deleteDars = new JButton("HAZF DARS");
+        setChooseTime = new JMenuItem("SET/TAKE TIME");
         deleteDars1 = new JTextField();
         jOptionPane = new JOptionPane();
 
@@ -49,7 +51,7 @@ public class EduAssistantPage extends TeacherPage{
         sabtkarbar.add(addOstad);
         sabtkarbar.add(addDaneshjoo);
         jMenuBar.add(sabtkarbar);
-
+        eduService.add(setChooseTime);
     }
     public void addMoreListener(){
         for (ActionListener i :
@@ -137,6 +139,12 @@ public class EduAssistantPage extends TeacherPage{
             public void actionPerformed(ActionEvent e) {
                 DataHandler.getInstance().updateTemporaryGradesList();
                 GuiController.getInstance().changePanelTo(PanelType.CHECK_TEMPORARY_GRADES_LIST);
+            }
+        });
+        setChooseTime.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GuiController.getInstance().changePanelTo(PanelType.SET_CHOOSE_TIME);
             }
         });
     }

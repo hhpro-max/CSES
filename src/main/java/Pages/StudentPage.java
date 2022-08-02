@@ -18,6 +18,7 @@ public class StudentPage extends MainPage{
     public JMenuItem temporaryGrades;
     public JMenuItem eduStatus;
     public JMenuItem userProfileMenu;
+    JMenuItem takeLesson;
 
     public StudentPage() {
         super();
@@ -64,6 +65,7 @@ public class StudentPage extends MainPage{
         minorReq = new JMenuItem("MINOR");
         studyEvidenceReq = new JMenuItem("STUDY EVIDENCE");
         recommendReq = new JMenuItem("RECOMMEND REQ");
+        takeLesson = new JMenuItem("CHOOSE LESSON");
         requests.add(leaveReq);
         requests.add(recommendReq);
         requests.add(minorReq);
@@ -71,6 +73,7 @@ public class StudentPage extends MainPage{
         gradeService.add(temporaryGrades);
         gradeService.add(eduStatus);
         userProfile.add(userProfileMenu);
+        eduService.add(takeLesson);
     }
 
     private void addMoreListeners() {
@@ -95,6 +98,12 @@ public class StudentPage extends MainPage{
             @Override
             public void actionPerformed(ActionEvent e) {
                 GuiController.getInstance().changePanelTo(PanelType.STUDENT_PROFILE_PAGE);
+            }
+        });
+        takeLesson.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GuiController.getInstance().changePanelTo(PanelType.TAKE_LESSON_PAGE);
             }
         });
     }

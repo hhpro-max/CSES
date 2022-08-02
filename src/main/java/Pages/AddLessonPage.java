@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Locale;
 
 public class AddLessonPage extends JPanel {
-    JTextField id,name,pishniaz,ostad,tedadVahed,zarfiat,saatClass,zamanPayanterm;
+    JTextField id,name,pishniaz,ostad,tedadVahed,zarfiat,saatClass,zamanPayanterm,taId;
     JComboBox<College> daneshkade;
     JComboBox<LessonLevel> maghtaDars;
     JComboBox<WeekDays> roozAval;
     JComboBox<WeekDays> roozDovom;
     JButton sabt;
-    JLabel id1,name1,pishniaz1,ostad1,daneshkade1,tedadVahed1,maghtaDars1,zarfiat1,saatClass1,zamanPayanterm1,zamanPayanterm2;
+    JLabel id1,name1,pishniaz1,ostad1,daneshkade1,tedadVahed1,maghtaDars1,zarfiat1,saatClass1,zamanPayanterm1,zamanPayanterm2,taId1;
     JOptionPane jOptionPane;
 
     public AddLessonPage(){
@@ -58,8 +58,11 @@ public class AddLessonPage extends JPanel {
         zamanPayanterm2 = new JLabel("NEMONE : 1401/12/10");
         roozAval = new JComboBox<>(WeekDays.values());
         roozDovom = new JComboBox<>(WeekDays.values());
+        taId = new JTextField("example : 1,2,3,4,..");
+        taId1 = new JLabel("ID TA /'S : ");
     }
     public void align(){
+
         id1.setBounds(0,70,100,30);
         this.add(id1);
         id.setBounds(150,70,150,30);
@@ -106,6 +109,10 @@ public class AddLessonPage extends JPanel {
         this.add(zamanPayanterm);
         zamanPayanterm2.setBounds(550,160,200,30);
         this.add(zamanPayanterm2);
+        taId1.setBounds(350,200,200,30);
+        this.add(taId1);
+        taId.setBounds(550,200,200,30);
+        this.add(taId);
 
         sabt.setBounds(500,500,150,30);
         this.add(sabt);
@@ -129,7 +136,7 @@ public class AddLessonPage extends JPanel {
                     String secondDay = String.valueOf(roozDovom.getSelectedIndex());
                     String daneshKadeDars = daneshkade.getItemAt(daneshkade.getSelectedIndex()).toString().toLowerCase();
                     String tedadVahedDars = tedadVahed.getText();
-                    String maghtaInDars = maghtaDars.getItemAt(maghtaDars.getSelectedIndex()).toString().toLowerCase();
+                    String maghtaInDars = maghtaDars.getItemAt(maghtaDars.getSelectedIndex()).toString().toUpperCase();
                     String zarfiatDars = zarfiat.getText();
                     String classTime = saatClass.getText();
                     String examDate = zamanPayanterm.getText();
@@ -157,6 +164,7 @@ public class AddLessonPage extends JPanel {
                     req.add(firstDay + " " + secondDay);
                     req.add(classTime);
                     req.add(examDate);
+                    req.add(taId.getText());
                     GuiController.getInstance().getClient().getClientSender().sendMessage(req);
 
                     jOptionPane.showMessageDialog(null,"your request has been sent to the server!");

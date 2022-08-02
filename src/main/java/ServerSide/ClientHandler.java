@@ -50,11 +50,11 @@ public class ClientHandler implements Runnable {
 
             }catch (SQLException e) {
                 e.printStackTrace();
+                System.out.println("DATABASE PROBLEM!");
                 List<String> res = new ArrayList<>();
                 res.add(ServerReqType.SHOW_RESULT.toString());
                 res.add(RespondType.UNSUCCESSFUL.toString());
                 sendMessage(res.toString());
-                System.out.println("DATABASE PROBLEM!");
             }catch (NoSuchElementException e){
                 e.printStackTrace();
                 System.out.println("USER DISCONNECTED!");
@@ -148,6 +148,10 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().deleteTeacher(this,order);
         }else if (order.get(0).equals(ServerReqType.UPGRADE_TO_ASSISTANCE.toString())){
             DataBase.getInstance().upgradeToAssistance(this,order);
+        }else if (order.get(0).equals(ServerReqType.GET_STUDENTS_LIST.toString())){
+            DataBase.getInstance().getStudentsList(this);
+        }else if (order.get(0).equals(ServerReqType.SET_CHOOSE_TIME.toString())){
+            DataBase.getInstance().setChooseTime(this,order);
         }
 
     }

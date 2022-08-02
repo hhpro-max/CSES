@@ -44,6 +44,7 @@ public class DataHandler {
     List<List<String>> minorReqList;
     List<List<String>> leaveReqList;
     List<List<String>> userTemporaryGradesList;
+    List<List<String>> allStudents;
 
     private static DataHandler dataHandler;
     private DataHandler(){
@@ -54,6 +55,7 @@ public class DataHandler {
         minorReqList = new ArrayList<>();
         leaveReqList = new ArrayList<>();
         userTemporaryGradesList = new ArrayList<>();
+        allStudents = new ArrayList<>();
     }
     public static DataHandler getInstance(){
         if (dataHandler == null){
@@ -86,6 +88,8 @@ public class DataHandler {
             initTemporaryGradesList(orders);
         }else if (orders.get(0).equals(ClientReqType.SHOW_RESULT.toString())){
             showResult(orders);
+        }else if (orders.get(0).equals(ClientReqType.GET_STUDENTS_LIST.toString())){
+            initStudentsList(orders);
         }
     }
 
@@ -208,6 +212,18 @@ public class DataHandler {
             }
         }
     }
+    private void initStudentsList(List<String> orders) {
+        orders.remove(0);
+        allStudents = new ArrayList<>();
+        for (String i:
+                orders) {
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
+                allStudents.add(new ArrayList<>());
+            }else{
+                allStudents.get(allStudents.size() - 1).add(i);
+            }
+        }
+    }
     private void initMinorReqList(List<String> orders) {
         orders.remove(0);
         minorReqList = new ArrayList<>();
@@ -297,6 +313,11 @@ public class DataHandler {
     public void updateMinorReqList(){
         List<String> req = new ArrayList<>();
         req.add(ClientReqType.MINORREQLIST.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
+    public void updateStudentsList(){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.GET_STUDENTS_LIST.toString());
         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
     }
 
@@ -527,5 +548,9 @@ public class DataHandler {
 
     public String getEduLevel() {
         return eduLevel;
+    }
+
+    public List<List<String>> getAllStudents() {
+        return allStudents;
     }
 }
