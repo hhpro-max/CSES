@@ -78,7 +78,10 @@ public class DataBase {
                             respond.add(resultSet.getString("grade_average"));
                             respond.add(resultSet.getString("enter_year"));
                             respond.add(resultSet.getString("education_level"));
+
+                            clientHandler.studentLvl = resultSet.getString("education_level");
                         }
+
                         clientHandler.isStudent = true;
                         System.out.println("STUDENT LOGEDIN!");
                         break;
@@ -666,6 +669,33 @@ public class DataBase {
             preparedStatement.executeUpdate();
 
             sendSuccessMessage(clientHandler);
+        }
+    }
+
+    public void getRecommendedLessonsList(ClientHandler clientHandler) throws SQLException {
+        if (clientHandler.isStudent){
+            List<String> respond = new ArrayList<>();
+            respond.add(ServerReqType.GET_RECOMMENDED_LESSONS.toString());
+            PreparedStatement preparedStatement1 = connection.prepareStatement("select * from lessons join passed_lessons on lessons.prereq = passed_lessons.lessonid where ((passed_lessons.studentid = ?  and lessons.prereq = passed_lessons.lessonid) or (lessons.college = ? and lessons.level = ?)) and lessons.capacity > 0");
+            preparedStatement1.setInt(1,clientHandler.id);
+            preparedStatement1.setString(2, clientHandler.college);
+            preparedStatement1.setString(3,clientHandler.studentLvl.split("")[1]);
+            ResultSet resultSet = preparedStatement1.executeQuery();
+            while (resultSet.next()){
+                respond.add(RespondType.SUCCESSFUL.toString());
+                respond.add(resultSet.getString("lessonid"));
+                respond.add(resultSet.getString("name"));
+                respond.add(resultSet.getString("prereq"));
+                respond.add(resultSet.getString("teacherid"));
+                respond.add(resultSet.getString("college"));
+                respond.add(resultSet.getString("units"));
+                respond.add(resultSet.getString("level"));
+                respond.add(resultSet.getString("capacity"));
+                respond.add(resultSet.getString("days"));
+                respond.add(resultSet.getString("time"));
+                respond.add(resultSet.getString("examdate"));
+            }
+            clientHandler.sendMessage(respond.toString());
         }
     }
 }

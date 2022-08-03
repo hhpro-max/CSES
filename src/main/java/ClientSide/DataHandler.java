@@ -45,6 +45,7 @@ public class DataHandler {
     List<List<String>> leaveReqList;
     List<List<String>> userTemporaryGradesList;
     List<List<String>> allStudents;
+    List<List<String>> recommendedLessonsList;
 
     private static DataHandler dataHandler;
     private DataHandler(){
@@ -56,6 +57,7 @@ public class DataHandler {
         leaveReqList = new ArrayList<>();
         userTemporaryGradesList = new ArrayList<>();
         allStudents = new ArrayList<>();
+        recommendedLessonsList = new ArrayList<>();
     }
     public static DataHandler getInstance(){
         if (dataHandler == null){
@@ -90,6 +92,8 @@ public class DataHandler {
             showResult(orders);
         }else if (orders.get(0).equals(ClientReqType.GET_STUDENTS_LIST.toString())){
             initStudentsList(orders);
+        }else if (orders.get(0).equals(ClientReqType.GET_RECOMMENDED_LESSONS.toString())){
+            initRecommendedLessonsList(orders);
         }
     }
 
@@ -185,6 +189,18 @@ public class DataHandler {
                 allTeachers.add(new ArrayList<>());
             }else{
                 allTeachers.get(allTeachers.size() - 1).add(i);
+            }
+        }
+    }
+    public void initRecommendedLessonsList(List<String> orders){
+        orders.remove(0);
+        recommendedLessonsList = new ArrayList<>();
+        for (String i:
+                orders) {
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
+                recommendedLessonsList.add(new ArrayList<>());
+            }else{
+                recommendedLessonsList.get(recommendedLessonsList.size() - 1).add(i);
             }
         }
     }
@@ -320,7 +336,11 @@ public class DataHandler {
         req.add(ClientReqType.GET_STUDENTS_LIST.toString());
         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
     }
-
+    public void updateRecommendedLessonsList(){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.GET_RECOMMENDED_LESSONS.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
     public void showResult(List<String> order){
         if (order.get(1).equals(ServerRespondType.SUCCESSFUL.toString())){
             GuiController.getInstance().getjOptionPane().showMessageDialog(null,"SUCCESSFUL!");
@@ -552,5 +572,13 @@ public class DataHandler {
 
     public List<List<String>> getAllStudents() {
         return allStudents;
+    }
+
+    public List<List<String>> getRecommendedLessonsList() {
+        return recommendedLessonsList;
+    }
+
+    public void setRecommendedLessonsList(List<List<String>> recommendedLessonsList) {
+        this.recommendedLessonsList = recommendedLessonsList;
     }
 }

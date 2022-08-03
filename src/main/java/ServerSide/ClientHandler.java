@@ -23,6 +23,7 @@ public class ClientHandler implements Runnable {
     String phoneNumber;
     String college;
     String lastLoginTime;
+    String studentLvl;
 
     boolean isStudent = false;
     boolean isTeacher = false;
@@ -152,6 +153,8 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().getStudentsList(this);
         }else if (order.get(0).equals(ServerReqType.SET_CHOOSE_TIME.toString())){
             DataBase.getInstance().setChooseTime(this,order);
+        }else if (order.get(0).equals(ServerReqType.GET_RECOMMENDED_LESSONS.toString())){
+            DataBase.getInstance().getRecommendedLessonsList(this);
         }
 
     }
