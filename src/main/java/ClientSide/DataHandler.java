@@ -46,6 +46,7 @@ public class DataHandler {
     List<List<String>> userTemporaryGradesList;
     List<List<String>> allStudents;
     List<List<String>> recommendedLessonsList;
+    List<List<String>> markedLessons;
 
     private static DataHandler dataHandler;
     private DataHandler(){
@@ -58,8 +59,9 @@ public class DataHandler {
         userTemporaryGradesList = new ArrayList<>();
         allStudents = new ArrayList<>();
         recommendedLessonsList = new ArrayList<>();
+        markedLessons = new ArrayList<>();
     }
-    public static DataHandler getInstance(){
+    synchronized public static DataHandler getInstance(){
         if (dataHandler == null){
             dataHandler = new DataHandler();
         }
@@ -342,10 +344,17 @@ public class DataHandler {
         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
     }
     public void showResult(List<String> order){
-        if (order.get(1).equals(ServerRespondType.SUCCESSFUL.toString())){
-            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"SUCCESSFUL!");
-        }else {
-            GuiController.getInstance().getjOptionPane().showMessageDialog(null,"UNSUCCESSFUL! (S.TH WENT WRONG)");
+        try {
+            if (order.get(1).equals(ServerRespondType.SUCCESSFUL.toString())){
+                GuiController.getInstance().getjOptionPane().showMessageDialog(null,"SUCCESSFUL!");
+            }else if (order.get(1).equals(ServerRespondType.UNSUCCESSFUL.toString())){
+                GuiController.getInstance().getjOptionPane().showMessageDialog(null,"UNSUCCESSFUL! (S.TH WENT WRONG)");
+            }else {
+                JOptionPane.showMessageDialog(null,order.get(1));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("IDK WHATS WRONG WITH THIS!");
         }
     }
     public ImageIcon getImageIcon(){
@@ -580,5 +589,9 @@ public class DataHandler {
 
     public void setRecommendedLessonsList(List<List<String>> recommendedLessonsList) {
         this.recommendedLessonsList = recommendedLessonsList;
+    }
+
+    public List<List<String>> getMarkedLessons() {
+        return markedLessons;
     }
 }

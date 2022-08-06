@@ -672,7 +672,7 @@ public class DataBase {
         }
     }
 
-    public void getRecommendedLessonsList(ClientHandler clientHandler) throws SQLException {
+    synchronized public void getRecommendedLessonsList(ClientHandler clientHandler) throws SQLException {
         if (clientHandler.isStudent){
             List<String> respond = new ArrayList<>();
             respond.add(ServerReqType.GET_RECOMMENDED_LESSONS.toString());
@@ -697,5 +697,79 @@ public class DataBase {
             }
             clientHandler.sendMessage(respond.toString());
         }
+    }
+
+    synchronized public void takeLesson(ClientHandler clientHandler, List<String> order) throws SQLException {
+        if (clientHandler.isStudent){
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from lessons where lessonid = ?");
+            preparedStatement.setString(1,order.get(1));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            PreparedStatement preparedStatement1 = connection.prepareStatement("select * from student_lessons join lessons on student_lessons.lessonid = lessons.lessonid where student_lessons.id = ?");
+            preparedStatement1.setInt(1,clientHandler.id);
+            ResultSet resultSet1 = preparedStatement1.executeQuery();
+            List<String> respond = new ArrayList<>();
+            respond.add(ServerReqType.SHOW_RESULT.toString());
+            if (resultSet.next()){
+                try {
+                    boolean preReqCheck = false;
+                    boolean classTimeCheck = true;
+                    boolean examDateTime = true;
+                    boolean repeatedCheck = true;
+                    while (resultSet1.next()){
+                        if (resultSet.getString("prereq").equals(resultSet1.getString("student_lessons.lessonid"))){
+                            preReqCheck = true;
+                        }
+                        if (resultSet.getString("days").equals(resultSet1.getString("lessons.days")) && resultSet.getString("time").equals(resultSet1.getString("lessons.time"))){
+                            classTimeCheck = false;
+                        }
+                        if (resultSet.getString("examdate").equals(resultSet1.getString("lessons.examdate"))){
+                            examDateTime = false;
+                        }
+                        if (resultSet1.getString("lessons.lessonid").equals(order.get(1))){
+                            repeatedCheck = false;
+                        }
+                    }
+                    if (Integer.parseInt(resultSet.getString("capacity")) > 0  ){
+                        if (Integer.parseInt(resultSet.getString("prereq")) == 0 || preReqCheck){
+                            if (classTimeCheck){
+                                if (examDateTime){
+                                   if (repeatedCheck){
+                                       preparedStatement = connection.prepareStatement("update lessons set capacity = ? where lessonid = ?");
+                                       preparedStatement.setInt(1,Integer.parseInt(resultSet.getString("capacity")) - 1);
+                                       preparedStatement.setString(2,order.get(1));
+                                       preparedStatement.executeUpdate();
+                                       preparedStatement = connection.prepareStatement("insert into student_lessons values (?,?,default ,default ,default )");
+                                       preparedStatement.setInt(1,clientHandler.id);
+                                       preparedStatement.setString(2,order.get(1));
+                                       preparedStatement.execute();
+                                       sendSuccessMessage(clientHandler);
+                                   }else {
+                                       respond.add("YOU HAD TOOK THIS LESSON BEFORE !");
+                                   }
+                                }
+                                else {
+                                    respond.add("LESSON EXAM DATE HAS OVERLAP WITH OTHER LESSONS !");
+                                }
+                            }else {
+                                respond.add("LESSON CLASS TIME HAS OVERLAP WITH OTHER LESSONS !");
+                            }
+                        }else {
+                            respond.add("LESSON PRE REQ DIDNT OBSERVED !");
+                        }
+                    }else {
+                        respond.add("LESSON CAPACITY IS FULL !");
+                    }
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                    sendUnSuccessMessage(clientHandler);
+                }
+            }
+            if (respond.size()>=2){
+                clientHandler.sendMessage(respond.toString());
+            }
+            respond.clear();
+        }
+
     }
 }

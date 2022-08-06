@@ -1,6 +1,7 @@
 package Pages;
 
 import ClientSide.ClientConfig;
+import ClientSide.ClientReqType;
 import ClientSide.DataHandler;
 
 import javax.swing.*;
@@ -20,7 +21,7 @@ public class TakeLessonPage extends JPanel {
     List<List<String>> data1;
     List<List<String>> data2;
     List<List<String>> markedLessons;
-
+    List<List<String>> data3;
     JButton show;
 
     JButton mark;
@@ -35,6 +36,7 @@ public class TakeLessonPage extends JPanel {
     Object[][] rows2;
     Object[][] rows3;
     String[] columns1 = {"ID","NAME","PISHNIAZ","OSTAD","COLLEGE","VAHED","MAGHTA","ZARFIAT","DAYS","TIME","EXAMDATE","MARK","TAKE","REQ"};
+    String[] columns2 = {"ID","NAME","PISHNIAZ","OSTAD","COLLEGE","VAHED","MAGHTA","ZARFIAT","DAYS","TIME","EXAMDATE","SCORE","MARK","DELETE","CHANGE GP"};
 
     JLabel t1;
     JLabel t2;
@@ -58,9 +60,12 @@ public class TakeLessonPage extends JPanel {
         initComps();
         initFirstTable(DataHandler.getInstance().getAllLessons());
         initSecondTable(DataHandler.getInstance().getRecommendedLessonsList());
+        initThirdTable(DataHandler.getInstance().getUserLessons());
         GuiController.getInstance().addJPanel(this);
 
     }
+
+
     public void initPanel(){
         this.setBounds(0,30, ClientConfig.mainFrameWidth,ClientConfig.mainFrameHeight);
         this.setVisible(true);
@@ -69,7 +74,8 @@ public class TakeLessonPage extends JPanel {
     public void initComps(){
         data1 = new ArrayList<>();
         data2 = new ArrayList<>();
-        markedLessons = new ArrayList<>();
+        data3 = new ArrayList<>();
+        markedLessons = DataHandler.getInstance().getMarkedLessons();
 
         show = new JButton("SHOW");
         show.addActionListener(new ActionListener() {
@@ -111,16 +117,7 @@ public class TakeLessonPage extends JPanel {
         }
         data1.clear();
         List<List<String>> removedTookLessons = new ArrayList<>(data);
-        for (List<String> i : removedTookLessons){
-            loop:
-            for (List<String> j:
-                    DataHandler.getInstance().getUserLessons()) {
-                if (i.get(0).equals(j.get(0))){
-                    removedTookLessons.remove(i);
-                    break loop;
-                }
-            }
-        }
+        removedTookLessons.removeAll(DataHandler.getInstance().getUserLessons());
 
         for (List<String> i:
                 removedTookLessons){
@@ -153,27 +150,18 @@ public class TakeLessonPage extends JPanel {
         jScrollPane1 = new JScrollPane(jTable1);
         t1.setBounds(50,25,200,30);
         this.add(t1);
-        jScrollPane1.setBounds(50,50,1000,200);
+        jScrollPane1.setBounds(50,50,1300,200);
         this.add(jScrollPane1);
         repaint();
         revalidate();
     }
     public void initSecondTable(List<List<String>> data){
-        if (jScrollPane1 != null){
-            remove(jScrollPane1);
+        if (jScrollPane2 != null){
+            remove(jScrollPane2);
         }
         data2.clear();
         List<List<String>> removedTookLessons = new ArrayList<>(data);
-        for (List<String> i : removedTookLessons){
-            loop:
-            for (List<String> j:
-                    DataHandler.getInstance().getUserLessons()) {
-                if (i.get(0).equals(j.get(0))){
-                    removedTookLessons.remove(i);
-                    break loop;
-                }
-            }
-        }
+        removedTookLessons.removeAll(DataHandler.getInstance().getUserLessons());
         for (List<String> i:
                 removedTookLessons){
             data2.add(new ArrayList<>());
@@ -181,7 +169,7 @@ public class TakeLessonPage extends JPanel {
                     i) {
                 data2.get(data2.size()-1).add(j);
             }
-            data2.get(data2.size()-1).add("MARK");
+            data2.get(data2.size()-1).add("UNMARK");
             data2.get(data2.size()-1).add("TAKE");
             data2.get(data2.size()-1).add("REQ");
         }
@@ -192,7 +180,7 @@ public class TakeLessonPage extends JPanel {
                     i) {
                 data2.get(data2.size()-1).add(j);
             }
-            data2.get(data2.size()-1).add("MARK");
+            data2.get(data2.size()-1).add("UNMARK");
             data2.get(data2.size()-1).add("TAKE");
             data2.get(data2.size()-1).add("REQ");
         }
@@ -216,11 +204,47 @@ public class TakeLessonPage extends JPanel {
         jScrollPane2 = new JScrollPane(jTable2);
         t2.setBounds(50,300,300,30);
         this.add(t2);
-        jScrollPane2.setBounds(50,350,1000,200);
+        jScrollPane2.setBounds(50,350,1300,200);
         this.add(jScrollPane2);
         repaint();
         revalidate();
 
+    }
+    private void initThirdTable(List<List<String>> userLessons) {
+        if (jScrollPane3 != null){
+            remove(jScrollPane3);
+        }
+        data3.clear();
+        for (List<String> i:
+                userLessons){
+            data3.add(new ArrayList<>());
+            for (String j:
+                    i) {
+                data3.get(data3.size()-1).add(j);
+            }
+            data3.get(data3.size()-1).add("MARK");
+            data3.get(data3.size()-1).add("REMOVE");
+            data3.get(data3.size()-1).add("CHANGE GP");
+        }
+        rows3 = data3.stream().map(u -> u.toArray(new Object[0])).toArray(Object[][]::new);
+        DefaultTableModel dm = new DefaultTableModel();
+        dm.setDataVector(rows3,columns2);
+        jTable3 = new JTable(dm);
+        //
+        jTable3.getColumn("MARK").setCellRenderer(new ButtonRenderer());
+        jTable3.getColumn("MARK").setCellEditor(new ButtonEditor(new JCheckBox()));
+        jTable3.getColumn("DELETE").setCellRenderer(new ButtonRenderer());
+        jTable3.getColumn("DELETE").setCellEditor(new ButtonEditor(new JCheckBox()));
+        jTable3.getColumn("CHANGE GP").setCellRenderer(new ButtonRenderer());
+        jTable3.getColumn("CHANGE GP").setCellEditor(new ButtonEditor(new JCheckBox()));
+        //
+        jScrollPane3 = new JScrollPane(jTable3);
+        t3.setBounds(50,550,300,30);
+        this.add(t3);
+        jScrollPane3.setBounds(50,600,1300,150);
+        this.add(jScrollPane3);
+        repaint();
+        revalidate();
     }
     class ButtonRenderer extends JButton implements TableCellRenderer {
 
@@ -277,12 +301,32 @@ public class TakeLessonPage extends JPanel {
         public Object getCellEditorValue() {
             if (isPushed) {
                 //
-                if (label.equals("MARK")){
-                    //
+                if (jTable1.isColumnSelected(jTable1.getColumnCount()-1)){
+
+                    JOptionPane.showMessageDialog(null , jTable1.getValueAt(jTable1.getSelectedRow(),0));
+                    jTable1.clearSelection();
+                }else if (jTable1.isColumnSelected(jTable1.getColumnCount()-2)){
+                    List<String> req = new ArrayList<>();
+                    req.add(ClientReqType.TAKE_LESSON.toString());
+                    req.add((String) jTable1.getValueAt(jTable1.getSelectedRow(),0));
+                    GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+                    jTable1.clearSelection();
+                }else if (jTable1.isColumnSelected(jTable1.getColumnCount()-3)){
+                    for (List<String> i:
+                         data1) {
+                        if (i.get(0).equals(jTable1.getValueAt(jTable1.getSelectedRow(),0))){
+                            if (markedLessons.contains(i)){
+                                JOptionPane.showMessageDialog(null,"YOU HAD MARKED THIS BEFORE !");
+                            }else {
+                                markedLessons.add(i);
+                            }
+                        }
+                    }
+                    jTable1.clearSelection();
                 }
                 //
-                JOptionPane.showMessageDialog(null , "fine");
-                // System.out.println(label + ": Ouch!");
+
+                updatePanel();
             }
             isPushed = false;
             return new String(label);
@@ -296,6 +340,16 @@ public class TakeLessonPage extends JPanel {
         protected void fireEditingStopped() {
             super.fireEditingStopped();
         }
+    }
+    public void updatePanel(){
+        DataHandler.getInstance().updateLessonsList();
+        DataHandler.getInstance().updateUserLessons();
+        DataHandler.getInstance().updateRecommendedLessonsList();
+        initFirstTable(DataHandler.getInstance().getAllLessons());
+        initSecondTable(DataHandler.getInstance().getRecommendedLessonsList());
+        initThirdTable(DataHandler.getInstance().getUserLessons());
+        repaint();
+        revalidate();
     }
 
 }

@@ -155,6 +155,8 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().setChooseTime(this,order);
         }else if (order.get(0).equals(ServerReqType.GET_RECOMMENDED_LESSONS.toString())){
             DataBase.getInstance().getRecommendedLessonsList(this);
+        }else if (order.get(0).equals(ServerReqType.TAKE_LESSON.toString())){
+            DataBase.getInstance().takeLesson(this,order);
         }
 
     }
