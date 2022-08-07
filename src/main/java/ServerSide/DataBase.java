@@ -195,7 +195,7 @@ public class DataBase {
     }
 
     synchronized public void getUserLessons(ClientHandler clientHandler) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("select * from lessons join student_lessons on lessons.lessonid = student_lessons.lessonid where student_lessons.id = ? or lessons.teacherid = ?");
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from lessons join student_lessons on lessons.lessonid = student_lessons.lessonid where (student_lessons.id = ? and lessons.teacherid = student_lessons.teacherid) or lessons.teacherid = ?");
         preparedStatement.setInt(1, clientHandler.id);
         preparedStatement.setInt(2, clientHandler.id);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -206,7 +206,7 @@ public class DataBase {
             respond.add(resultSet.getString("lessonid"));
             respond.add(resultSet.getString("name"));
             respond.add(resultSet.getString("prereq"));
-            respond.add(resultSet.getString("teacherid"));
+            respond.add(resultSet.getString("lessons.teacherid"));
             respond.add(resultSet.getString("college"));
             respond.add(resultSet.getString("units"));
             respond.add(resultSet.getString("level"));
@@ -520,10 +520,11 @@ public class DataBase {
 
     synchronized public void setTemporaryGrades(ClientHandler clientHandler, List<String> order) throws SQLException {
         if (clientHandler.isTeacher){
-            PreparedStatement preparedStatement = connection.prepareStatement("update student_lessons set score = ? where id = ? and lessonid = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("update student_lessons set score = ? where id = ? and lessonid = ? and teacherid = ?");
             preparedStatement.setDouble(1,Double.parseDouble(order.get(order.size()-1)));
             preparedStatement.setInt(2,Integer.parseInt(order.get(1)));
             preparedStatement.setInt(3,Integer.parseInt(order.get(2)));
+            preparedStatement.setInt(4,clientHandler.id);
             preparedStatement.executeUpdate();
         }
     }
@@ -701,8 +702,9 @@ public class DataBase {
 
     synchronized public void takeLesson(ClientHandler clientHandler, List<String> order) throws SQLException {
         if (clientHandler.isStudent){
-            PreparedStatement preparedStatement = connection.prepareStatement("select * from lessons where lessonid = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from lessons where lessonid = ? and teacherid=?");
             preparedStatement.setString(1,order.get(1));
+            preparedStatement.setString(2,order.get(2));
             ResultSet resultSet = preparedStatement.executeQuery();
             PreparedStatement preparedStatement1 = connection.prepareStatement("select * from student_lessons join lessons on student_lessons.lessonid = lessons.lessonid where student_lessons.id = ?");
             preparedStatement1.setInt(1,clientHandler.id);
@@ -734,13 +736,15 @@ public class DataBase {
                             if (classTimeCheck){
                                 if (examDateTime){
                                    if (repeatedCheck){
-                                       preparedStatement = connection.prepareStatement("update lessons set capacity = ? where lessonid = ?");
+                                       preparedStatement = connection.prepareStatement("update lessons set capacity = ? where lessonid = ? and teacherid =?");
                                        preparedStatement.setInt(1,Integer.parseInt(resultSet.getString("capacity")) - 1);
                                        preparedStatement.setString(2,order.get(1));
+                                       preparedStatement.setString(3,order.get(2));
                                        preparedStatement.executeUpdate();
-                                       preparedStatement = connection.prepareStatement("insert into student_lessons values (?,?,default ,default ,default )");
+                                       preparedStatement = connection.prepareStatement("insert into student_lessons values (?,?,?,default ,default ,default )");
                                        preparedStatement.setInt(1,clientHandler.id);
                                        preparedStatement.setString(2,order.get(1));
+                                       preparedStatement.setString(3,order.get(2));
                                        preparedStatement.execute();
                                        sendSuccessMessage(clientHandler);
                                    }else {
@@ -771,5 +775,24 @@ public class DataBase {
             respond.clear();
         }
 
+    }
+
+    synchronized public void setReqMessage(ClientHandler clientHandler, List<String> order) throws SQLException {
+        if (clientHandler.isStudent){
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from sut_members where relation = ? and college = ?");
+            preparedStatement.setString(1,"M");
+            preparedStatement.setString(2, clientHandler.college);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                preparedStatement = connection.prepareStatement("insert into req_message values (?,?,?,default)");
+                preparedStatement.setInt(1,clientHandler.id);
+                preparedStatement.setString(2,resultSet.getString("id"));
+                preparedStatement.setString(3, order.get(1));
+                preparedStatement.execute();
+                sendSuccessMessage(clientHandler);
+            }else {
+                sendUnSuccessMessage(clientHandler);
+            }
+        }
     }
 }

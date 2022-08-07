@@ -29,4 +29,5 @@ public enum ClientReqType {
     SET_CHOOSE_TIME,
     GET_RECOMMENDED_LESSONS,
     TAKE_LESSON,
+    SEND_REQ_MESSAGE
 }

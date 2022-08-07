@@ -357,6 +357,12 @@ public class DataHandler {
             System.out.println("IDK WHATS WRONG WITH THIS!");
         }
     }
+    public void sendReqMessage(String msg){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.SEND_REQ_MESSAGE.toString());
+        req.add(msg);
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
     public ImageIcon getImageIcon(){
         if (imageIcon == null){
             ImageIcon imageIcon = new ImageIcon(ResourceManager.get(ImageResource.NULL_PROFILE));

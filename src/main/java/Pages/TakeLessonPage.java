@@ -302,13 +302,13 @@ public class TakeLessonPage extends JPanel {
             if (isPushed) {
                 //
                 if (jTable1.isColumnSelected(jTable1.getColumnCount()-1)){
-
-                    JOptionPane.showMessageDialog(null , jTable1.getValueAt(jTable1.getSelectedRow(),0));
+                    DataHandler.getInstance().sendReqMessage("REQUEST FROM : " + DataHandler.getInstance().getId() + " . " + DataHandler.getInstance().getFullName() + " TO TAKE A LESSON WITH ID : " + jTable1.getValueAt(jTable1.getSelectedRow(),0));
                     jTable1.clearSelection();
                 }else if (jTable1.isColumnSelected(jTable1.getColumnCount()-2)){
                     List<String> req = new ArrayList<>();
                     req.add(ClientReqType.TAKE_LESSON.toString());
                     req.add((String) jTable1.getValueAt(jTable1.getSelectedRow(),0));
+                    req.add((String) jTable1.getValueAt(jTable1.getSelectedRow(),3));
                     GuiController.getInstance().getClient().getClientSender().sendMessage(req);
                     jTable1.clearSelection();
                 }else if (jTable1.isColumnSelected(jTable1.getColumnCount()-3)){
@@ -323,6 +323,43 @@ public class TakeLessonPage extends JPanel {
                         }
                     }
                     jTable1.clearSelection();
+                }else if (jTable2.isColumnSelected(jTable2.getColumnCount()-1)){
+                    DataHandler.getInstance().sendReqMessage("REQUEST FROM : " + DataHandler.getInstance().getId() + " . " + DataHandler.getInstance().getFullName() + " TO TAKE A LESSON WITH ID : " + jTable2.getValueAt(jTable2.getSelectedRow(),0));
+                    jTable2.clearSelection();
+                }else if (jTable2.isColumnSelected(jTable2.getColumnCount()-2)){
+                    List<String> req = new ArrayList<>();
+                    req.add(ClientReqType.TAKE_LESSON.toString());
+                    req.add((String) jTable2.getValueAt(jTable2.getSelectedRow(),0));
+                    req.add((String) jTable2.getValueAt(jTable2.getSelectedRow(),3));
+                    GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+                    jTable2.clearSelection();
+                }else if (jTable2.isColumnSelected(jTable2.getColumnCount()-3)){
+                    for (List<String> i:
+                            data1) {
+                        if (i.get(0).equals(jTable2.getValueAt(jTable2.getSelectedRow(),0))){
+                            if (markedLessons.contains(i)){
+                                markedLessons.remove(i);
+                            }else {
+                                JOptionPane.showMessageDialog(null,"THERE IS NOTHING TO REMOVE FROM MARKED LIST !");
+                            }
+                        }
+                    }
+                    jTable2.clearSelection();
+                }else if (jTable3.isColumnSelected(jTable3.getColumnCount()-1)){
+                    List<List<String>> groups = new ArrayList<>();
+                    for (List<String> i:
+                         DataHandler.getInstance().getAllLessons()) {
+                        if (jTable3.getValueAt(jTable3.getSelectedRow(),0).equals(i.get(0))){
+                            groups.add(i);
+                        }
+
+                    }
+                    if (groups.size()<=1){
+                        JOptionPane.showMessageDialog(null,"THERE IS ONLY ONE GROUP FOR THIS LESSON !");
+                    }else {
+                        ChangeLessonGpFrame changeLessonGpFrame = new ChangeLessonGpFrame(groups);
+                    }
+                    jTable3.clearSelection();
                 }
                 //
 
