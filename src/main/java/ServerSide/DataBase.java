@@ -700,15 +700,18 @@ public class DataBase {
         }
     }
 
-    synchronized public void takeLesson(ClientHandler clientHandler, List<String> order) throws SQLException {
+    synchronized public boolean takeLesson(ClientHandler clientHandler, List<String> order) throws SQLException {
         if (clientHandler.isStudent){
             PreparedStatement preparedStatement = connection.prepareStatement("select * from lessons where lessonid = ? and teacherid=?");
             preparedStatement.setString(1,order.get(1));
             preparedStatement.setString(2,order.get(2));
             ResultSet resultSet = preparedStatement.executeQuery();
-            PreparedStatement preparedStatement1 = connection.prepareStatement("select * from student_lessons join lessons on student_lessons.lessonid = lessons.lessonid where student_lessons.id = ?");
+            PreparedStatement preparedStatement1 = connection.prepareStatement("select * from lessons join student_lessons on student_lessons.lessonid = lessons.lessonid and student_lessons.teacherid = lessons.teacherid where student_lessons.id = ?");
             preparedStatement1.setInt(1,clientHandler.id);
             ResultSet resultSet1 = preparedStatement1.executeQuery();
+            PreparedStatement preparedStatement2 = connection.prepareStatement("select * from passed_lessons where studentid = ?");
+            preparedStatement2.setInt(1,clientHandler.id);
+            ResultSet resultSet2 = preparedStatement2.executeQuery();
             List<String> respond = new ArrayList<>();
             respond.add(ServerReqType.SHOW_RESULT.toString());
             if (resultSet.next()){
@@ -716,40 +719,37 @@ public class DataBase {
                     boolean preReqCheck = false;
                     boolean classTimeCheck = true;
                     boolean examDateTime = true;
-                    boolean repeatedCheck = true;
-                    while (resultSet1.next()){
-                        if (resultSet.getString("prereq").equals(resultSet1.getString("student_lessons.lessonid"))){
+                    while (resultSet2.next()){
+                        if (resultSet.getString("prereq").equals(resultSet2.getString("passed_lessons.lessonid")) || resultSet.getString("prereq").equals("0")){
                             preReqCheck = true;
                         }
+                    }
+                    while (resultSet1.next()){
+
                         if (resultSet.getString("days").equals(resultSet1.getString("lessons.days")) && resultSet.getString("time").equals(resultSet1.getString("lessons.time"))){
                             classTimeCheck = false;
                         }
                         if (resultSet.getString("examdate").equals(resultSet1.getString("lessons.examdate"))){
                             examDateTime = false;
                         }
-                        if (resultSet1.getString("lessons.lessonid").equals(order.get(1))){
-                            repeatedCheck = false;
-                        }
+
                     }
                     if (Integer.parseInt(resultSet.getString("capacity")) > 0  ){
                         if (Integer.parseInt(resultSet.getString("prereq")) == 0 || preReqCheck){
                             if (classTimeCheck){
                                 if (examDateTime){
-                                   if (repeatedCheck){
-                                       preparedStatement = connection.prepareStatement("update lessons set capacity = ? where lessonid = ? and teacherid =?");
-                                       preparedStatement.setInt(1,Integer.parseInt(resultSet.getString("capacity")) - 1);
-                                       preparedStatement.setString(2,order.get(1));
-                                       preparedStatement.setString(3,order.get(2));
-                                       preparedStatement.executeUpdate();
-                                       preparedStatement = connection.prepareStatement("insert into student_lessons values (?,?,?,default ,default ,default )");
-                                       preparedStatement.setInt(1,clientHandler.id);
-                                       preparedStatement.setString(2,order.get(1));
-                                       preparedStatement.setString(3,order.get(2));
-                                       preparedStatement.execute();
-                                       sendSuccessMessage(clientHandler);
-                                   }else {
-                                       respond.add("YOU HAD TOOK THIS LESSON BEFORE !");
-                                   }
+                                    preparedStatement = connection.prepareStatement("update lessons set capacity = ? where lessonid = ? and teacherid =?");
+                                    preparedStatement.setInt(1,Integer.parseInt(resultSet.getString("capacity")) - 1);
+                                    preparedStatement.setString(2,order.get(1));
+                                    preparedStatement.setString(3,order.get(2));
+                                    preparedStatement.executeUpdate();
+                                    preparedStatement = connection.prepareStatement("insert into student_lessons values (?,?,?,default ,default ,default )");
+                                    preparedStatement.setInt(1,clientHandler.id);
+                                    preparedStatement.setString(2,order.get(1));
+                                    preparedStatement.setString(3,order.get(2));
+                                    preparedStatement.execute();
+                                    sendSuccessMessage(clientHandler);
+                                    return true;
                                 }
                                 else {
                                     respond.add("LESSON EXAM DATE HAS OVERLAP WITH OTHER LESSONS !");
@@ -774,7 +774,7 @@ public class DataBase {
             }
             respond.clear();
         }
-
+        return false;
     }
 
     synchronized public void setReqMessage(ClientHandler clientHandler, List<String> order) throws SQLException {
@@ -793,6 +793,28 @@ public class DataBase {
             }else {
                 sendUnSuccessMessage(clientHandler);
             }
+        }
+    }
+
+    synchronized public void changeLessonGp(ClientHandler clientHandler, List<String> order) throws SQLException {
+        if (clientHandler.isStudent){
+            if (takeLesson(clientHandler,order)){
+                PreparedStatement preparedStatement = connection.prepareStatement("delete from student_lessons where id=? and lessonid=? and teacherid <> ?");
+                preparedStatement.setInt(1,clientHandler.id);
+                preparedStatement.setString(2,order.get(1));
+                preparedStatement.setString(3,order.get(2));
+                preparedStatement.execute();
+            }
+        }
+    }
+    synchronized  public void removeTookLesson(ClientHandler clientHandler,List<String> order) throws SQLException {
+        if (clientHandler.isStudent){
+            PreparedStatement preparedStatement = connection.prepareStatement("delete from student_lessons where id=? and lessonid=? and teacherid=?");
+            preparedStatement.setInt(1,clientHandler.id);
+            preparedStatement.setString(2,order.get(1));
+            preparedStatement.setString(3,order.get(2));
+            preparedStatement.execute();
+            sendSuccessMessage(clientHandler);
         }
     }
 }

@@ -1,7 +1,12 @@
 package Pages;
 
+import ClientSide.ClientReqType;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeLessonGpFrame extends JFrame {
@@ -39,6 +44,17 @@ public class ChangeLessonGpFrame extends JFrame {
         this.add(jScrollPane);
     }
     public void addListener(){
-        //
+        jButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String teacherId = jTextField.getText();
+                String lessonId = lessonGp.get(0).get(0);
+                List<String> req = new ArrayList<>();
+                req.add(ClientReqType.CHANGE_LESSON_GP.toString());
+                req.add(lessonId);
+                req.add(teacherId);
+                GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+            }
+        });
     }
 }

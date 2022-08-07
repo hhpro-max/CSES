@@ -159,6 +159,10 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().takeLesson(this,order);
         }else if (order.get(0).equals(ServerReqType.SEND_REQ_MESSAGE.toString())){
             DataBase.getInstance().setReqMessage(this,order);
+        }else if(order.get(0).equals(ServerReqType.CHANGE_LESSON_GP.toString())){
+            DataBase.getInstance().changeLessonGp(this,order);
+        }else if (order.get(0).equals(ServerReqType.REMOVE_TOOK_LESSON.toString())){
+            DataBase.getInstance().removeTookLesson(this,order);
         }
 
     }

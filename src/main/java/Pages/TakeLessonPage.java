@@ -360,6 +360,25 @@ public class TakeLessonPage extends JPanel {
                         ChangeLessonGpFrame changeLessonGpFrame = new ChangeLessonGpFrame(groups);
                     }
                     jTable3.clearSelection();
+                }else if (jTable3.isColumnSelected(jTable3.getColumnCount()-2)){
+                    List<String> req = new ArrayList<>();
+                    req.add(ClientReqType.REMOVE_TOOK_LESSON.toString());
+                    req.add((String) jTable3.getValueAt(jTable3.getSelectedRow(),0));
+                    req.add((String) jTable3.getValueAt(jTable3.getSelectedRow(),3));
+                    GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+                    jTable3.clearSelection();
+                }else if (jTable3.isColumnSelected(jTable3.getColumnCount()-3)){
+                    for (List<String> i:
+                            data1) {
+                        if (i.get(0).equals(jTable3.getValueAt(jTable3.getSelectedRow(),0))){
+                            if (markedLessons.contains(i)){
+                                JOptionPane.showMessageDialog(null,"YOU HAD MARKED THIS BEFORE !");
+                            }else {
+                                markedLessons.add(i);
+                            }
+                        }
+                    }
+                    jTable3.clearSelection();
                 }
                 //
 
