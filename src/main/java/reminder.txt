@@ -10,3 +10,5 @@ complete normalStudentPage addMoreListener function.
 complete teacherMainPage.
 
 fix the filters of lessonslistpage.
+
+set time for take lesson and hide it!

@@ -777,14 +777,14 @@ public class DataBase {
         return false;
     }
 
-    synchronized public void setReqMessage(ClientHandler clientHandler, List<String> order) throws SQLException {
+    synchronized public void addReqMessage(ClientHandler clientHandler, List<String> order) throws SQLException {
         if (clientHandler.isStudent){
             PreparedStatement preparedStatement = connection.prepareStatement("select * from sut_members where relation = ? and college = ?");
             preparedStatement.setString(1,"M");
             preparedStatement.setString(2, clientHandler.college);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()){
-                preparedStatement = connection.prepareStatement("insert into req_message values (?,?,?,default)");
+                preparedStatement = connection.prepareStatement("insert into req_message values (default,?,?,?,default)");
                 preparedStatement.setInt(1,clientHandler.id);
                 preparedStatement.setString(2,resultSet.getString("id"));
                 preparedStatement.setString(3, order.get(1));
@@ -816,5 +816,32 @@ public class DataBase {
             preparedStatement.execute();
             sendSuccessMessage(clientHandler);
         }
+    }
+
+    synchronized public void getReqMessages(ClientHandler clientHandler) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("select  * from req_message where sender_id = ? or receiver_id = ?");
+        preparedStatement.setInt(1,clientHandler.id);
+        preparedStatement.setInt(2,clientHandler.id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<String> respond = new ArrayList<>();
+        respond.add(ServerReqType.GET_REQ_MESSAGES.toString());
+        while (resultSet.next()){
+            respond.add(RespondType.SUCCESSFUL.toString());
+            respond.add(resultSet.getString("message_id"));
+            respond.add(resultSet.getString("sender_id"));
+            respond.add(resultSet.getString("receiver_id"));
+            respond.add(resultSet.getString("message"));
+            respond.add(resultSet.getString("result"));
+        }
+        clientHandler.sendMessage(respond.toString());
+    }
+
+   synchronized public void setReqMessageResult(ClientHandler clientHandler, List<String> order) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("update req_message set result = ? where receiver_id = ? and message_id = ?");
+        preparedStatement.setString(1,order.get(2));
+        preparedStatement.setInt(2,clientHandler.id);
+        preparedStatement.setString(3,order.get(1));
+        preparedStatement.executeUpdate();
+        sendSuccessMessage(clientHandler);
     }
 }

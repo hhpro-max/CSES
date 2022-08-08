@@ -47,6 +47,7 @@ public class DataHandler {
     List<List<String>> allStudents;
     List<List<String>> recommendedLessonsList;
     List<List<String>> markedLessons;
+    List<List<String>> reqMessages;
 
     private static DataHandler dataHandler;
     private DataHandler(){
@@ -60,6 +61,7 @@ public class DataHandler {
         allStudents = new ArrayList<>();
         recommendedLessonsList = new ArrayList<>();
         markedLessons = new ArrayList<>();
+        reqMessages = new ArrayList<>();
     }
     synchronized public static DataHandler getInstance(){
         if (dataHandler == null){
@@ -96,6 +98,8 @@ public class DataHandler {
             initStudentsList(orders);
         }else if (orders.get(0).equals(ClientReqType.GET_RECOMMENDED_LESSONS.toString())){
             initRecommendedLessonsList(orders);
+        }else if (orders.get(0).equals(ClientReqType.GET_REQ_MESSAGES.toString())){
+            initReqMessageList(orders);
         }
     }
 
@@ -254,6 +258,18 @@ public class DataHandler {
             }
         }
     }
+    public void initReqMessageList(List<String> orders){
+        orders.remove(0);
+        reqMessages = new ArrayList<>();
+        for (String i:
+                orders) {
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
+                reqMessages.add(new ArrayList<>());
+            }else{
+                reqMessages.get(reqMessages.size() - 1).add(i);
+            }
+        }
+    }
 
     private void showMinorReqResult(List<String> orders) {
         try {
@@ -341,6 +357,11 @@ public class DataHandler {
     public void updateRecommendedLessonsList(){
         List<String> req = new ArrayList<>();
         req.add(ClientReqType.GET_RECOMMENDED_LESSONS.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
+    public void updateReqMessage(){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.GET_REQ_MESSAGES.toString());
         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
     }
     public void showResult(List<String> order){
@@ -599,5 +620,9 @@ public class DataHandler {
 
     public List<List<String>> getMarkedLessons() {
         return markedLessons;
+    }
+
+    public List<List<String>> getReqMessages() {
+        return reqMessages;
     }
 }

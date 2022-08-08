@@ -23,6 +23,7 @@ public class MainPage extends JPanel {
     public JMenuItem teachersList;
     public JMenuItem weeklyPlan;
     public JMenuItem examsList;
+    public JMenuItem reqMessage;
     public JMenu requests;
 
     public Timer timer;
@@ -73,6 +74,8 @@ public class MainPage extends JPanel {
         examsList = new JMenuItem("EXAMS");
         eduService.add(examsList);
         requests = new JMenu("REQUESTS");
+        reqMessage = new JMenuItem("REQ MESSAGES");
+        requests.add(reqMessage);
         eduService.add(requests);
         userProfile = new JMenu("PROFILE");
         mainPage = new JButton("MAIN PANEL");
@@ -123,5 +126,11 @@ public class MainPage extends JPanel {
         ExamListListener examListListener = new ExamListListener();
         examsList.addActionListener(examListListener);
         //
+        reqMessage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GuiController.getInstance().changePanelTo(PanelType.REQ_MESSAGES_PAGE);
+            }
+        });
     }
 }

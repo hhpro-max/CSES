@@ -1,6 +1,5 @@
 package ServerSide;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -158,11 +157,15 @@ public class ClientHandler implements Runnable {
         }else if (order.get(0).equals(ServerReqType.TAKE_LESSON.toString())){
             DataBase.getInstance().takeLesson(this,order);
         }else if (order.get(0).equals(ServerReqType.SEND_REQ_MESSAGE.toString())){
-            DataBase.getInstance().setReqMessage(this,order);
+            DataBase.getInstance().addReqMessage(this,order);
         }else if(order.get(0).equals(ServerReqType.CHANGE_LESSON_GP.toString())){
             DataBase.getInstance().changeLessonGp(this,order);
         }else if (order.get(0).equals(ServerReqType.REMOVE_TOOK_LESSON.toString())){
             DataBase.getInstance().removeTookLesson(this,order);
+        }else if (order.get(0).equals(ServerReqType.GET_REQ_MESSAGES.toString())){
+            DataBase.getInstance().getReqMessages(this);
+        }else if (order.get(0).equals(ServerReqType.SET_REQ_MESSAGE_RESULT.toString())){
+            DataBase.getInstance().setReqMessageResult(this,order);
         }
 
     }

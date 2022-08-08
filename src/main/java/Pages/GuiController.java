@@ -197,6 +197,11 @@ public class GuiController {
                 userCurrentPanel = takeLessonPage;
                 frame.add(takeLessonPage,1);
                 break;
+            case REQ_MESSAGES_PAGE:
+                ReqMessagePage reqMessagePage = new ReqMessagePage();
+                userCurrentPanel = reqMessagePage;
+                frame.add(reqMessagePage,1);
+                break;
         }
         updateFrame();
     }
