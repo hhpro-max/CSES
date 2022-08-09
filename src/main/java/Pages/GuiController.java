@@ -203,7 +203,7 @@ public class GuiController {
                 frame.add(reqMessagePage,1);
                 break;
             case CHAT_PAGE:
-                ChatPanel chatPanel = new ChatPanel();
+                ChatPage chatPanel = new ChatPage();
                 userCurrentPanel = chatPanel;
                 frame.add(chatPanel,1);
                 break;

@@ -168,6 +168,8 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().setReqMessageResult(this,order);
         }else if (order.get(0).equals(ServerReqType.GET_CHATS.toString())){
             DataBase.getInstance().getChats(this);
+        }else if (order.get(0).equals(ServerReqType.SEND_MESSAGE.toString())){
+            DataBase.getInstance().setMessage(this,order);
         }
 
     }

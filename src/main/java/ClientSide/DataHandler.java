@@ -226,6 +226,13 @@ public class DataHandler {
                 chats.get(chats.size() - 1).add(i);
             }
         }
+        for (List<String> i:
+             chats) {
+            int j = i.get(2).lastIndexOf('.');
+            if (i.get(2).substring(j+1).equals("msg")){
+              i.set(2,i.get(2).replace(".msg",""));
+            }
+        }
         Collections.reverse(chats);
     }
     public void initUserLessons(List<String> orders){

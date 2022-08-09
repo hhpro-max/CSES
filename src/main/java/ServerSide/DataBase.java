@@ -857,13 +857,31 @@ public class DataBase {
             if (resultSet.getInt("sender_id") == clientHandler.id){
                 respond.add(resultSet.getString("receiver_id"));
                 respond.add(findMemberName(resultSet.getInt("receiver_id")));
-                respond.add(resultSet.getString("message"));
+                respond.add("you : " + resultSet.getString("message"));
             }else {
                 respond.add(resultSet.getString("sender_id"));
                 respond.add(findMemberName(resultSet.getInt("sender_id")));
-                respond.add(resultSet.getString("message"));
+                respond.add(findMemberName(resultSet.getInt("sender_id")) + " : " + resultSet.getString("message"));
             }
         }
         clientHandler.sendMessage(respond.toString());
+    }
+
+    synchronized public void setMessage(ClientHandler clientHandler, List<String> order) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("insert into chats values (default ,?,?,?,?)");
+        preparedStatement.setInt(1,clientHandler.id);
+        preparedStatement.setString(2,order.get(1));
+        if (findMessageSuffix(order.get(2)).equals("msg")){
+            preparedStatement.setString(3,order.get(2));
+            preparedStatement.setString(4,"--");
+        }else {
+            preparedStatement.setString(3,order.get(2));
+            preparedStatement.setString(4,order.get(3));
+        }
+        preparedStatement.execute();
+    }
+    synchronized public String findMessageSuffix(String message){
+        int i = message.lastIndexOf('.');
+        return message.substring(i+1);
     }
 }

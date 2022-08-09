@@ -34,5 +34,6 @@ public enum ServerReqType {
     REMOVE_TOOK_LESSON,
     GET_REQ_MESSAGES,
     SET_REQ_MESSAGE_RESULT,
-    GET_CHATS
+    GET_CHATS,
+    SEND_MESSAGE
 }
