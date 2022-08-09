@@ -8,6 +8,7 @@ import Pages.PanelType;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DataHandler {
@@ -48,6 +49,7 @@ public class DataHandler {
     List<List<String>> recommendedLessonsList;
     List<List<String>> markedLessons;
     List<List<String>> reqMessages;
+    List<List<String>> chats;
 
     private static DataHandler dataHandler;
     private DataHandler(){
@@ -62,6 +64,7 @@ public class DataHandler {
         recommendedLessonsList = new ArrayList<>();
         markedLessons = new ArrayList<>();
         reqMessages = new ArrayList<>();
+        chats = new ArrayList<>();
     }
     synchronized public static DataHandler getInstance(){
         if (dataHandler == null){
@@ -100,6 +103,8 @@ public class DataHandler {
             initRecommendedLessonsList(orders);
         }else if (orders.get(0).equals(ClientReqType.GET_REQ_MESSAGES.toString())){
             initReqMessageList(orders);
+        }else if (orders.get(0).equals(ClientReqType.GET_CHATS.toString())){
+            initChatsList(orders);
         }
     }
 
@@ -209,6 +214,19 @@ public class DataHandler {
                 recommendedLessonsList.get(recommendedLessonsList.size() - 1).add(i);
             }
         }
+    }
+    private void initChatsList(List<String> orders) {
+        orders.remove(0);
+        chats = new ArrayList<>();
+        for (String i:
+                orders) {
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
+                chats.add(new ArrayList<>());
+            }else{
+                chats.get(chats.size() - 1).add(i);
+            }
+        }
+        Collections.reverse(chats);
     }
     public void initUserLessons(List<String> orders){
         orders.remove(0);
@@ -362,6 +380,11 @@ public class DataHandler {
     public void updateReqMessage(){
         List<String> req = new ArrayList<>();
         req.add(ClientReqType.GET_REQ_MESSAGES.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
+    public void updateChats(){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.GET_CHATS.toString());
         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
     }
     public void showResult(List<String> order){
@@ -624,5 +647,9 @@ public class DataHandler {
 
     public List<List<String>> getReqMessages() {
         return reqMessages;
+    }
+
+    public List<List<String>> getChats() {
+        return chats;
     }
 }

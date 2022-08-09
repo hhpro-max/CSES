@@ -18,13 +18,17 @@ public class MainPage extends JPanel {
     public JMenu eduService;
     public JMenu gradeService;
     public JMenu userProfile;
+    public JMenu requests;
+    public JMenu chats;
+    public JMenuItem chatPanel;
+    public JMenuItem chatReq;
     public JButton mainPage;
     public JMenuItem lessonsList;
     public JMenuItem teachersList;
     public JMenuItem weeklyPlan;
     public JMenuItem examsList;
     public JMenuItem reqMessage;
-    public JMenu requests;
+
 
     public Timer timer;
     public JLabel showTime;
@@ -69,6 +73,11 @@ public class MainPage extends JPanel {
         registration = new JMenu("REGISTRATION");
         gradeService = new JMenu("GRADE SERVICE");
         eduService = new JMenu("EDU SERVICE");
+        chats = new JMenu("CHATS");
+        chatPanel = new JMenuItem("CHAT PANEL");
+        chatReq = new JMenuItem("NEW CHAT");
+        chats.add(chatPanel);
+        chats.add(chatReq);
         weeklyPlan = new JMenuItem("WEEKLY PLAN");
         eduService.add(weeklyPlan);
         examsList = new JMenuItem("EXAMS");
@@ -87,7 +96,7 @@ public class MainPage extends JPanel {
         jMenuBar.add(eduService);
         jMenuBar.add(userProfile);
         jMenuBar.add(registration);
-        
+        jMenuBar.add(chats);
 
 
     }
@@ -130,6 +139,12 @@ public class MainPage extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 GuiController.getInstance().changePanelTo(PanelType.REQ_MESSAGES_PAGE);
+            }
+        });
+        chatPanel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GuiController.getInstance().changePanelTo(PanelType.CHAT_PAGE);
             }
         });
     }

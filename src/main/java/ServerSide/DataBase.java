@@ -844,4 +844,26 @@ public class DataBase {
         preparedStatement.executeUpdate();
         sendSuccessMessage(clientHandler);
     }
+
+    synchronized public void getChats(ClientHandler clientHandler) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from chats where sender_id = ? or receiver_id = ?");
+        preparedStatement.setInt(1,clientHandler.id);
+        preparedStatement.setInt(2,clientHandler.id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<String> respond = new ArrayList<>();
+        respond.add(ServerReqType.GET_CHATS.toString());
+        while (resultSet.next()){
+            respond.add(RespondType.SUCCESSFUL.toString());
+            if (resultSet.getInt("sender_id") == clientHandler.id){
+                respond.add(resultSet.getString("receiver_id"));
+                respond.add(findMemberName(resultSet.getInt("receiver_id")));
+                respond.add(resultSet.getString("message"));
+            }else {
+                respond.add(resultSet.getString("sender_id"));
+                respond.add(findMemberName(resultSet.getInt("sender_id")));
+                respond.add(resultSet.getString("message"));
+            }
+        }
+        clientHandler.sendMessage(respond.toString());
+    }
 }
