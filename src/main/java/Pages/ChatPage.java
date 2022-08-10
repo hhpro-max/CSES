@@ -41,15 +41,17 @@ public class ChatPage extends JPanel {
         GuiController.getInstance().addJPanel(this);
     }
     public void initPanel(){
+
         this.setBounds(0,30, ClientConfig.mainFrameWidth,ClientConfig.mainFrameHeight);
         this.setVisible(true);
         this.setLayout(null);
-    }
-
-    public void initTable(){
+        //
         jTextField = new JTextField();
         sendMessage = new JButton("SEND MESSAGE");
         sendFile = new JButton("SEND FILE");
+    }
+
+    public void initTable(){
         if (chatBox != null){
             this.remove(chatBox);
         }
@@ -67,15 +69,16 @@ public class ChatPage extends JPanel {
         this.add(chatBox);
         repaint();
         revalidate();
-    }
-    public void addListener(){
         jTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 id = (String) jTable.getValueAt(jTable.getSelectedRow(),0);
-                initChatRoom(id);
+                initChatRoom();
             }
         });
+    }
+    public void addListener(){
+
         sendFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -117,7 +120,7 @@ public class ChatPage extends JPanel {
             }
         });
     }
-    public void initChatRoom(String id){
+    public void initChatRoom(){
         chats.clear();
         if (chatPanel != null){
             this.remove(chatPanel);

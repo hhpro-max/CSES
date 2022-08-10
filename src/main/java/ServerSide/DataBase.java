@@ -885,6 +885,13 @@ public class DataBase {
             preparedStatement.setString(4,Config.uploadedFilesUrl+order.get(2));
         }
         preparedStatement.execute();
+        getChats(clientHandler);
+        for (ClientHandler i:
+             Server.clients) {
+            if (i.id == Integer.parseInt(order.get(1))){
+                getChats(i);
+            }
+        }
     }
     synchronized public String findMessageSuffix(String message){
         int i = message.lastIndexOf('.');

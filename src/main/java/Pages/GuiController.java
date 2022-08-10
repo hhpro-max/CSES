@@ -274,4 +274,8 @@ public class GuiController {
     public void setUserMainPanel(JPanel userMainPanel) {
         this.userMainPanel = userMainPanel;
     }
+
+    public JPanel getUserCurrentPanel() {
+        return userCurrentPanel;
+    }
 }

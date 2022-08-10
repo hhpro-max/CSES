@@ -68,6 +68,10 @@ public class DataHandler {
         markedLessons = new ArrayList<>();
         reqMessages = new ArrayList<>();
         chats = new ArrayList<>();
+        //
+        GuiUpdater guiUpdater = new GuiUpdater();
+        new Thread(guiUpdater).start();
+        //
     }
     synchronized public static DataHandler getInstance(){
         if (dataHandler == null){
