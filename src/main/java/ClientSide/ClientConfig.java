@@ -8,4 +8,6 @@ public class ClientConfig {
     //GUI configs
     public static int mainFrameWidth = 1900;
     public static int mainFrameHeight = 1000;
+
+    public static String downloadedFileUrl = "src/main/java/downloadedFiles/";
 }

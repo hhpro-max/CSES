@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -84,15 +85,15 @@ public class ChatPage extends JPanel {
                         file = jFileChooser.getSelectedFile();
                         FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
                         String fileName = file.getName();
-
                         byte[] fileContentBytes = new byte[(int) file.length()];
+
                         fileInputStream.read(fileContentBytes);
 
                         List<String> req = new ArrayList<>();
                         req.add(ClientReqType.SEND_MESSAGE.toString());
                         req.add(id);
                         req.add(fileName);
-                        req.add(fileContentBytes.toString());
+                        req.add(Arrays.toString(fileContentBytes));
                         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
                     }catch (IOException exception){
                         exception.printStackTrace();
@@ -139,7 +140,44 @@ public class ChatPage extends JPanel {
             jLabel.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-
+                    int i = jLabel.getText().lastIndexOf('.');
+                    if (i > 0){
+                        JFrame jFrame = new JFrame();
+                        jFrame.setVisible(true);
+                        jFrame.setLayout(null);
+                        jFrame.setResizable(true);
+                        jFrame.setSize(new Dimension(800,400));
+                        JLabel JFLabel = new JLabel("ARE YOU SURE YOU WANT TO DOWNLOAD / "+jLabel.getText()+" / FILE ?");
+                        JFLabel.setBounds(10,50,600,50);
+                        jFrame.add(JFLabel);
+                        JButton JFYesBut = new JButton("YES");
+                        JFYesBut.setBounds(200,100,150,30);
+                        jFrame.add(JFYesBut);
+                        JButton JFNoBut = new JButton("NO");
+                        JFNoBut.setBounds(400,100,150,30);
+                        jFrame.add(JFNoBut);
+                        JFNoBut.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e1) {
+                                jFrame.dispose();
+                            }
+                        });
+                        JFYesBut.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                List<String> req = new ArrayList<>();
+                                req.add(ClientReqType.DOWNLOAD_FILE.toString());
+                                String fileName = jLabel.getText().replaceAll(" ","").split(":")[1];
+                                req.add(fileName);
+                                GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+                                jFrame.dispose();
+                            }
+                        });
+                        jFrame.repaint();
+                        jFrame.revalidate();
+                    }else {
+                        JOptionPane.showMessageDialog(null,"this is not downloadable file!");
+                    }
                 }
 
                 @Override

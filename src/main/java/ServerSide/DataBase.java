@@ -3,8 +3,10 @@ package ServerSide;
 
 
 
+import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -876,12 +878,52 @@ public class DataBase {
             preparedStatement.setString(4,"--");
         }else {
             preparedStatement.setString(3,order.get(2));
-            preparedStatement.setString(4,order.get(3));
+            //
+            FileUpLoader fileUpLoader = new FileUpLoader(order);
+            new Thread(fileUpLoader).start();
+            //
+            preparedStatement.setString(4,Config.uploadedFilesUrl+order.get(2));
         }
         preparedStatement.execute();
     }
     synchronized public String findMessageSuffix(String message){
         int i = message.lastIndexOf('.');
         return message.substring(i+1);
+    }
+
+    synchronized public void downloadFile(ClientHandler clientHandler, List<String> order) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from chats where message = ?");
+        preparedStatement.setString(1,order.get(1));
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<String> respond = new ArrayList<>();
+        respond.add(ServerReqType.DOWNLOAD_FILE.toString());
+        if (resultSet.next()){
+            respond.add(resultSet.getString("message"));
+            //
+            try {
+                File fileToDownload = new File(resultSet.getString("file_bytes"));
+                FileInputStream fileInputStream = new FileInputStream(fileToDownload);
+                int i;
+                while (true){
+                    i = fileInputStream.read();
+                    if (i != -1){
+                        respond.add(String.valueOf(i));
+                    }else {
+                        break;
+                    }
+                }
+                fileInputStream.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                sendUnSuccessMessage(clientHandler);
+            } catch (IOException e) {
+                e.printStackTrace();
+                sendUnSuccessMessage(clientHandler);
+            }
+            //
+            clientHandler.sendMessage(respond.toString());
+        }else {
+            sendUnSuccessMessage(clientHandler);
+        }
     }
 }

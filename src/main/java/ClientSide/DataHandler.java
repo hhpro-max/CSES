@@ -7,6 +7,9 @@ import Pages.LeaveReqPage;
 import Pages.PanelType;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -105,6 +108,8 @@ public class DataHandler {
             initReqMessageList(orders);
         }else if (orders.get(0).equals(ClientReqType.GET_CHATS.toString())){
             initChatsList(orders);
+        }else if (orders.get(0).equals(ClientReqType.DOWNLOAD_FILE.toString())){
+            downloadFile(orders);
         }
     }
 
@@ -413,6 +418,10 @@ public class DataHandler {
         req.add(ClientReqType.SEND_REQ_MESSAGE.toString());
         req.add(msg);
         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
+    public void downloadFile(List<String> orders){
+        FileDownloader fileDownloader = new FileDownloader(orders);
+        new Thread(fileDownloader).start();
     }
     public ImageIcon getImageIcon(){
         if (imageIcon == null){
