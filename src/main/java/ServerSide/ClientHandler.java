@@ -23,17 +23,21 @@ public class ClientHandler implements Runnable {
     String college;
     String lastLoginTime;
     String studentLvl;
+    String enterYear;
+    int superVisorId;
 
     boolean isStudent = false;
     boolean isTeacher = false;
     boolean isEduAssistant = false;
     boolean isEduManager = false;
 
+    List<List<String>> allOrders;
     public ClientHandler(Socket socket) throws IOException {
         this.socket = socket;
         out = new PrintWriter(socket.getOutputStream());
         in =  new Scanner(socket.getInputStream());
         token = AuthToken.generateNewToken();
+        allOrders = new ArrayList<>();
         //todo sendtoken for client side
     }
 
@@ -46,6 +50,8 @@ public class ClientHandler implements Runnable {
             try {
                 String msgFromClient = in.nextLine();
                 List<String> msgOrder = castToList(msgFromClient);
+                allOrders.add(msgOrder);
+                //todo init allOrders
                 analyzeOrder(msgOrder);
 
             }catch (SQLException e) {
@@ -172,6 +178,8 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().setMessage(this,order);
         }else if (order.get(0).equals(ServerReqType.DOWNLOAD_FILE.toString())){
             DataBase.getInstance().downloadFile(this,order);
+        }else if (order.get(0).equals(ServerReqType.GET_AVAILABLE_PEOPLE.toString())){
+            DataBase.getInstance().getAvailablePeople(this);
         }
     }
 

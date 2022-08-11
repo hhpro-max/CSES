@@ -207,6 +207,12 @@ public class GuiController {
                 userCurrentPanel = chatPanel;
                 frame.add(chatPanel,1);
                 break;
+            case NEW_CHAT_PAGE:
+                NewChatPage newChatPage = new NewChatPage();
+                userCurrentPanel = newChatPage;
+                frame.add(newChatPage,1);
+                break;
+
         }
         updateFrame();
     }

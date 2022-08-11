@@ -3,13 +3,9 @@ package ClientSide;
 import ClientSources.ImageResource;
 import ClientSources.ResourceManager;
 import Pages.GuiController;
-import Pages.LeaveReqPage;
 import Pages.PanelType;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -53,6 +49,7 @@ public class DataHandler {
     List<List<String>> markedLessons;
     List<List<String>> reqMessages;
     List<List<String>> chats;
+    List<List<String>> availablePeople;
 
     private static DataHandler dataHandler;
     private DataHandler(){
@@ -68,6 +65,7 @@ public class DataHandler {
         markedLessons = new ArrayList<>();
         reqMessages = new ArrayList<>();
         chats = new ArrayList<>();
+        availablePeople = new ArrayList<>();
         //
         GuiUpdater guiUpdater = new GuiUpdater();
         new Thread(guiUpdater).start();
@@ -114,6 +112,8 @@ public class DataHandler {
             initChatsList(orders);
         }else if (orders.get(0).equals(ClientReqType.DOWNLOAD_FILE.toString())){
             downloadFile(orders);
+        }else if (orders.get(0).equals(ClientReqType.GET_AVAILABLE_PEOPLE.toString())){
+            initAvailablePeopleList(orders);
         }
     }
 
@@ -243,6 +243,18 @@ public class DataHandler {
             }
         }
         Collections.reverse(chats);
+    }
+    private void initAvailablePeopleList(List<String> orders) {
+        orders.remove(0);
+        availablePeople = new ArrayList<>();
+        for (String i:
+                orders) {
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
+                availablePeople.add(new ArrayList<>());
+            }else{
+                availablePeople.get(availablePeople.size() - 1).add(i);
+            }
+        }
     }
     public void initUserLessons(List<String> orders){
         orders.remove(0);
@@ -403,6 +415,11 @@ public class DataHandler {
         req.add(ClientReqType.GET_CHATS.toString());
         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
     }
+    public void  updateAvailablePeople(){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.GET_AVAILABLE_PEOPLE.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
     public void showResult(List<String> order){
         try {
             if (order.get(1).equals(ServerRespondType.SUCCESSFUL.toString())){
@@ -433,6 +450,9 @@ public class DataHandler {
             return imageIcon ;
         }
         return imageIcon;
+    }
+    public void resetData(){
+        dataHandler = null;
     }
 
     public List<List<String>> getMinorReqList() {
@@ -671,5 +691,9 @@ public class DataHandler {
 
     public List<List<String>> getChats() {
         return chats;
+    }
+
+    public List<List<String>> getAvailablePeople() {
+        return availablePeople;
     }
 }

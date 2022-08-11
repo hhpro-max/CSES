@@ -36,5 +36,6 @@ public enum ClientReqType {
     SET_REQ_MESSAGE_RESULT,
     GET_CHATS,
     SEND_MESSAGE,
-    DOWNLOAD_FILE
+    DOWNLOAD_FILE,
+    GET_AVAILABLE_PEOPLE
 }

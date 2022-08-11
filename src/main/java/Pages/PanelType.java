@@ -33,5 +33,6 @@ public enum PanelType {
     TAKE_LESSON_PAGE,
     SET_CHOOSE_TIME,
     REQ_MESSAGES_PAGE,
-    CHAT_PAGE
+    CHAT_PAGE,
+    NEW_CHAT_PAGE
 }

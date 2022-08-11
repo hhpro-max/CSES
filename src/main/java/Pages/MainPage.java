@@ -147,5 +147,11 @@ public class MainPage extends JPanel {
                 GuiController.getInstance().changePanelTo(PanelType.CHAT_PAGE);
             }
         });
+        chatReq.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GuiController.getInstance().changePanelTo(PanelType.NEW_CHAT_PAGE);
+            }
+        });
     }
 }
