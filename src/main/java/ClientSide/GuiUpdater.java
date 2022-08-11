@@ -1,7 +1,6 @@
 package ClientSide;
 
 import Pages.ChatPage;
-import Pages.ConnectionStatusPage;
 import Pages.GuiController;
 import Pages.NewChatPage;
 

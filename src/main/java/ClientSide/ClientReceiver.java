@@ -1,9 +1,6 @@
 package ClientSide;
 
-import Pages.ConnectionStatusPage;
-
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.*;
@@ -39,7 +36,6 @@ public class ClientReceiver implements Runnable {
             }catch (NoSuchElementException noSuchElementException){
                 noSuchElementException.printStackTrace();
                 JOptionPane.showMessageDialog(null,"CONNECTION LOST!");
-                ConnectionStatusPage.isConnected = false;
                 break;
             }
 

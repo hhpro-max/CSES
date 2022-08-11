@@ -99,7 +99,7 @@ public class MainPage extends JPanel {
         jMenuBar.add(chats);
 
         //
-        ConnectionStatusPage connectionStatusPage = new ConnectionStatusPage();
+        HelpPage connectionStatusPage = new HelpPage();
         JScrollPane jScrollPane = new JScrollPane(connectionStatusPage);
         jScrollPane.setBounds(ClientConfig.mainFrameWidth - 800,ClientConfig.mainFrameHeight - 450,400,350);
         this.add(jScrollPane);
