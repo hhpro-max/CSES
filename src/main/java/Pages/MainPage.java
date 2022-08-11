@@ -98,7 +98,12 @@ public class MainPage extends JPanel {
         jMenuBar.add(registration);
         jMenuBar.add(chats);
 
-
+        //
+        ConnectionStatusPage connectionStatusPage = new ConnectionStatusPage();
+        JScrollPane jScrollPane = new JScrollPane(connectionStatusPage);
+        jScrollPane.setBounds(ClientConfig.mainFrameWidth - 800,ClientConfig.mainFrameHeight - 450,400,350);
+        this.add(jScrollPane);
+        //
     }
     public void align(){
         mainPage.setBounds(ClientConfig.mainFrameWidth - 500,0,150,30);

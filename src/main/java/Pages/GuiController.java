@@ -3,6 +3,7 @@ package Pages;
 import ClientSide.Client;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class GuiController {
@@ -19,6 +20,7 @@ public class GuiController {
 
     private GuiController() {
         jOptionPane = new JOptionPane();
+
     }
 
     public static GuiController getInstance() {
@@ -214,6 +216,7 @@ public class GuiController {
                 break;
 
         }
+
         updateFrame();
     }
 
@@ -263,6 +266,8 @@ public class GuiController {
             userCurrentPanel.repaint();
             userCurrentPanel.revalidate();
         }
+
+
     }
 
     public JOptionPane getjOptionPane() {
@@ -284,4 +289,5 @@ public class GuiController {
     public JPanel getUserCurrentPanel() {
         return userCurrentPanel;
     }
+
 }

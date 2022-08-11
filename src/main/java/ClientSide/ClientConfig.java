@@ -10,4 +10,6 @@ public class ClientConfig {
     public static int mainFrameHeight = 1000;
 
     public static String downloadedFileUrl = "src/main/java/downloadedFiles/";
+    public static String eduAdminId = "10";
+    public static int delayTime = 5000;
 }

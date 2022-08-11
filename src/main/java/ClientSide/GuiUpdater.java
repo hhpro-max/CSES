@@ -1,6 +1,7 @@
 package ClientSide;
 
 import Pages.ChatPage;
+import Pages.ConnectionStatusPage;
 import Pages.GuiController;
 import Pages.NewChatPage;
 
@@ -11,7 +12,7 @@ public class GuiUpdater implements Runnable{
     public void run() {
         while (true){
             try {
-                Thread.sleep(5000);
+                Thread.sleep(ClientConfig.delayTime);
                 upDate();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -27,6 +28,8 @@ public class GuiUpdater implements Runnable{
         }else if (jPanel instanceof NewChatPage){
             ((NewChatPage) jPanel).initTable();
         }
+
+
 
         jPanel.repaint();
         jPanel.revalidate();

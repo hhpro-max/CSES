@@ -1,13 +1,12 @@
 package ClientSide;
 
+import Pages.ConnectionStatusPage;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ClientReceiver implements Runnable {
     Socket socket;
@@ -26,15 +25,23 @@ public class ClientReceiver implements Runnable {
         //Client.setToken(token[1]);
         //System.out.println( "YOUR TOKEN IS : " + Client.getToken() );
         while (true) {
-            String input = in.nextLine();
-
-            //todo delete sout
-            System.out.println(input);
-
-            List<String> serverOrder = castToList(input);
+            try {
+                String input = in.nextLine();
 
 
-            DataHandler.getInstance().analyzeOrder(serverOrder);
+                //todo delete sout
+                System.out.println(input);
+
+                List<String> serverOrder = castToList(input);
+
+
+                DataHandler.getInstance().analyzeOrder(serverOrder);
+            }catch (NoSuchElementException noSuchElementException){
+                noSuchElementException.printStackTrace();
+                JOptionPane.showMessageDialog(null,"CONNECTION LOST!");
+                ConnectionStatusPage.isConnected = false;
+                break;
+            }
 
         }
     }

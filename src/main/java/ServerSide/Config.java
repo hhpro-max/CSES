@@ -8,5 +8,6 @@ public class Config {
     public static String uploadedFilesUrl = "src/main/java/uploadedFiles/";
     //server configs
     public static int serverPort = 8080;
+    public static String eduAdminId = "10";
 
 }

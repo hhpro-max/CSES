@@ -83,9 +83,13 @@ public class WeeklyPlanPage extends JPanel {
                         DataHandler.getInstance().getUserLessons()) {
                     List<Integer> lessonDays = new ArrayList<>();
                     String[] days = i.get(8).split(" ");
-                    lessonDays.add(Integer.parseInt(days[0]));
-                    lessonDays.add(Integer.parseInt(days[1]));
-                    lessonDays.add(Integer.parseInt(days[2]));
+                    try {
+                        lessonDays.add(Integer.parseInt(days[0]));
+                        lessonDays.add(Integer.parseInt(days[1]));
+                        lessonDays.add(Integer.parseInt(days[2]));
+                    }catch (Exception e2){
+                        e2.printStackTrace();
+                    }
                     int rh = 0;
                     int sd = 0;
                     for (Integer j:
