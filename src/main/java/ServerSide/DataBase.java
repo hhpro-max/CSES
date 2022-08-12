@@ -123,6 +123,9 @@ public class DataBase {
                         clientHandler.isEduManager = true;
                         System.out.println("MANAGER LOGEDIN!");
                         break;
+                    case "E":
+                        clientHandler.isMrMohseni = true;
+                        break;
                     //todo complete the relations
                 }
 
@@ -661,6 +664,26 @@ public class DataBase {
                 respond.add(resultSet.getString("students.signup_time"));
                 respond.add(resultSet.getString("students.enter_year"));
                 respond.add(resultSet.getString("students.education_level"));
+            }
+            clientHandler.sendMessage(respond.toString());
+        }else if (clientHandler.isMrMohseni){
+            List<String> respond = new ArrayList<>();
+            respond.add(ServerReqType.GET_STUDENTS_LIST.toString());
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from students join sut_members on students.id = sut_members.id");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                respond.add(RespondType.SUCCESSFUL.toString());
+                respond.add(resultSet.getString("students.id"));
+                respond.add(findMemberName(Integer.parseInt(resultSet.getString("students.id"))));
+                respond.add(resultSet.getString("students.education_level"));
+                respond.add(resultSet.getString("students.enter_year"));
+                respond.add(resultSet.getString("students.grade_average"));
+                respond.add(resultSet.getString("students.signup_time"));
+                respond.add(resultSet.getString("students.signup_permit"));
+                respond.add(resultSet.getString("students.educational_status"));
+                respond.add(resultSet.getString("sut_members.phonenumber"));
+                respond.add(resultSet.getString("sut_members.email"));
+                respond.add(resultSet.getString("sut_members.lastlogintime"));
             }
             clientHandler.sendMessage(respond.toString());
         }

@@ -1,5 +1,6 @@
 package Pages;
 
+import ClientSide.Client;
 import ClientSide.ClientConfig;
 
 import javax.swing.*;

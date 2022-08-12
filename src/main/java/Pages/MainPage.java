@@ -100,6 +100,7 @@ public class MainPage extends JPanel {
 
         //
         HelpPage connectionStatusPage = new HelpPage();
+        new Thread(connectionStatusPage).start();
         JScrollPane jScrollPane = new JScrollPane(connectionStatusPage);
         jScrollPane.setBounds(ClientConfig.mainFrameWidth - 800,ClientConfig.mainFrameHeight - 450,400,350);
         this.add(jScrollPane);

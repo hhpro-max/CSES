@@ -30,6 +30,7 @@ public class ClientHandler implements Runnable {
     boolean isTeacher = false;
     boolean isEduAssistant = false;
     boolean isEduManager = false;
+    boolean isMrMohseni = false;
 
     List<List<String>> allOrders;
     public ClientHandler(Socket socket) throws IOException {
@@ -102,6 +103,11 @@ public class ClientHandler implements Runnable {
     public void kill() throws IOException {
         socket.close();
         Server.clients.remove(this);
+        isStudent = false;
+        isTeacher = false;
+        isEduAssistant = false;
+        isEduManager = false;
+        isMrMohseni = false;
     }
 
 

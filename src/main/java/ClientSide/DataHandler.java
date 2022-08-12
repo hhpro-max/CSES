@@ -179,6 +179,9 @@ public class DataHandler {
                     this.roomNumber = orders.get(12);
                     GuiController.getInstance().changePanelTo(PanelType.EDU_MANAGER_MAIN_PAGE);
                     break;
+                case "E":
+                    GuiController.getInstance().changePanelTo(PanelType.MR_MOHSENI_MAIN_PAGE);
+                    break;
             }
             //todo change this
 
@@ -418,6 +421,11 @@ public class DataHandler {
     public void  updateAvailablePeople(){
         List<String> req = new ArrayList<>();
         req.add(ClientReqType.GET_AVAILABLE_PEOPLE.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
+    public void updateAllStudents(){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.GET_STUDENTS_LIST.toString());
         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
     }
     public void showResult(List<String> order){

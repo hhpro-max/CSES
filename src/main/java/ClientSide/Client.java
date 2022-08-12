@@ -12,6 +12,7 @@ public class Client implements Runnable{
     String host = ClientConfig.host;
     ClientSender clientSender;
     ClientReceiver clientReceiver;
+    public boolean isConnected;
 
     public void init() throws IOException {
         socket = new Socket(host,port);
@@ -19,6 +20,7 @@ public class Client implements Runnable{
         clientReceiver = new ClientReceiver(this);
         new Thread(clientReceiver).start();
         new Thread(clientSender).start();
+        isConnected = true;
         GuiController.getInstance().setClient(this);
     }
 
@@ -78,5 +80,6 @@ public class Client implements Runnable{
             e.printStackTrace();
             System.out.println("SERVER IS OFF!");
         }
+        //todo retry to connect to server
     }
 }

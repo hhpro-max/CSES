@@ -25,7 +25,6 @@ public class ClientReceiver implements Runnable {
             try {
                 String input = in.nextLine();
 
-
                 //todo delete sout
                 System.out.println(input);
 
@@ -36,6 +35,7 @@ public class ClientReceiver implements Runnable {
             }catch (NoSuchElementException noSuchElementException){
                 noSuchElementException.printStackTrace();
                 JOptionPane.showMessageDialog(null,"CONNECTION LOST!");
+                client.isConnected = false;
                 break;
             }
 
