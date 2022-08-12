@@ -1001,6 +1001,16 @@ public class DataBase {
                 respond.add(findMemberName(resultSet2.getInt("sut_members.id")));
             }
             clientHandler.sendMessage(respond.toString());
+        }else if (clientHandler.isMrMohseni){
+            PreparedStatement preparedStatement2 = connection.prepareStatement("select * from sut_members where id <> ?");
+            preparedStatement2.setInt(1, clientHandler.id);
+            ResultSet resultSet2 = preparedStatement2.executeQuery();
+            while (resultSet2.next()) {
+                respond.add(RespondType.SUCCESSFUL.toString());
+                respond.add(resultSet2.getString("sut_members.id"));
+                respond.add(findMemberName(resultSet2.getInt("sut_members.id")));
+            }
+            clientHandler.sendMessage(respond.toString());
         }
     }
 }

@@ -19,6 +19,7 @@ public class MrMohseniMainPage extends JPanel {
     JButton mainPage;
     public MrMohseniMainPage(){
         DataHandler.getInstance().updateAllStudents();
+        DataHandler.getInstance().updateAvailablePeople();
         initPanel();
         initComps();
         align();
@@ -56,6 +57,12 @@ public class MrMohseniMainPage extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 GuiController.getInstance().changePanelTo(PanelType.SEARCH_IN_STUDENTS_PAGE);
+            }
+        });
+        sendMsg.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GuiController.getInstance().changePanelTo(PanelType.NEW_CHAT_PAGE);
             }
         });
         ExitListener exitListener = new ExitListener();
