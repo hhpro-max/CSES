@@ -103,14 +103,15 @@ public class ClientHandler implements Runnable {
     public void kill() throws IOException {
         socket.close();
         Server.clients.remove(this);
+    }
+
+    public void disconnect(){
         isStudent = false;
         isTeacher = false;
         isEduAssistant = false;
         isEduManager = false;
         isMrMohseni = false;
     }
-
-
 
     private void analyzeOrder(List<String> order) throws SQLException {
         //todo delete sout
@@ -186,6 +187,10 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().downloadFile(this,order);
         }else if (order.get(0).equals(ServerReqType.GET_AVAILABLE_PEOPLE.toString())){
             DataBase.getInstance().getAvailablePeople(this);
+        }else if (order.get(0).equals(ServerReqType.DISCONNECT.toString())){
+            disconnect();
+        }else if (order.get(0).equals(ServerReqType.GET_CW_EDU_SUBJECTS.toString())){
+            DataBase.getInstance().getCwEduSubjects(this);
         }
     }
 

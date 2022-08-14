@@ -50,6 +50,7 @@ public class DataHandler {
     List<List<String>> reqMessages;
     List<List<String>> chats;
     List<List<String>> availablePeople;
+    List<List<String>> cwLessonsEduSubjects;
 
     private static DataHandler dataHandler;
     private DataHandler(){
@@ -66,6 +67,7 @@ public class DataHandler {
         reqMessages = new ArrayList<>();
         chats = new ArrayList<>();
         availablePeople = new ArrayList<>();
+        cwLessonsEduSubjects = new ArrayList<>();
         //
         GuiUpdater guiUpdater = new GuiUpdater();
         new Thread(guiUpdater).start();
@@ -114,6 +116,8 @@ public class DataHandler {
             downloadFile(orders);
         }else if (orders.get(0).equals(ClientReqType.GET_AVAILABLE_PEOPLE.toString())){
             initAvailablePeopleList(orders);
+        }else if (orders.get(0).equals(ClientReqType.GET_CW_EDU_SUBJECTS.toString())){
+            initCwEduSubjects(orders);
         }
     }
 
@@ -246,6 +250,26 @@ public class DataHandler {
             }
         }
         Collections.reverse(chats);
+    }
+    public void initCwEduSubjects(List<String> orders){
+        orders.remove(0);
+        cwLessonsEduSubjects = new ArrayList<>();
+        for (String i:
+                orders) {
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
+                cwLessonsEduSubjects.add(new ArrayList<>());
+            }else{
+                cwLessonsEduSubjects.get(cwLessonsEduSubjects.size() - 1).add(i);
+            }
+        }
+        for (List<String> i:
+                cwLessonsEduSubjects) {
+            int j = i.get(1).lastIndexOf('.');
+            if (i.get(1).substring(j+1).equals("msg")){
+                i.set(1,i.get(1).replace(".msg",""));
+            }
+        }
+        Collections.reverse(cwLessonsEduSubjects);
     }
     private void initAvailablePeopleList(List<String> orders) {
         orders.remove(0);
@@ -426,6 +450,11 @@ public class DataHandler {
     public void updateAllStudents(){
         List<String> req = new ArrayList<>();
         req.add(ClientReqType.GET_STUDENTS_LIST.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
+    public void updateCwLessonsEduSubject(){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.GET_CW_EDU_SUBJECTS.toString());
         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
     }
     public void showResult(List<String> order){
@@ -703,5 +732,9 @@ public class DataHandler {
 
     public List<List<String>> getAvailablePeople() {
         return availablePeople;
+    }
+
+    public List<List<String>> getCwLessonsEduSubjects() {
+        return cwLessonsEduSubjects;
     }
 }

@@ -1,8 +1,6 @@
 package ClientSide;
 
-import Pages.ChatPage;
-import Pages.GuiController;
-import Pages.NewChatPage;
+import Pages.*;
 
 import javax.swing.*;
 
@@ -26,6 +24,14 @@ public class GuiUpdater implements Runnable{
             ((ChatPage) jPanel).initChatRoom();
         }else if (jPanel instanceof NewChatPage){
             ((NewChatPage) jPanel).initTable();
+        }else if (jPanel instanceof StudentPage){
+            ((StudentPage) jPanel).initCWMyLesson();
+            ((StudentPage) jPanel).jMenuBar.repaint();
+            ((StudentPage) jPanel).jMenuBar.revalidate();
+        }else if (jPanel instanceof TeacherPage){
+            ((TeacherPage) jPanel).initCWMyLesson();
+            ((TeacherPage) jPanel).jMenuBar.repaint();
+            ((TeacherPage) jPanel).jMenuBar.revalidate();
         }
 
 

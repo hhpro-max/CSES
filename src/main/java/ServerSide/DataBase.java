@@ -1013,4 +1013,19 @@ public class DataBase {
             clientHandler.sendMessage(respond.toString());
         }
     }
+
+    synchronized public void getCwEduSubjects(ClientHandler clientHandler) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from chats join student_lessons on chats.receiver_id = student_lessons.lessonid and student_lessons.teacherid = chats.sender_id where student_lessons.teacherid = ? or student_lessons.id = ?");
+        preparedStatement.setInt(1,clientHandler.id);
+        preparedStatement.setInt(2,clientHandler.id);
+        List<String> respond = new ArrayList<>();
+        respond.add(ServerReqType.GET_CW_EDU_SUBJECTS.toString());
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()){
+            respond.add(RespondType.SUCCESSFUL.toString());
+            respond.add(resultSet.getString("student_lessons.lessonid"));
+            respond.add(resultSet.getString("chats.message"));
+        }
+        clientHandler.sendMessage(respond.toString());
+    }
 }

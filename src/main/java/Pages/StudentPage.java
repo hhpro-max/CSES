@@ -4,8 +4,10 @@ import ClientSide.DataHandler;
 import Listeners.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class StudentPage extends MainPage{
     public JTable studyStatus;
@@ -18,10 +20,14 @@ public class StudentPage extends MainPage{
     public JMenuItem temporaryGrades;
     public JMenuItem eduStatus;
     public JMenuItem userProfileMenu;
+    public JMenu cw;
+    public JMenu myLessons;
     JMenuItem takeLesson;
+
 
     public StudentPage() {
         super();
+        DataHandler.getInstance().updateUserLessons();
         initTable();
         initMenubar();
         addMoreListeners();
@@ -66,6 +72,12 @@ public class StudentPage extends MainPage{
         studyEvidenceReq = new JMenuItem("STUDY EVIDENCE");
         recommendReq = new JMenuItem("RECOMMEND REQ");
         takeLesson = new JMenuItem("CHOOSE LESSON");
+        cw = new JMenu("COURSE WARE");
+        myLessons = new JMenu("MY LESSONS");
+        //
+        initCWMyLesson();
+        //
+        cw.add(myLessons);
         requests.add(leaveReq);
         requests.add(recommendReq);
         requests.add(minorReq);
@@ -74,6 +86,28 @@ public class StudentPage extends MainPage{
         gradeService.add(eduStatus);
         userProfile.add(userProfileMenu);
         eduService.add(takeLesson);
+        jMenuBar.add(cw);
+    }
+    public void initCWMyLesson(){
+        //
+        for (List<String> i:
+                DataHandler.getInstance().getUserLessons()) {
+            JMenuItem jMenuItem = new JMenuItem(i.get(1));
+            boolean isContained = false;
+            for (Component j:
+                    myLessons.getMenuComponents()) {
+                if (j instanceof JMenuItem){
+                    if (((JMenuItem) j).getText().equals(jMenuItem.getText())){
+                        isContained = true;
+                    }
+                }
+            }
+            if (!isContained){
+                //todo add listener to jmenu item
+                myLessons.add(jMenuItem);
+            }
+        }
+        //
     }
 
     private void addMoreListeners() {
