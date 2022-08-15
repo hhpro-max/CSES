@@ -51,6 +51,7 @@ public class DataHandler {
     List<List<String>> chats;
     List<List<String>> availablePeople;
     List<List<String>> cwLessonsEduSubjects;
+    List<List<String>> homeWorks;
 
     private static DataHandler dataHandler;
     private DataHandler(){
@@ -68,6 +69,7 @@ public class DataHandler {
         chats = new ArrayList<>();
         availablePeople = new ArrayList<>();
         cwLessonsEduSubjects = new ArrayList<>();
+        homeWorks = new ArrayList<>();
         //
         GuiUpdater guiUpdater = new GuiUpdater();
         new Thread(guiUpdater).start();
@@ -118,6 +120,8 @@ public class DataHandler {
             initAvailablePeopleList(orders);
         }else if (orders.get(0).equals(ClientReqType.GET_CW_EDU_SUBJECTS.toString())){
             initCwEduSubjects(orders);
+        }else if (orders.get(0).equals(ClientReqType.GET_HM.toString())){
+            initHomeWorks(orders);
         }
     }
 
@@ -295,6 +299,18 @@ public class DataHandler {
             }
         }
     }
+    private void initHomeWorks(List<String> orders) {
+        orders.remove(0);
+        homeWorks = new ArrayList<>();
+        for (String i:
+                orders) {
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
+                homeWorks.add(new ArrayList<>());
+            }else{
+                homeWorks.get(homeWorks.size() - 1).add(i);
+            }
+        }
+    }
     private void initRecommendList(List<String> orders) {
         orders.remove(0);
         recommendsList = new ArrayList<>();
@@ -455,6 +471,11 @@ public class DataHandler {
     public void updateCwLessonsEduSubject(){
         List<String> req = new ArrayList<>();
         req.add(ClientReqType.GET_CW_EDU_SUBJECTS.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
+    public void updateHomeWorks(){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.GET_HM.toString());
         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
     }
     public void showResult(List<String> order){
@@ -736,5 +757,9 @@ public class DataHandler {
 
     public List<List<String>> getCwLessonsEduSubjects() {
         return cwLessonsEduSubjects;
+    }
+
+    public List<List<String>> getHomeWorks() {
+        return homeWorks;
     }
 }

@@ -39,5 +39,7 @@ public enum ServerReqType {
     DOWNLOAD_FILE,
     GET_AVAILABLE_PEOPLE,
     DISCONNECT,
-    GET_CW_EDU_SUBJECTS
+    GET_CW_EDU_SUBJECTS,
+    ADD_NEW_HM,
+    GET_HM
 }

@@ -26,6 +26,18 @@ public class TeacherCwLessonPage extends JPanel {
     int subjectAdded = 0;
     List<List<String>> eduSubject;
     JScrollPane subjectPanel;
+    //
+    JTextField hmStartTime;
+    JTextField hmFinishTime;
+    JTextField hmPreferTime;
+    JTextField hmName;
+    JTextField exp;
+    JButton hmFile;
+    JTable hmTable;
+    JScrollPane hmScrollPane;
+    String[] columns = {"START TIME","FINISH TIME","FULL SCORE TIME","HM NAME","EXPLANATION","FILE"};
+    String[][] rows;
+    //
     public TeacherCwLessonPage(String lessonName){
         this.lessonName = lessonName;
         eduSubject = new ArrayList<>();
@@ -33,6 +45,7 @@ public class TeacherCwLessonPage extends JPanel {
         initComps();
         align();
         initCwEduSubjects();
+        initHMTable();
         addListener();
         GuiController.getInstance().addJPanel(this);
     }
@@ -49,10 +62,31 @@ public class TeacherCwLessonPage extends JPanel {
                 lessonId = i.get(0);
             }
         }
+        //
+        hmStartTime = new JTextField("HM START TIME");
+        hmFinishTime = new JTextField("HM FINISH TIME");
+        hmPreferTime = new JTextField("TIME BDOON KASR NOMRE");
+        hmName = new JTextField("HM NAME");
+        exp = new JTextField("EXPLANATIONS");
+        hmFile = new JButton("CHOOSE FILE AND UPLOAD HM");
     }
     public void align(){
         addEduSubject.setBounds(10,70,200,30);
         this.add(addEduSubject);
+        //
+        hmStartTime.setBounds(350,70,150,30);
+        this.add(hmStartTime);
+        hmFinishTime.setBounds(350,110,150,30);
+        this.add(hmFinishTime);
+        hmPreferTime.setBounds(350,150,150,30);
+        this.add(hmPreferTime);
+        hmName.setBounds(530,70,150,30);
+        this.add(hmName);
+        exp.setBounds(530,110,200,30);
+        this.add(exp);
+        hmFile.setBounds(530,150,200,30);
+        this.add(hmFile);
+        //
     }
     public void initCwEduSubjects(){
         eduSubject.clear();
@@ -143,6 +177,27 @@ public class TeacherCwLessonPage extends JPanel {
         repaint();
         revalidate();
     }
+    public void initHMTable(){
+        if (hmScrollPane != null){
+            remove(hmScrollPane);
+        }
+        List<List<String>> data = new ArrayList<>();
+        for (List<String> i:
+             DataHandler.getInstance().getHomeWorks()) {
+            if (i.get(0).equals(lessonId)){
+                data.add(i);
+            }
+        }
+        for (List<String> i:
+             data) {
+            i.remove(0);
+        }
+        rows = data.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
+        hmTable = new JTable(rows,columns);
+        hmScrollPane = new JScrollPane(hmTable);
+        hmScrollPane.setBounds(350,200,400,520);
+        this.add(hmScrollPane);
+    }
     public void addListener(){
         addEduSubject.addActionListener(new ActionListener() {
             @Override
@@ -208,6 +263,39 @@ public class TeacherCwLessonPage extends JPanel {
                 });
                 jFrame.repaint();
                 jFrame.revalidate();
+            }
+        });
+        hmFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser jFileChooser = new JFileChooser();
+                if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+                    try {
+                        File file = jFileChooser.getSelectedFile();
+                        FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
+                        String fileName = file.getName();
+                        byte[] fileContentBytes = new byte[(int) file.length()];
+                        fileInputStream.read(fileContentBytes);
+                        List<String> req = new ArrayList<>();
+                        req.add(ClientReqType.ADD_NEW_HM.toString());
+                        req.add(lessonId);
+                        req.add(hmStartTime.getText());
+                        req.add(hmFinishTime.getText());
+                        req.add(hmPreferTime.getText());
+                        req.add(hmName.getText());
+                        req.add(exp.getText());
+                        req.add(fileName);
+                        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+                        List<String> req1 = new ArrayList<>();
+                        req1.add(ClientReqType.SEND_MESSAGE.toString());
+                        req1.add(lessonId);
+                        req1.add("HW"+fileName);
+                        req1.add(Arrays.toString(fileContentBytes));
+                        GuiController.getInstance().getClient().getClientSender().sendMessage(req1);
+                    }catch (IOException exception){
+                        exception.printStackTrace();
+                    }
+                }
             }
         });
     }

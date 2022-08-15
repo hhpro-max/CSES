@@ -1028,4 +1028,42 @@ public class DataBase {
         }
         clientHandler.sendMessage(respond.toString());
     }
+
+    synchronized public void addNewHm(ClientHandler clientHandler, List<String> order) throws SQLException {
+        if (clientHandler.isTeacher){
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into home_works values (default ,?,?,?,?,?,?,?,?)");
+            preparedStatement.setString(1,order.get(1));
+            preparedStatement.setInt(2,clientHandler.id);
+            preparedStatement.setString(3,order.get(2));
+            preparedStatement.setString(4,order.get(3));
+            preparedStatement.setString(5,order.get(4));
+            preparedStatement.setString(6,order.get(5));
+            preparedStatement.setString(7,order.get(6));
+            preparedStatement.setString(8,Config.uploadedFilesUrl + order.get(7));
+            preparedStatement.execute();
+            //
+            sendSuccessMessage(clientHandler);
+            //
+        }
+    }
+
+    synchronized public void getHomeWorks(ClientHandler clientHandler) throws SQLException {
+        PreparedStatement preparedStatement =connection.prepareStatement("select * from student_lessons join home_works on home_works.lesson_id = student_lessons.lessonid where student_lessons.id = ? or student_lessons.teacherid = ?");
+        preparedStatement.setInt(1,clientHandler.id);
+        preparedStatement.setInt(2,clientHandler.id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<String> respond = new ArrayList<>();
+        respond.add(ServerReqType.GET_HM.toString());
+        while (resultSet.next()){
+            respond.add(RespondType.SUCCESSFUL.toString());
+            respond.add(resultSet.getString("home_works.lesson_id"));
+            respond.add(resultSet.getString("home_works.start_time"));
+            respond.add(resultSet.getString("home_works.finish_time"));
+            respond.add(resultSet.getString("home_works.prefer_time"));
+            respond.add(resultSet.getString("home_works.hm_name"));
+            respond.add(resultSet.getString("home_works.exp"));
+            respond.add(resultSet.getString("home_works.file"));
+        }
+        clientHandler.sendMessage(respond.toString());
+    }
 }

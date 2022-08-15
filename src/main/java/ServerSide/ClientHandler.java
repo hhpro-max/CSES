@@ -191,6 +191,10 @@ public class ClientHandler implements Runnable {
             disconnect();
         }else if (order.get(0).equals(ServerReqType.GET_CW_EDU_SUBJECTS.toString())){
             DataBase.getInstance().getCwEduSubjects(this);
+        }else if (order.get(0).equals(ServerReqType.ADD_NEW_HM.toString())){
+            DataBase.getInstance().addNewHm(this,order);
+        }else if (order.get(0).equals(ServerReqType.GET_HM.toString())){
+            DataBase.getInstance().getHomeWorks(this);
         }
     }
 
