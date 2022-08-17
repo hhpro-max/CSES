@@ -39,6 +39,7 @@ public class MainPage extends JPanel {
     public JLabel email;
 
     public MainPage() {
+        DataHandler.getInstance().updateChats();
         initPanel();
         initCom();
         align();
