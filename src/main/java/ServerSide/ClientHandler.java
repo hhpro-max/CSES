@@ -195,6 +195,10 @@ public class ClientHandler implements Runnable {
             DataBase.getInstance().addNewHm(this,order);
         }else if (order.get(0).equals(ServerReqType.GET_HM.toString())){
             DataBase.getInstance().getHomeWorks(this);
+        }else if (order.get(0).equals(ServerReqType.GET_UPLOADED_HM.toString())){
+            DataBase.getInstance().getUploadedHm(this);
+        }else if (order.get(0).equals(ServerReqType.SET_HM_SCORE.toString())){
+            DataBase.getInstance().setHmScore(this,order);
         }
     }
 

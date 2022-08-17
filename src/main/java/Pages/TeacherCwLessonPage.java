@@ -38,6 +38,10 @@ public class TeacherCwLessonPage extends JPanel {
     String[] columns = {"START TIME","FINISH TIME","FULL SCORE TIME","HM NAME","EXPLANATION","FILE"};
     String[][] rows;
     //
+    JTable checkHm;
+    JScrollPane checkHmSp;
+    String[] columns2 = {"STUDENT_ID","UPLOADED_FILE","UPLOAD_TIME","SCORE"};
+    String[][] rows2;
     public TeacherCwLessonPage(String lessonName){
         this.lessonName = lessonName;
         eduSubject = new ArrayList<>();
@@ -46,6 +50,7 @@ public class TeacherCwLessonPage extends JPanel {
         align();
         initCwEduSubjects();
         initHMTable();
+        initCheckHmTable();
         addListener();
         GuiController.getInstance().addJPanel(this);
     }
@@ -197,6 +202,114 @@ public class TeacherCwLessonPage extends JPanel {
         hmScrollPane = new JScrollPane(hmTable);
         hmScrollPane.setBounds(350,200,400,520);
         this.add(hmScrollPane);
+    }
+    public void initCheckHmTable(){
+        if (checkHmSp != null){
+            remove(checkHmSp);
+        }
+        List<List<String>> data = new ArrayList<>();
+        for (List<String> i :
+                DataHandler.getInstance().getUploadedHm()) {
+            if (i.get(1).equals(lessonId)){
+                data.add(new ArrayList<>());
+                data.get(data.size() - 1).add(i.get(0));
+                data.get(data.size() - 1).add(i.get(3));
+                data.get(data.size() - 1).add(i.get(4));
+                data.get(data.size() - 1).add(i.get(5));
+            }
+        }
+        rows2 = data.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
+        checkHm = new JTable(rows2,columns2);
+        checkHm.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JFrame jFrame = new JFrame();
+                jFrame.setVisible(true);
+                jFrame.setLayout(null);
+                jFrame.setResizable(true);
+                jFrame.setSize(new Dimension(800,400));
+                JLabel JFLabel = new JLabel("ARE YOU SURE YOU WANT TO DOWNLOAD / "+checkHm.getValueAt(checkHm.getSelectedRow(),1)+" / FILE ?");
+                JFLabel.setBounds(10,50,600,50);
+                jFrame.add(JFLabel);
+                JButton JFYesBut = new JButton("YES");
+                JFYesBut.setBounds(200,100,150,30);
+                jFrame.add(JFYesBut);
+                JButton JFNoBut = new JButton("NO");
+                JFNoBut.setBounds(400,100,150,30);
+                jFrame.add(JFNoBut);
+                JFNoBut.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e1) {
+                        jFrame.dispose();
+                    }
+                });
+                JFYesBut.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        List<String> req = new ArrayList<>();
+                        req.add(ClientReqType.DOWNLOAD_FILE.toString());
+                        String fileName = (String) checkHm.getValueAt(checkHm.getSelectedRow(),1);
+                        req.add(fileName);
+                        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+                        jFrame.dispose();
+                    }
+                });
+                //
+                JLabel label2 = new JLabel("OR YOU CAN JUST SET THE SCORE FOR STUDENT "+checkHm.getValueAt(checkHm.getSelectedRow(),0)+" :");
+                label2.setBounds(10,150,600,50);
+                jFrame.add(label2);
+                JTextField jTextField12 = new JTextField();
+                jTextField12.setBounds(10,220,150,30);
+                jFrame.add(jTextField12);
+                JButton save = new JButton("SAVE SCORE");
+                save.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            Double.parseDouble(jTextField12.getText());
+                        }catch (Exception exception){
+                            JOptionPane.showMessageDialog(null,"INTEGER FORMAT IS JUST ACCEPTABLE!");
+                            return;
+                        }
+                        List<String> req = new ArrayList<>();
+                        req.add(ClientReqType.SET_HM_SCORE.toString());
+                        req.add((String) checkHm.getValueAt(checkHm.getSelectedRow(),0));
+                        req.add(lessonId);
+                        req.add(jTextField12.getText());
+                        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+                        jFrame.dispose();
+                    }
+                });
+                save.setBounds(200,220,150,30);
+                jFrame.add(save);
+                //
+                jFrame.repaint();
+                jFrame.revalidate();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+        checkHmSp = new JScrollPane(checkHm);
+        checkHmSp.setBounds(800,200,400,520);
+        this.add(checkHmSp);
     }
     public void addListener(){
         addEduSubject.addActionListener(new ActionListener() {

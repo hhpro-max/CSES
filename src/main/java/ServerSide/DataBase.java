@@ -1066,4 +1066,40 @@ public class DataBase {
         }
         clientHandler.sendMessage(respond.toString());
     }
+
+    synchronized public void getUploadedHm(ClientHandler clientHandler) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("?");
+        ResultSet resultSet;
+        if (clientHandler.isTeacher){
+            preparedStatement = connection.prepareStatement("select * from uploaded_hm where teacher_id = ?");
+        }else if (clientHandler.isStudent){
+            preparedStatement = connection.prepareStatement("select * from uploaded_hm where sender_id = ?");
+        }
+        preparedStatement.setInt(1,clientHandler.id);
+        resultSet = preparedStatement.executeQuery();
+        List<String> respond =new ArrayList<>();
+        respond.add(ServerReqType.GET_UPLOADED_HM.toString());
+        while (resultSet.next()){
+            respond.add(RespondType.SUCCESSFUL.toString());
+            respond.add(resultSet.getString("sender_id"));
+            respond.add(resultSet.getString("lesson_id"));
+            respond.add(resultSet.getString("teacher_id"));
+            respond.add(resultSet.getString("file"));
+            respond.add(resultSet.getString("upload_time"));
+            respond.add(resultSet.getString("score"));
+        }
+        clientHandler.sendMessage(respond.toString());
+    }
+
+    synchronized public void setHmScore(ClientHandler clientHandler, List<String> order) throws SQLException {
+        if (clientHandler.isTeacher){
+            PreparedStatement preparedStatement = connection.prepareStatement("update uploaded_hm set score = ? where sender_id = ? and lesson_id = ? and teacher_id = ?");
+            preparedStatement.setString(1,order.get(3));
+            preparedStatement.setString(2,order.get(1));
+            preparedStatement.setString(3,order.get(2));
+            preparedStatement.setInt(4,clientHandler.id);
+            preparedStatement.executeUpdate();
+            sendSuccessMessage(clientHandler);
+        }
+    }
 }

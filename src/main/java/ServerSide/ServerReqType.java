@@ -41,5 +41,7 @@ public enum ServerReqType {
     DISCONNECT,
     GET_CW_EDU_SUBJECTS,
     ADD_NEW_HM,
-    GET_HM
+    GET_HM,
+    GET_UPLOADED_HM,
+    SET_HM_SCORE
 }

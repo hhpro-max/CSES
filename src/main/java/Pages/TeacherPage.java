@@ -25,6 +25,7 @@ public class TeacherPage extends MainPage{
         DataHandler.getInstance().updateUserLessons();
         DataHandler.getInstance().updateCwLessonsEduSubject();
         DataHandler.getInstance().updateHomeWorks();
+        DataHandler.getInstance().updateUploadedHm();
         initMenuBar();
         addMoreListener();
     }

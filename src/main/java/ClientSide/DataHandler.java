@@ -52,7 +52,7 @@ public class DataHandler {
     List<List<String>> availablePeople;
     List<List<String>> cwLessonsEduSubjects;
     List<List<String>> homeWorks;
-
+    List<List<String>> uploadedHm;
     private static DataHandler dataHandler;
     private DataHandler(){
         allLessons = new ArrayList<>();
@@ -70,6 +70,7 @@ public class DataHandler {
         availablePeople = new ArrayList<>();
         cwLessonsEduSubjects = new ArrayList<>();
         homeWorks = new ArrayList<>();
+        uploadedHm = new ArrayList<>();
         //
         GuiUpdater guiUpdater = new GuiUpdater();
         new Thread(guiUpdater).start();
@@ -122,6 +123,8 @@ public class DataHandler {
             initCwEduSubjects(orders);
         }else if (orders.get(0).equals(ClientReqType.GET_HM.toString())){
             initHomeWorks(orders);
+        }else if (orders.get(0).equals(ClientReqType.GET_UPLOADED_HM.toString())){
+            initUploadedHmList(orders);
         }
     }
 
@@ -220,6 +223,18 @@ public class DataHandler {
                 allTeachers.add(new ArrayList<>());
             }else{
                 allTeachers.get(allTeachers.size() - 1).add(i);
+            }
+        }
+    }
+    public void initUploadedHmList(List<String> orders){
+        orders.remove(0);
+        uploadedHm = new ArrayList<>();
+        for (String i:
+                orders) {
+            if (i.equals(ServerRespondType.SUCCESSFUL.toString())){
+                uploadedHm.add(new ArrayList<>());
+            }else{
+                uploadedHm.get(uploadedHm.size() - 1).add(i);
             }
         }
     }
@@ -476,6 +491,11 @@ public class DataHandler {
     public void updateHomeWorks(){
         List<String> req = new ArrayList<>();
         req.add(ClientReqType.GET_HM.toString());
+        GuiController.getInstance().getClient().getClientSender().sendMessage(req);
+    }
+    public void updateUploadedHm(){
+        List<String> req = new ArrayList<>();
+        req.add(ClientReqType.GET_UPLOADED_HM.toString());
         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
     }
     public void showResult(List<String> order){
@@ -761,5 +781,9 @@ public class DataHandler {
 
     public List<List<String>> getHomeWorks() {
         return homeWorks;
+    }
+
+    public List<List<String>> getUploadedHm() {
+        return uploadedHm;
     }
 }
