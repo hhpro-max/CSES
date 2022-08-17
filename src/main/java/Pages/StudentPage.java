@@ -28,6 +28,9 @@ public class StudentPage extends MainPage{
     public StudentPage() {
         super();
         DataHandler.getInstance().updateUserLessons();
+        DataHandler.getInstance().updateCwLessonsEduSubject();
+        DataHandler.getInstance().updateHomeWorks();
+        DataHandler.getInstance().updateUploadedHm();
         initTable();
         initMenubar();
         addMoreListeners();
@@ -103,7 +106,16 @@ public class StudentPage extends MainPage{
                 }
             }
             if (!isContained){
-                //todo add listener to jmenu item
+                jMenuItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        StudentCwLessonPage studentCwLessonPage = new StudentCwLessonPage(jMenuItem.getText());
+                        GuiController.getInstance().userCurrentPanel = studentCwLessonPage;
+                        GuiController.getInstance().getFrame().add(studentCwLessonPage,1);
+                        repaint();
+                        revalidate();
+                    }
+                });
                 myLessons.add(jMenuItem);
             }
         }
