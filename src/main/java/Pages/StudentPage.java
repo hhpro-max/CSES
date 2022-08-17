@@ -20,6 +20,7 @@ public class StudentPage extends MainPage{
     public JMenuItem temporaryGrades;
     public JMenuItem eduStatus;
     public JMenuItem userProfileMenu;
+    public JMenuItem eduSchedule;
     public JMenu cw;
     public JMenu myLessons;
     JMenuItem takeLesson;
@@ -77,10 +78,12 @@ public class StudentPage extends MainPage{
         takeLesson = new JMenuItem("CHOOSE LESSON");
         cw = new JMenu("COURSE WARE");
         myLessons = new JMenu("MY LESSONS");
+        eduSchedule = new JMenuItem("EDU SCHEDULE");
         //
         initCWMyLesson();
         //
         cw.add(myLessons);
+        cw.add(eduSchedule);
         requests.add(leaveReq);
         requests.add(recommendReq);
         requests.add(minorReq);
@@ -150,6 +153,12 @@ public class StudentPage extends MainPage{
             @Override
             public void actionPerformed(ActionEvent e) {
                 GuiController.getInstance().changePanelTo(PanelType.TAKE_LESSON_PAGE);
+            }
+        });
+        eduSchedule.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GuiController.getInstance().changePanelTo(PanelType.CW_SCHEDULE_PAGE);
             }
         });
     }

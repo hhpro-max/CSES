@@ -225,6 +225,11 @@ public class GuiController {
                 userCurrentPanel = searchInStudent;
                 frame.add(searchInStudent,1);
                 break;
+            case CW_SCHEDULE_PAGE:
+                CwSchedulePage schedulePage = new CwSchedulePage();
+                userCurrentPanel = schedulePage;
+                frame.add(schedulePage,1);
+                break;
         }
 
         updateFrame();
@@ -276,8 +281,6 @@ public class GuiController {
             userCurrentPanel.repaint();
             userCurrentPanel.revalidate();
         }
-
-
     }
 
     public JOptionPane getjOptionPane() {
