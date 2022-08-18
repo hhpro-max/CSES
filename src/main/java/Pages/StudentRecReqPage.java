@@ -52,7 +52,7 @@ public class StudentRecReqPage extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if (!jTextField.getText().isEmpty()){
                     try {
-                        int test = Integer.parseInt(jTextField.getText());
+                        Integer.parseInt(jTextField.getText());
                         if (!(jScrollPane==null)){
                             remove(jScrollPane);
                         }
@@ -62,7 +62,7 @@ public class StudentRecReqPage extends JPanel {
                         req.add(ClientReqType.RECOMMENDREQ.toString());
                         req.add(jTextField.getText());
                         GuiController.getInstance().getClient().getClientSender().sendMessage(req);
-                        //todo make auto refresh here
+
 
                     }catch (Exception e1){
                         jOptionPane.showMessageDialog(null,"INTEGER ID ONLY ACCEPTABLE!");

@@ -3,11 +3,13 @@ package Listeners;
 
 
 import ClientSide.Client;
+import ClientSide.DataHandler;
 import Pages.GuiController;
 import Pages.LoginPage;
 import ClientSide.ClientReqType;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -34,6 +36,8 @@ public class LoginListener implements ActionListener {
                 loginOrder.add(username);
                 loginOrder.add(password);
                 GuiController.getInstance().getClient().getClientSender().sendMessage(loginOrder);
+                DataHandler.getInstance().setPassWord(password);
+                DataHandler.getInstance().setUserName(username);
             }else {
                 jOptionPane.showMessageDialog(null,"MAKE SURE THAT YOU DIDNT LEFT ANY FIELD BLANK!");
             }

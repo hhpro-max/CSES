@@ -2,6 +2,7 @@ package ClientSide;
 
 public enum ClientReqType {
     LOGIN,
+    SET_TOKEN,
     GETLESSONSLIST,
     GETTEACHERSLIST,
     GETUSERLESSONS,

@@ -11,6 +11,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class DataHandler {
+    String userName;
+    String passWord;
+    String token;
+    //
     int id;
     int nc;
     String fullName;
@@ -125,9 +129,10 @@ public class DataHandler {
             initHomeWorks(orders);
         }else if (orders.get(0).equals(ClientReqType.GET_UPLOADED_HM.toString())){
             initUploadedHmList(orders);
+        }else if (orders.get(0).equals(ClientReqType.SET_TOKEN.toString())){
+            setToken(orders);
         }
     }
-
 
 
 
@@ -196,7 +201,6 @@ public class DataHandler {
                 case "A":
                     GuiController.getInstance().changePanelTo(PanelType.EDU_ADMIN_MAIN_PAGE);
             }
-            //todo change this
 
         }else {
             GuiController.getInstance().jOptionPane.showMessageDialog(null,"USERNAME OR PASSWORD IS WRONG!");
@@ -787,5 +791,29 @@ public class DataHandler {
 
     public List<List<String>> getUploadedHm() {
         return uploadedHm;
+    }
+
+    public String getPassWord() {
+        return passWord;
+    }
+
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(List<String> tokens) {
+        this.token = tokens.get(1);
     }
 }

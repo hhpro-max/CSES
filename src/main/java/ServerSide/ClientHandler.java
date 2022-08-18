@@ -38,21 +38,27 @@ public class ClientHandler implements Runnable {
         out = new PrintWriter(socket.getOutputStream());
         in =  new Scanner(socket.getInputStream());
         token = AuthToken.generateNewToken();
+        //
+        List<String> res = new ArrayList<>();
+        res.add(ServerReqType.SET_TOKEN.toString());
+        res.add(token);
+        sendMessage(res.toString());
+        //
         allOrders = new ArrayList<>();
-        //todo sendtoken for client side
+
     }
 
     @Override
     public void run() {
 
         while (true){
-            //todo
+
 
             try {
                 String msgFromClient = in.nextLine();
                 List<String> msgOrder = castToList(msgFromClient);
                 allOrders.add(msgOrder);
-                //todo init allOrders
+
                 analyzeOrder(msgOrder);
 
             }catch (SQLException e) {
@@ -88,15 +94,16 @@ public class ClientHandler implements Runnable {
         out.flush();
     }
 
-    private void checkAuthToken(String str) {
-        String tokenC = str.split(":")[1];
-        if (!tokenC.equals(this.token)){
+    private void checkAuthToken(List<String> str) {
+        if (!str.get(0).equals(token)){
             sendMessage("WRONG TOKEN!");
             try {
                 this.kill();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else {
+            str.remove(0);
         }
     }
 
@@ -114,9 +121,9 @@ public class ClientHandler implements Runnable {
     }
 
     private void analyzeOrder(List<String> order) throws SQLException {
-        //todo delete sout
-        System.out.println(order.toString());
 
+        System.out.println(order.toString());
+        checkAuthToken(order);
         if (order.get(0).equals(ServerReqType.LOGIN.toString())){
             DataBase.getInstance().checkLogin(this,order.get(1),order.get(2));
         }else if (order.get(0).equals(ServerReqType.GETLESSONSLIST.toString())){

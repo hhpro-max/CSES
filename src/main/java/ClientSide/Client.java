@@ -80,6 +80,5 @@ public class Client implements Runnable{
             e.printStackTrace();
             System.out.println("SERVER IS OFF!");
         }
-        //todo retry to connect to server
     }
 }

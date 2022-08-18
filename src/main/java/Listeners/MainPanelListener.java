@@ -9,7 +9,6 @@ public class MainPanelListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        //todo
         GuiController.getInstance().goToMainPanel();
 
     }

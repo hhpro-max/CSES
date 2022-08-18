@@ -33,7 +33,7 @@ public class MainPage extends JPanel {
     public Timer timer;
     public JLabel showTime;
     public JButton exit;
-    public JLabel lastLoginTime; //todo align this
+    public JLabel lastLoginTime;
     public JLabel imageIcon;
     public JLabel name;
     public JLabel email;
@@ -64,7 +64,7 @@ public class MainPage extends JPanel {
         timer.start();
 
         exit = new JButton("EXIT");
-        lastLoginTime = new JLabel(DataHandler.getInstance().getLastLoginTime());
+        lastLoginTime = new JLabel("LAST LOGIN TIME : "+DataHandler.getInstance().getLastLoginTime());
         imageIcon = new JLabel(DataHandler.getInstance().getImageIcon());
         name = new JLabel("yourName : " + DataHandler.getInstance().getFullName());
         email = new JLabel("yourEmail : " +DataHandler.getInstance().getEmail());
@@ -122,7 +122,8 @@ public class MainPage extends JPanel {
         this.add(name);
         email.setBounds(0,230,300,30);
         this.add(email);
-
+        lastLoginTime.setBounds(0,260,300,30);
+        this.add(lastLoginTime);
     }
     public void addListener(){
         //

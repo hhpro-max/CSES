@@ -22,13 +22,12 @@ public class ClientSender implements Runnable{
 
     @Override
     public void run() {
-        while (true){
-           //String msg = sendM.nextLine();
-           //out.println(msg);//todo ":"+Client.getToken() (check token)
-           //out.flush();
-        }
+
     }
     public void sendMessage(List<String> message){
+        //
+        message.add(0,DataHandler.getInstance().getToken());
+        //
         out.println(message);
         out.flush();
     }

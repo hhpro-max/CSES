@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class DormitoryReqPage extends JPanel {
-    //todo complete this page
+
 
     JButton jButton;
     JTable jTable;

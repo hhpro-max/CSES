@@ -17,26 +17,45 @@ public class GuiUpdater implements Runnable{
         }
     }
     public void upDate(){
-        JPanel jPanel = GuiController.getInstance().getUserCurrentPanel();
+        try {
+            JPanel jPanel = GuiController.getInstance().getUserCurrentPanel();
+            if (jPanel instanceof EduAdminMainPage){
+                DataHandler.getInstance().updateChats();
+                ((EduAdminMainPage) jPanel).initTable();
+                ((EduAdminMainPage) jPanel).initChatRoom();
+            }
+            else if (jPanel instanceof ChatPage){
+                DataHandler.getInstance().updateChats();
+                ((ChatPage) jPanel).initTable();
+                ((ChatPage) jPanel).initChatRoom();
+            }else if (jPanel instanceof NewChatPage){
+                DataHandler.getInstance().updateAvailablePeople();
+                ((NewChatPage) jPanel).initTable();
+            }else if (jPanel instanceof StudentPage){
+                DataHandler.getInstance().updateUserLessons();
+                DataHandler.getInstance().updateCwLessonsEduSubject();
+                ((StudentPage) jPanel).initCWMyLesson();
+                ((StudentPage) jPanel).jMenuBar.repaint();
+                ((StudentPage) jPanel).jMenuBar.revalidate();
+            }else if (jPanel instanceof TeacherPage){
+                DataHandler.getInstance().updateUserLessons();
+                DataHandler.getInstance().updateCwLessonsEduSubject();
+                ((TeacherPage) jPanel).initCWMyLesson();
+                ((TeacherPage) jPanel).jMenuBar.repaint();
+                ((TeacherPage) jPanel).jMenuBar.revalidate();
+            }else if (jPanel instanceof CwSchedulePage){
+                DataHandler.getInstance().updateUserLessons();
+                DataHandler.getInstance().updateHomeWorks();
+                ((CwSchedulePage) jPanel).initTable();
+            }
 
-        if (jPanel instanceof ChatPage){
-            ((ChatPage) jPanel).initTable();
-            ((ChatPage) jPanel).initChatRoom();
-        }else if (jPanel instanceof NewChatPage){
-            ((NewChatPage) jPanel).initTable();
-        }else if (jPanel instanceof StudentPage){
-            ((StudentPage) jPanel).initCWMyLesson();
-            ((StudentPage) jPanel).jMenuBar.repaint();
-            ((StudentPage) jPanel).jMenuBar.revalidate();
-        }else if (jPanel instanceof TeacherPage){
-            ((TeacherPage) jPanel).initCWMyLesson();
-            ((TeacherPage) jPanel).jMenuBar.repaint();
-            ((TeacherPage) jPanel).jMenuBar.revalidate();
+
+
+            jPanel.repaint();
+            jPanel.revalidate();
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("ERROR IN GUI UPDATER! DONT BE WORRY THIS IS NOT IMPORTANT!");
         }
-
-
-
-        jPanel.repaint();
-        jPanel.revalidate();
     }
 }

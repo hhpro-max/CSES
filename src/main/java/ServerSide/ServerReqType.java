@@ -2,6 +2,7 @@ package ServerSide;
 
 public enum ServerReqType {
     LOGIN ,
+    SET_TOKEN,
     GETLESSONSLIST,
     GETTEACHERSLIST,
     GETUSERLESSONS,

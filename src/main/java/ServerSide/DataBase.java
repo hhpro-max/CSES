@@ -19,7 +19,18 @@ public class DataBase {
             connection = DriverManager.getConnection(Config.databaseUrl, Config.databaseUser, Config.databasePass);
         } catch (SQLException e) {
             e.printStackTrace();
-            //todo exception handle
+            for (ClientHandler c:
+                 Server.clients) {
+                List<String> res = new ArrayList<>();
+                res.add(ServerReqType.SHOW_RESULT.toString());
+                res.add("CONNECTION TO THE DATA BASE HAS BEEN LOST !");
+                c.sendMessage(res.toString());
+                try {
+                    c.kill();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     }
 
@@ -126,7 +137,6 @@ public class DataBase {
                     case "E":
                         clientHandler.isMrMohseni = true;
                         break;
-                    //todo complete the relations
                 }
 
                 preparedStatement = connection.prepareStatement("update sut_members set lastlogintime = ? where id = ?");
@@ -143,7 +153,6 @@ public class DataBase {
             respond.clear();
         } catch (SQLException e) {
             e.printStackTrace();
-            //todo
         }
     }
 
@@ -238,7 +247,6 @@ public class DataBase {
             preparedStatement.setInt(1, clientHandler.id);
 
         } else {
-            //todo
             preparedStatement = connection.prepareStatement("");
         }
         resultSet = preparedStatement.executeQuery();

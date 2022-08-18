@@ -168,7 +168,6 @@ public class TeacherTemporaryGradesPage extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 jOptionPane.showMessageDialog(null,"NOT INITIALIZED YET!COME BACK LATER");
-                //todo initialize here pls ty!
             }
         });
     }
