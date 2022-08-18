@@ -47,9 +47,23 @@ public class GuiUpdater implements Runnable{
                 DataHandler.getInstance().updateUserLessons();
                 DataHandler.getInstance().updateHomeWorks();
                 ((CwSchedulePage) jPanel).initTable();
+            }else if (jPanel instanceof TeacherCwLessonPage){
+                DataHandler.getInstance().updateUserLessons();
+                DataHandler.getInstance().updateCwLessonsEduSubject();
+                DataHandler.getInstance().updateHomeWorks();
+                DataHandler.getInstance().updateUploadedHm();
+                ((TeacherCwLessonPage) jPanel).initCwEduSubjects();
+                ((TeacherCwLessonPage) jPanel).initHMTable();
+                ((TeacherCwLessonPage) jPanel).initCheckHmTable();
+            }else if (jPanel instanceof StudentCwLessonPage){
+                DataHandler.getInstance().updateUserLessons();
+                DataHandler.getInstance().updateCwLessonsEduSubject();
+                DataHandler.getInstance().updateHomeWorks();
+                DataHandler.getInstance().updateUploadedHm();
+                ((StudentCwLessonPage) jPanel).initCwEduSubjects();
+                ((StudentCwLessonPage) jPanel).initHMTable();
+                ((StudentCwLessonPage) jPanel).initCheckHmTable();
             }
-
-
 
             jPanel.repaint();
             jPanel.revalidate();
