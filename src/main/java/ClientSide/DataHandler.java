@@ -193,6 +193,8 @@ public class DataHandler {
                 case "E":
                     GuiController.getInstance().changePanelTo(PanelType.MR_MOHSENI_MAIN_PAGE);
                     break;
+                case "A":
+                    GuiController.getInstance().changePanelTo(PanelType.EDU_ADMIN_MAIN_PAGE);
             }
             //todo change this
 
